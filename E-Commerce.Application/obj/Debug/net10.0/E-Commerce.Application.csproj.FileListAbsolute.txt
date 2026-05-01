@@ -1,0 +1,17 @@
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Application.deps.json
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Application.dll
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Application.pdb
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Domain.dll
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Shared.dll
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Domain.pdb
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\bin\Debug\net10.0\E-Commerce.Shared.pdb
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.csproj.AssemblyReference.cache
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.AssemblyInfoInputs.cache
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.AssemblyInfo.cs
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.csproj.CoreCompileInputs.cache
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commer.B20A53FF.Up2Date
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.dll
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\refint\E-Commerce.Application.dll
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\E-Commerce.Application.pdb
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Application\obj\Debug\net10.0\ref\E-Commerce.Application.dll
