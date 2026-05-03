@@ -35,6 +35,22 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Carritos/CarritoModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ2Fycml0b3NcQ2Fycml0b01vZGFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoCard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvQ2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoDetailModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvRGV0YWlsTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvRm9ybS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Auth/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aFxMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

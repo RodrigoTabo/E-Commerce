@@ -1,0 +1,186 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.Carritos
+@inject CarritoApi carritoApi
+
+@if (Cargando)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else if (!string.IsNullOrEmpty(Error))
+{
+    <MudAlert Severity="Severity.Error">
+        @Error
+    </MudAlert>
+}
+else if (carrito == null || !carrito.Items.Any())
+{
+    <MudAlert Severity="Severity.Info">
+        El carrito está vacío
+    </MudAlert>
+}
+else
+{
+    <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+        <DialogContent>
+
+            <MudText Typo="Typo.h5" Class="mb-4">
+                🛒 Tu carrito
+            </MudText>
+            <MudStack Spacing="2">
+                @foreach (var item in carrito.Items)
+                {
+                    <MudPaper Class="pa-3 d-flex align-center" Elevation="1">
+
+                        <!-- Imagen -->
+                        <MudImage Src="@item.ProductoUrlImagen"
+                                  Width="80"
+                                  Height="80"
+                                  Class="me-3 rounded" />
+
+                        <!-- Info -->
+                        <div class="flex-grow-1">
+
+                            <MudText Typo="Typo.subtitle1">
+                                @item.ProductoNombre
+                            </MudText>
+
+                            <MudText Typo="Typo.caption">
+                                Modelo: @item.ModeloNombre
+                            </MudText>
+
+                            <!-- Controles cantidad -->
+                            <MudStack Row AlignItems="AlignItems.Center" Spacing="1" Class="mt-2">
+
+                                <MudIconButton Icon="@Icons.Material.Filled.Remove"
+                                               OnClick="() => Restar(item)"
+                                               Size="Size.Small" />
+
+                                <MudText>
+                                    @item.CarritoCantidad
+                                </MudText>
+
+                                <MudIconButton Icon="@Icons.Material.Filled.Add"
+                                               OnClick="() => Sumar(item)"
+                                               Size="Size.Small" />
+
+                            </MudStack>
+
+                        </div>
+
+                        <!-- Precio -->
+                        <MudText Typo="Typo.subtitle2" Class="mx-3">
+                            $@item.CarritoPrecio
+                        </MudText>
+
+                        <!-- Eliminar -->
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       OnClick="() => Eliminar(item)" />
+
+                    </MudPaper>
+                }
+                <MudDivider Class="my-2" />
+
+                <!-- Total -->
+                <MudStack Row Justify="Justify.SpaceBetween">
+                    <MudText Typo="Typo.h6">Total</MudText>
+                    <MudText Typo="Typo.h6">
+                        $@carrito.Total
+                    </MudText>
+                </MudStack>
+            </MudStack>
+        </DialogContent>
+        <DialogActions>
+
+            <MudButton OnClick="Cerrar"
+                       Color="Color.Secondary">
+                Cerrar
+            </MudButton>
+
+            <MudButton Color="Color.Primary"
+                       Variant="Variant.Filled">
+                Finalizar compra
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+}
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private CarritoDto? carrito;
+    private string? Error;
+    private bool Cargando;
+
+    protected override async Task OnInitializedAsync()
+    {
+        carrito = await carritoApi.CarritoUser();
+    }
+
+    async Task Sumar(CarritoItemDto item)
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            await carritoApi.SumarCantidad(item.ProductoId);
+            await RecargarCarrito();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    async Task Restar(CarritoItemDto item)
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            await carritoApi.RestarCantidad(item.ProductoId);
+            await RecargarCarrito();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    async Task Eliminar(CarritoItemDto item)
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            // await carritoApi.EliminarItem(item.ProductoId);
+            await RecargarCarrito();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    async Task RecargarCarrito()
+    {
+        carrito = await carritoApi.CarritoUser();
+        StateHasChanged();
+    }
+
+    void Cerrar() => MudDialog.Close();
+}

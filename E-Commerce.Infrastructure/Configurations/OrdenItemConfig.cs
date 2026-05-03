@@ -15,7 +15,7 @@ namespace E_Commerce.Infrastructure.Configurations
 
             b.Property(b => b.Cantidad).IsRequired();
             b.Property(b => b.PrecioUnitario).HasPrecision(18, 2).IsRequired();
-            b.Property(o => o.EstadoOrden).HasConversion<string>().HasMaxLength(30).IsRequired();
+            //b.Property(o => o.EstadoOrden).HasConversion<string>().HasMaxLength(30).IsRequired();
 
             b.HasOne(o => o.Orden)
                 .WithMany(o => o.OrdenItems)

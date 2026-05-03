@@ -12,10 +12,11 @@ namespace E_Commerce.Domain.Entities
         public Guid IdApplicationUser { get; set; }
         public string Calle { get; set; } = null!;
         public int Altura { get; set; }
+
         public Ciudad Ciudad { get; set; } = null!;
         public int IdCiudad { get; set; }
         public string CodigoPostal { get; set; } = null!;
-        public string Referencia { get; set; } = null!;
+        public string? Referencia { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }

@@ -418,6 +418,21 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AlturaSnapshot")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CalleSnapshot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CiudadSnapshot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodigoPostalSnapshot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -468,11 +483,6 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("EstadoOrden")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("IdOrden")
                         .HasColumnType("int");
@@ -1159,8 +1169,7 @@ namespace E_Commerce.Infrastructure.Migrations
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Carrito")
-                        .IsRequired();
+                    b.Navigation("Carrito");
 
                     b.Navigation("Domicilios");
 

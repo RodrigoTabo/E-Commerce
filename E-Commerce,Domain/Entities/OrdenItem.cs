@@ -16,7 +16,6 @@ namespace E_Commerce.Domain.Entities
         public int IdProducto { get; set; }
         public int Cantidad { get; set; }
         public decimal PrecioUnitario { get; set; }
-        public EstadoOrden EstadoOrden { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E3DAD80-29C3-233A-D9F5-F4DFB8A7964B}|E-Commerce,Domain\\E-Commerce.Domain.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce,domain\\entities\\carrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E3DAD80-29C3-233A-D9F5-F4DFB8A7964B}|E-Commerce,Domain\\E-Commerce.Domain.csproj|solutionrelative:e-commerce,domain\\entities\\carrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.infrastructure\\configurations\\carritoitemconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|solutionrelative:e-commerce.infrastructure\\configurations\\carritoitemconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\interfaces\\ordenes\\iordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\ordenes\\iordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\interfaces\\ordenes\\iordenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\ordenes\\iordenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,21 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Carrito.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce,Domain\\Entities\\Carrito.cs",
-              "RelativeDocumentMoniker": "E-Commerce,Domain\\Entities\\Carrito.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce,Domain\\Entities\\Carrito.cs",
-              "RelativeToolTip": "E-Commerce,Domain\\Entities\\Carrito.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T19:40:36.992Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
@@ -47,16 +38,40 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CarritoItemConfig.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Configurations\\CarritoItemConfig.cs",
-              "RelativeDocumentMoniker": "E-Commerce.Infrastructure\\Configurations\\CarritoItemConfig.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Configurations\\CarritoItemConfig.cs",
-              "RelativeToolTip": "E-Commerce.Infrastructure\\Configurations\\CarritoItemConfig.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAkwBoAAAAkAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "OrdenService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\OrdenService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Services\\OrdenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T19:40:03.85Z",
+              "WhenOpened": "2026-05-03T21:20:37.091Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IOrdenRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T21:20:20.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IOrdenService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T21:20:06.895Z"
             }
           ]
         }

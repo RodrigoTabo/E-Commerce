@@ -1,7 +1,57 @@
 ﻿@page "/"
+@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.Productos
+@using E_Commerce.Client.Componentes.Carritos
+@using E_Commerce.Shared.DTOs.Productos
+@inject IDialogService DialogService
+@inject ProductoApi productoApi
 
-<PageTitle>Home</PageTitle>
+<MudButton @onclick="@(() => OpenDialogAsync())" StartIcon="@Icons.Material.Filled.AddShoppingCart" Variant="Variant.Filled" Color="Color.Primary">
+    Carrito
+</MudButton>
 
-<h1>Hello, world!</h1>
+<ProductoCard Items="items"
+              Loading="Cargando" />
 
-Welcome to your new app.
+<ProductoForm />
+
+
+@code {
+
+    public List<ProductoResponseDTO> items { get; set; } = new();
+    private string? Error;
+    private bool Cargando;
+
+    protected override async Task OnInitializedAsync()
+        => await ProductList();
+    
+    private async Task ProductList()
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            items = await productoApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    private async Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var dialog = await DialogService.ShowAsync<CarritoModal>("", options);
+        var result = await dialog.Result;
+
+    }
+
+
+}

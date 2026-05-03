@@ -11,7 +11,7 @@ namespace E_Commerce.Domain.Entities
         public List<Domicilio> Domicilios { get; set; } = new();
         public List<Orden> Ordenes { get; set; } = new();
         public List<Review> Reviews { get; set; } = new();
-        public Carrito Carrito { get; set; } = null!;
+        public Carrito? Carrito { get; set; } = null!;
         public int IdCarrito { get; set; }
         public List<Favorito> Favoritos { get; set; } = new();
         public List<Producto> Productos { get; set; } = new();

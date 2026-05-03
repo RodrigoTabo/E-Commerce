@@ -1,0 +1,117 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.Productos
+@inject ProductoApi productoApi
+
+@if (Cargando)
+{
+    <MudProgressCircular Indeterminate="true" />
+
+}
+else if (Model is not null)
+{
+    <!-- 2. Ventana Modal -->
+    <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+        <DialogContent>
+            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="@Cancel" />
+            <MudGrid>
+                <!-- Imagen -->
+                <MudItem xs="12">
+                    <MudImage Src="@Model.UrlImagen" Alt="Producto" Class="rounded-lg" />
+                </MudItem>
+
+                <!-- Contenido -->
+                <MudItem xs="12">
+                    <MudStack Spacing="2">
+
+                        <!-- Header -->
+                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                            <MudText Typo="Typo.h6">@Model.Nombre</MudText>
+                        </MudStack>
+
+                        <!-- Precio -->
+                        <MudText Typo="Typo.h5" Color="Color.Primary">@Model.Precio</MudText>
+
+                        <!-- Descripción -->
+                        <MudText Typo="Typo.body2">
+                           @Model.MarcaNombre
+                        </MudText>
+
+                        <!-- Detalles -->
+                        <MudText Typo="Typo.body2">
+                            @Model.Descripcion
+                        </MudText>
+
+                        <!-- Cantidad -->
+                        @* <MudNumericField T="int" Label="Cantidad" @bind-Value="@Model.Stock" Min="1" /> *@
+
+                        <!-- Botones -->
+                        <MudStack Row="true" Spacing="2">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary">
+                                Agregar al carrito
+                            </MudButton>
+
+                            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Disabled="true">
+                                Sin stock
+                            </MudButton>
+                        </MudStack>
+
+                        <!-- Categorías -->
+                        <MudText Typo="Typo.caption">
+                            Categorías: Clothing, Men's Clothes, Tops & T-Shirts
+                        </MudText>
+
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+
+        </DialogContent>
+    </MudDialog>
+}
+else if (Error is not null)
+{
+    <MudText Color="Color.Error">@Error</MudText>
+}
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private string? Error;
+    private bool Cargando;
+
+    private ProductoResponseDTO Model { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+
+    protected override async Task OnInitializedAsync()
+        => await LoadProductoById();
+
+
+    public async Task LoadProductoById()
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            if (Id != 0)
+            {
+                Model = await productoApi.GetByIdAsync(Id);
+            }
+
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+
+    }
+}

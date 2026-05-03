@@ -1,4 +1,9 @@
 using E_Commerce.Application.Interfaces.Auth;
+using E_Commerce.Application.Interfaces.CarritoItems;
+using E_Commerce.Application.Interfaces.Carritos;
+using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
+using E_Commerce.Application.Interfaces.Modelos;
+using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Application.Interfaces.Tokens;
 using E_Commerce.Application.Services;
 using E_Commerce.Domain.Entities;
@@ -7,6 +12,7 @@ using E_Commerce.Infrastructure.Repositories;
 using E_Commerce.Infrastructure.Services;
 using E_Commerce.Server.Middlewares;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,8 +26,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorOrigin",
         policy => policy.WithOrigins("https://localhost:7039")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+      .AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowCredentials());
 });
 //-------------------------------------------CORS------------------------------------------------------
 
@@ -50,20 +57,29 @@ builder.Host.UseSerilog((context, logConfg) => logConfg.ReadFrom.Configuration(c
 //-------------------------------------------Serilog + Seq ---------------------------------------------
 
 // ------------------------------------- JSON WEB TOKENS------------------------------------------------
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        ),
+
+        ClockSkew = TimeSpan.Zero
+    };
+});
 // ------------------------------------- JSON WEB TOKENS------------------------------------------------
 
 // ------------------------------------- FluentValidator ------------------------------------------------
@@ -78,11 +94,27 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>(); //JWT
 builder.Services.AddScoped<IGenerarTokenService, GenerarTokenService>();//JWT
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IModeloRepository, ModeloRepository>();
+builder.Services.AddScoped<IModeloService, ModeloService>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IGenerarTokenService, GenerarTokenService>();
+builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+builder.Services.AddScoped<ICarritoItemsService, CarritoItemsService>();
+builder.Services.AddScoped<ICarritoItemsRepository, CarritoItemsRepository>();
+builder.Services.AddScoped<ICarritoService, CarritoService>();
+builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
+builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT
 builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddOpenApi();
 // ------------------------------------- SERVICIOS ------------------------------------------------
+
 
 var app = builder.Build();
 
@@ -92,16 +124,31 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseCors();
 
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorOrigin");
 
 // --- JWT ---
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+try
+{
+    using var scope = app.Services.CreateScope();
+
+    var db = scope.ServiceProvider.GetRequiredService<ECommerceDBContext>();
+    await db.Database.MigrateAsync();
+
+    var seed = scope.ServiceProvider.GetRequiredService<IdentitySeedService>();
+    await seed.SeedAsync();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("DB/Seed error: " + ex.Message);
+}   
 
 app.Run();

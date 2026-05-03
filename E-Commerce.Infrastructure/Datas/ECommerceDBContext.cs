@@ -10,7 +10,6 @@ namespace E_Commerce.Infrastructure.Datas
     public class ECommerceDBContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public ECommerceDBContext(DbContextOptions<ECommerceDBContext> options) : base(options) {}
-
         public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public DbSet<Carrito> Carritos => Set<Carrito>();
         public DbSet<CarritoItem> CarritoItems => Set<CarritoItem>();

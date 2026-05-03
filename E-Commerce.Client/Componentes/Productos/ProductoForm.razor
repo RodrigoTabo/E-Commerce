@@ -1,0 +1,72 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.Productos
+@inject ProductoApi productoApi
+
+<EditForm Model="@model" OnValidSubmit="CreateAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Nombre del producto</label>
+            <InputText class="form-control" @bind-Value="model.Nombre" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Imagen</label>
+            <InputText class="form-control" @bind-Value="model.UrlImagen" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Descripcion</label>
+            <InputText class="form-control" @bind-Value="model.Descripcion" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Stock</label>
+            <InputNumber class="form-control" @bind-Value="model.Stock" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Precio</label>
+            <InputNumber class="form-control" @bind-Value="model.Precio" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Modelo</label>
+            <InputNumber class="form-control" @bind-Value="model.IdModelo" />
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">
+                Crear
+            </button>
+        </div>
+
+    </div>
+</EditForm>
+
+@code {
+
+    private CreateProductoRequestDTO model = new();
+    private string? Error;
+    private bool Cargando;
+
+    public async Task CreateAsync()
+    {
+        Cargando = false;
+        Error = null;
+        try
+        {
+            await productoApi.CreateAsync(model);
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = true;
+        }
+    }
+}

@@ -14,7 +14,7 @@ namespace E_Commerce.Server.Controllers
         private readonly IGenerarTokenService _generarTokenService = generarTokenService;
 
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             var user = await _authService.LoginAsync(login.Identifier, login.Password);
