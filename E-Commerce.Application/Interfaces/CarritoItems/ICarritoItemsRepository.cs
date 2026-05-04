@@ -11,6 +11,7 @@ namespace E_Commerce.Application.Interfaces.CarritoItems
         Task<CarritoItem?> ValidarProductoExistente(int productoId, int carritoId);
         Task AgregarProducto(CarritoItem carrito);
         Task<Result<CarritoItem?>> ObtenerItemCarrito(int IdProducto, Guid? userId);
+        Task<List<CarritoItem?>> ObtenerItemCarritoByIdUser(Guid? userId);
         Task RemoverProducto(CarritoItem request);
     }
 }

@@ -10,7 +10,7 @@ namespace E_Commerce.Domain.Entities
     {
         public int Id { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;
-        public Guid IdApplicationUser { get; set; }
+        public Guid? IdApplicationUser { get; set; }
         public Domicilio Domicilio { get; set; } = null!;
         public int IdDomicilio { get; set; }
         public string CalleSnapshot { get; set; } = null!;
@@ -23,6 +23,7 @@ namespace E_Commerce.Domain.Entities
         public decimal Total { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }    
+        public DateTime? ExpiresAt { get; set; }    
         public List<OrdenItem> OrdenItems { get; set; } = new();
         public List<Pago> Pagos { get; set; } = new();
     }

@@ -1,4 +1,5 @@
-﻿using E_Commerce.Shared.DTOs.Productos;
+﻿using E_Commerce.Domain.Entities;
+using E_Commerce.Shared.DTOs.Productos;
 using ROP;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace E_Commerce.Application.Interfaces.Productos
         Task<Result<int>> CreateAsync(CreateProductoRequestDTO request);
         //Task<Result<bool>> UpdateAsync(int id, UpdateProductoRequestDTO request);
         Task<Result<bool>> DeleteAsync(int id);
+        Task<Result<List<Producto>>> ListaProductosByIds(List<int> IdsProductos);
+        Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems);
     }
 }

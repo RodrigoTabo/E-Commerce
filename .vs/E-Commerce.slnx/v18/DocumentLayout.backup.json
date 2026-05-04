@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.infrastructure\\repositories\\metodoenviorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|solutionrelative:e-commerce.infrastructure\\repositories\\metodoenviorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\interfaces\\metodoenvios\\imetodoenviorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\metodoenvios\\imetodoenviorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\interfaces\\metodoenvios\\imetodoenvioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\metodoenvios\\imetodoenvioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,8 +23,12 @@
       "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\ordenes\\iordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\interfaces\\ordenes\\iordenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\interfaces\\ordenes\\iordenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{844AAF0E-3871-2166-BA9D-1F4C14947F3A}|E-Commerce.Shared\\E-Commerce.Shared.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.shared\\dtos\\orden\\createordenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{844AAF0E-3871-2166-BA9D-1F4C14947F3A}|E-Commerce.Shared\\E-Commerce.Shared.csproj|solutionrelative:e-commerce.shared\\dtos\\orden\\createordenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.infrastructure\\datas\\ecommercedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{507DD327-40BD-C284-9F34-1C336AB692D0}|E-Commerce.Infrastructure\\E-Commerce.Infrastructure.csproj|solutionrelative:e-commerce.infrastructure\\datas\\ecommercedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,8 +38,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MetodoEnvioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Repositories\\MetodoEnvioRepository.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Infrastructure\\Repositories\\MetodoEnvioRepository.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Repositories\\MetodoEnvioRepository.cs",
+              "RelativeToolTip": "E-Commerce.Infrastructure\\Repositories\\MetodoEnvioRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAB0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T15:27:16.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IMetodoEnvioService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T15:24:51.662Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IMetodoEnvioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioRepository.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioRepository.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioRepository.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\MetodoEnvios\\IMetodoEnvioRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T15:24:14.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IOrdenService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T14:55:40.615Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
@@ -38,40 +106,42 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "OrdenService.cs",
               "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
               "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\OrdenService.cs",
               "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
               "RelativeToolTip": "E-Commerce.Application\\Services\\OrdenService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAAB8AAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-03T21:20:37.091Z",
+              "WhenOpened": "2026-05-04T14:52:58.654Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IOrdenRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
-              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
-              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "CreateOrdenRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Shared\\DTOs\\Orden\\CreateOrdenRequest.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Shared\\DTOs\\Orden\\CreateOrdenRequest.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Shared\\DTOs\\Orden\\CreateOrdenRequest.cs",
+              "RelativeToolTip": "E-Commerce.Shared\\DTOs\\Orden\\CreateOrdenRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-03T21:20:20.426Z"
+              "WhenOpened": "2026-05-04T14:42:21.939Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IOrdenService.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
-              "RelativeDocumentMoniker": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
-              "RelativeToolTip": "E-Commerce.Application\\Interfaces\\Ordenes\\IOrdenService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAKAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "ECommerceDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Datas\\ECommerceDBContext.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Infrastructure\\Datas\\ECommerceDBContext.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Infrastructure\\Datas\\ECommerceDBContext.cs",
+              "RelativeToolTip": "E-Commerce.Infrastructure\\Datas\\ECommerceDBContext.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAA2wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-03T21:20:06.895Z"
+              "WhenOpened": "2026-05-04T14:22:19.781Z",
+              "EditorCaption": ""
             }
           ]
         }

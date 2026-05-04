@@ -10,5 +10,6 @@ namespace E_Commerce.Application.Interfaces.Productos
         Task<List<Producto>> GetAllAsync();
         Task<ProductoResponseDTO> GetByIdAsync(int id);
         Task AddAsync(Producto producto);
+        Task<List<Producto>> ListaProductosByIds(List<int> IdsProductos);
     }
 }

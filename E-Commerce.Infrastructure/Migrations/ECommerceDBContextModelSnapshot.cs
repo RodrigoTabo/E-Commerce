@@ -441,6 +441,9 @@ namespace E_Commerce.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("IdApplicationUser")
                         .HasColumnType("uniqueidentifier");
 

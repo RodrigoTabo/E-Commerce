@@ -66,6 +66,16 @@ namespace E_Commerce.Application.Services
 
         }
 
+        public async Task<Result<List<CarritoItem?>>> ObtenerItemCarritoByIdUser(Guid? userId)
+        {
+            var obtenerCarritoByIdUser = await _carritoItemsRepository.ObtenerItemCarritoByIdUser(userId);
+
+            if (obtenerCarritoByIdUser is null)
+                return Result.Conflict<List<CarritoItem?>>("El carrito de los productos no existe.");
+
+            return Result.Success(obtenerCarritoByIdUser);
+        }
+
         public async Task RemoverProducto(CarritoItem request)
             => await _carritoItemsRepository.RemoverProducto(request);
     }

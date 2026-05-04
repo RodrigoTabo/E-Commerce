@@ -93,7 +93,40 @@ namespace E_Commerce.Application.Services
             throw new NotImplementedException();
         }
 
-        // --- Mantenemos tus métodos privados exactamente como los tenías (con correcciones de tipos) ---
+        public async Task<Result<List<Producto>>> ListaProductosByIds(List<int> IdsProductos)
+        {
+            var productoList = await _productoRepository.ListaProductosByIds(IdsProductos);
+
+            if (!productoList.Any())
+                return Result.Conflict<List<Producto>>("Ha ocurrido un problema con la lista de productos");
+
+            return Result.Success(productoList);
+
+        }
+
+        public Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems)
+        {
+            var productosDict = productos
+                .ToDictionary(p => p.Id);
+
+            foreach (var item in carritoItems)
+            {
+                if (!productosDict.TryGetValue(item.IdProducto, out var producto))
+                    return Result.Failure<Unit>($"Producto {item.IdProducto} no existe.");
+
+                if (producto.Stock < item.Cantidad)
+                    return Result.Failure<Unit>($"El producto {producto.Nombre} no tiene stock");
+            }
+
+            foreach (var item in carritoItems)
+            {
+                var producto = productosDict[item.IdProducto];
+                producto.Stock -= item.Cantidad;
+            }
+
+            return Result.Success();
+        }
+
 
         private Result<List<Producto>> ValidateProductos(List<Producto>? productos)
         {
@@ -164,5 +197,6 @@ namespace E_Commerce.Application.Services
 
             return Result.Success(dto);
         }
+
     }
 }

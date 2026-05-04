@@ -23,6 +23,11 @@ namespace E_Commerce.Infrastructure.Repositories
                     ci.IdProducto == IdProducto &&
                     ci.Carrito.IdApplicationUser == userId);
 
+        public async Task<List<CarritoItem?>> ObtenerItemCarritoByIdUser(Guid? userId)
+            => await _context.CarritoItems.AsNoTracking()
+                .Where(ci => ci.Carrito.IdApplicationUser == userId)
+                .ToListAsync();
+
         public async Task RemoverProducto(CarritoItem request)
             => _context.CarritoItems.Remove(request);
 

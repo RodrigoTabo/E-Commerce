@@ -47,5 +47,7 @@ namespace E_Commerce.Infrastructure.Repositories
             return producto;
         }
 
+        public async Task<List<Producto>> ListaProductosByIds(List<int> IdsProductos)
+            => await _context.Productos.AsNoTracking().Where(p => IdsProductos.Contains(p.Id)).ToListAsync();
     }
 }
