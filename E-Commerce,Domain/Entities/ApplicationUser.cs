@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using E_Commerce.Domain.Entities.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace E_Commerce.Domain.Entities
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<Guid>, IBaseEntity
     {
         public string Nombre { get; set; } = null!;
         public string Apellido { get; set; } = null!;
@@ -15,5 +16,7 @@ namespace E_Commerce.Domain.Entities
         public int IdCarrito { get; set; }
         public List<Favorito> Favoritos { get; set; } = new();
         public List<Producto> Productos { get; set; } = new();
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -40,6 +40,9 @@ namespace E_Commerce.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DNI")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -88,6 +91,9 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UrlImagen")
                         .IsRequired()
@@ -522,6 +528,9 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ComprobanteUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -530,19 +539,21 @@ namespace E_Commerce.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<DateTime?>("FechaCargaComprobante")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IdMetodoPago")
                         .HasColumnType("int");
 
                     b.Property<int>("IdOrden")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdTransaccion")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Monto")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NombreArchivo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -552,9 +563,6 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.HasIndex("IdMetodoPago");
 
                     b.HasIndex("IdOrden");
-
-                    b.HasIndex("IdTransaccion")
-                        .IsUnique();
 
                     b.ToTable("Pagos");
                 });

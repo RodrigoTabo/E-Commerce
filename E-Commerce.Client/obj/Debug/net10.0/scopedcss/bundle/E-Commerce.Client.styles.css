@@ -160,3 +160,43 @@ main[b-urzsx8dz0a] {
         overflow-y: auto;
     }
 }
+/* /Pages/Counter.razor.rz.scp.css */
+
+.steps-wrapper[b-7z6n0exjnh] {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.step-item[b-7z6n0exjnh] {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+    .step-item span[b-7z6n0exjnh] {
+        font-size: 0.85rem;
+    }
+
+.circle[b-7z6n0exjnh] {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e9ecef;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+    .circle.active[b-7z6n0exjnh] {
+        background: #0d6efd;
+        color: white;
+    }
+
+    .circle.done[b-7z6n0exjnh] {
+        background: #198754;
+        color: white;
+    }

@@ -1,0 +1,152 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Shared.DTOs.Domicilios
+@using E_Commerce.Shared.DTOs.MetodoEnvios
+@using E_Commerce.Shared.DTOs.Orden
+
+@inject MetodoEnvioApi metodoEnvioApi
+@inject DomicilioApi domicilioApi
+
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Registro de Orden</h5>
+
+                        <!-- MÉTODO ENVÍO -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Método de Envío</label>
+                            <InputSelect @bind-Value="Model.IdMetodoEnvio" class="form-select">
+                                <option value="0" disabled>Seleccione...</option>
+                                @foreach (var item in metodoEnvioDTOs)
+                                {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <!-- DOMICILIO -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Domicilio</label>
+
+                            <select class="form-select"
+                                    value="@Model.IdDomicilio"
+                                    @onchange="HandleDomicilioChange"
+                                    disabled="@(!EsDomicilio)">
+
+                                <option value="">Seleccione...</option>
+
+                                @foreach (var dom in domicilioDTOs)
+                                {
+                                    <option value="@dom.Id">@dom.Calle - @dom.Altura</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- SNAPSHOT -->
+                        @if (EsDomicilio && Model.IdDomicilio.HasValue)
+                        {
+                            <div class="row g-3 p-3 bg-light rounded border">
+
+                                <div class="col-md-8">
+                                    <label class="form-label small">Calle</label>
+                                    <input class="form-control" readonly value="@Model.CalleSnapshot" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label small">Altura</label>
+                                    <input class="form-control" readonly value="@Model.AlturaSnapshot" />
+                                </div>
+
+                                <div class="col-md-8">
+                                    <label class="form-label small">Ciudad</label>
+                                    <input class="form-control" readonly value="@Model.CiudadSnapshot" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label small">Código Postal</label>
+                                    <input class="form-control" readonly value="@Model.CodigoPostaSnapshot" />
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="card-footer bg-white border-0 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Continuar
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter] public CreateOrdenRequest Model { get; set; } = default!;
+    [Parameter] public EventCallback<CreateOrdenRequest> OnNext { get; set; }
+
+    private List<MetodoEnvioDTO> metodoEnvioDTOs = new();
+    private List<DomicilioDTO> domicilioDTOs = new();
+
+    private const int MetodoEnvioDomicilio = 1;
+
+    private bool EsDomicilio => Model.IdMetodoEnvio == MetodoEnvioDomicilio;
+
+    protected override async Task OnInitializedAsync()
+    {
+        metodoEnvioDTOs = await metodoEnvioApi.GetAllAsync();
+        domicilioDTOs = await domicilioApi.GetAllAsync();
+    }
+
+    private async Task OnValidSubmit()
+    {
+        await OnNext.InvokeAsync(Model);
+    }
+
+    private void HandleDomicilioChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var id))
+        {
+            OnDomicilioChanged(id);
+        }
+        else
+        {
+            OnDomicilioChanged(null);
+        }
+    }
+
+    private void OnDomicilioChanged(int? id)
+    {
+        Model.IdDomicilio = id;
+
+        if (id is null)
+        {
+            LimpiarSnapshot();
+            return;
+        }
+
+        var dom = domicilioDTOs.FirstOrDefault(x => x.Id == id.Value);
+        if (dom is null) return;
+
+        Model.CalleSnapshot = dom.Calle;
+        Model.AlturaSnapshot = dom.Altura;
+        Model.CiudadSnapshot = dom.Ciudad;
+        Model.CodigoPostaSnapshot = dom.CodigoPostal;
+    }
+
+    private void LimpiarSnapshot()
+    {
+        Model.CalleSnapshot = "";
+        Model.AlturaSnapshot = 0;
+        Model.CiudadSnapshot = "";
+        Model.CodigoPostaSnapshot = "";
+    }
+}

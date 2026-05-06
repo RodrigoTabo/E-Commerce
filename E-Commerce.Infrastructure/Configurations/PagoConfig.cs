@@ -15,9 +15,9 @@ namespace E_Commerce.Infrastructure.Configurations
 
             b.Property(b => b.Monto).HasPrecision(18, 2).IsRequired();
             b.Property(b => b.EstadoPago).HasConversion<string>().HasMaxLength(30).IsRequired();
-            b.Property(b => b.IdTransaccion).IsRequired().HasMaxLength(100);
+            //b.Property(b => b.IdTransaccion).IsRequired().HasMaxLength(100);
 
-            b.HasIndex(p => p.IdTransaccion).IsUnique();
+            //b.HasIndex(p => p.IdTransaccion).IsUnique();
 
             b.HasOne(m => m.MetodoPago)
                 .WithMany(p => p.Pagos)

@@ -14,8 +14,11 @@ namespace E_Commerce.Domain.Entities
         public MetodoPago MetodoPago { get; set; } = null!;
         public int IdMetodoPago { get; set; }
         public EstadoPago EstadoPago { get; set; }
-        public int IdTransaccion { get; set; }
+        //public int? IdTransaccion { get; set; }
         public decimal Monto { get; set; }
+        public string? ComprobanteUrl { get; set; }
+        public string? NombreArchivo { get; set; }
+        public DateTime? FechaCargaComprobante { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

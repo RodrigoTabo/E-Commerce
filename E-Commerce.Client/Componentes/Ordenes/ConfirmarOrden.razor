@@ -1,0 +1,88 @@
+﻿@using E_Commerce.Shared.DTOs.Carritos
+@using E_Commerce.Shared.DTOs.Orden
+@using E_Commerce.Shared.DTOs.Pagos
+<div class="card shadow-sm p-3">
+
+    <h5 class="mb-3">Confirmar compra</h5>
+
+    <h6 class="mt-2">Productos</h6>
+
+    @if (Carrito?.Items is not null)
+    {
+        @foreach (var item in Carrito.Items)
+        {
+            <div class="d-flex justify-content-between border-bottom py-2">
+                <div>
+                    <div>@item.ProductoNombre</div>
+                    <small class="text-muted">
+                        @item.ModeloNombre x @item.CarritoCantidad
+                    </small>
+                </div>
+
+                <div>
+                    $@(item.CarritoPrecio * item.CarritoCantidad)
+                </div>
+            </div>
+        }
+    }
+
+    <h6 class="mt-3">Envío</h6>
+
+    <div class="mb-2">
+        <strong>Método:</strong> @MetodoEnvioNombre
+    </div>
+
+    @if (Orden?.IdDomicilio is not null)
+    {
+        <div class="text-muted">
+            @Orden.CalleSnapshot @Orden.AlturaSnapshot <br />
+            @Orden.CiudadSnapshot (@Orden.CodigoPostaSnapshot)
+        </div>
+    }
+
+    <h6 class="mt-3">Pago</h6>
+
+    <div>
+        <strong>Transferencia bancaria</strong>
+    </div>
+
+    <div class="text-muted">
+        Alias: MI.ALIAS <br />
+        CBU: 000000000000 <br />
+        Titular: Juan Perez
+    </div>
+
+    <hr />
+
+    <div class="d-flex justify-content-between">
+        <span>Total</span>
+        <strong>$@Total</strong>
+    </div>
+
+    <button class="btn btn-success w-100 mt-3"
+            @onclick="Confirmar">
+        Confirmar compra
+    </button>
+
+    <small class="text-muted">
+        Luego de confirmar, podrás cargar el comprobante desde "Mis compras".
+    </small>
+
+</div>
+
+@code {
+
+    [Parameter] public CreateOrdenRequest Orden { get; set; }
+    [Parameter] public PagoRequestDTO Pago { get; set; }
+    [Parameter] public CarritoDto? Carrito { get; set; }
+    [Parameter] public decimal Total { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+
+    private string MetodoEnvioNombre =>
+        Orden.IdMetodoEnvio == 1 ? "Envío a domicilio" : "Retiro en local";
+
+    private async Task Confirmar()
+    {
+        await OnConfirm.InvokeAsync();
+    }
+}

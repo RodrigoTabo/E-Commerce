@@ -5,14 +5,12 @@ using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.MetodoEnvios;
 using E_Commerce.Application.Interfaces.Ordenes;
 using E_Commerce.Application.Interfaces.OrdenItems;
+using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Orden;
+using E_Commerce.Shared.DTOs.Pagos;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -23,7 +21,8 @@ namespace E_Commerce.Application.Services
         ICurrentUserService currentUserService,
         ICarritoItemsService carritoItemsService,
         IProductoService productoService,
-        IOrdenItemService ordenItemService) : IOrdenService
+        IOrdenItemService ordenItemService,
+        IPagoService pagoService) : IOrdenService
     {
         private readonly IOrdenRepository _ordenRepository = ordenRepository;
         private readonly IOrdenItemService _ordenItemService = ordenItemService;
@@ -33,50 +32,56 @@ namespace E_Commerce.Application.Services
         private readonly ICurrentUserService _currentUserService = currentUserService;
         private readonly IProductoService _productoService = productoService;
         private readonly ICarritoItemsService _carritoItemsService = carritoItemsService;
+        private readonly IPagoService _pagoService = pagoService;
 
-        public async Task<Result<int>> CreateAsync(CreateOrdenRequest request)
+        public async Task<Result<int>> CreateAsync(CreateOrdenRequest request, PagoRequestDTO pagorequest)
         {
-            var userId = _currentUserService.UserId;
-
-            if (userId is null)
-                return Result.Conflict<int>("Debes conectarte para esta acción.");
-
-            var carritoItems = await _carritoItemsService.ObtenerItemCarritoByIdUser(userId);
-
-            if (!carritoItems.Success)
-                return Result.Failure<int>(carritoItems.Errors);
-
-            if (!carritoItems.Value.Any())
-                return Result.BadRequest<int>("Carrito vacío.");
-
-            var productosIds = carritoItems.Value
-                .Select(x => x.IdProducto)
-                .Distinct()
-                .ToList();
-
-            var productosResult = await _productoService.ListaProductosByIds(productosIds);
-
-            if (!productosResult.Success)
-                return Result.Failure<int>(productosResult.Errors);
-
-            var productos = productosResult.Value;
-            var items = carritoItems.Value;
-
-            var crearOrden = await CrearOrden(request, productos, items, userId);
-            if (!crearOrden.Success)
-                return Result.Failure<int>(crearOrden.Errors);
-
-            var ordenItemsResult = _ordenItemService.CrearOrdenItem(crearOrden.Value, productos, items);
-            if (!ordenItemsResult.Success)
-                return Result.Failure<int>(ordenItemsResult.Errors);
-
-            var stockResult = _productoService.DescontarStock(productos, items);
-            if (!stockResult.Success)
-                return Result.Failure<int>(stockResult.Errors);
-
+            await _unitOfWorkRepository.BeginTransactionAsync();
             try
             {
-                await _unitOfWorkRepository.BeginTransactionAsync();
+                var userId = _currentUserService.UserId;
+
+                if (userId is null)
+                    return Result.Conflict<int>("Debes conectarte para esta acción.");
+
+                var carritoItems = await _carritoItemsService.ObtenerItemCarritoByIdUser(userId);
+
+                if (!carritoItems.Success)
+                    return Result.Failure<int>(carritoItems.Errors);
+
+                if (!carritoItems.Value.Any())
+                    return Result.BadRequest<int>("Carrito vacío.");
+
+                var productosIds = carritoItems.Value
+                    .Select(x => x.IdProducto)
+                    .Distinct()
+                    .ToList();
+
+                var productosResult = await _productoService.ListaProductosByIds(productosIds);
+
+                if (!productosResult.Success)
+                    return Result.Failure<int>(productosResult.Errors);
+
+                var productos = productosResult.Value;
+                var items = carritoItems.Value;
+
+                var crearOrden = await CrearOrden(request, productos, items, userId);
+                if (!crearOrden.Success)
+                    return Result.Failure<int>(crearOrden.Errors);
+
+                var ordenItemsResult = _ordenItemService.CrearOrdenItem(crearOrden.Value, productos, items);
+                if (!ordenItemsResult.Success)
+                    return Result.Failure<int>(ordenItemsResult.Errors);
+
+                var pagoPendiente = await _pagoService.CrearPagoAsync(crearOrden.Value, pagorequest);
+                if (!pagoPendiente.Success)
+                    return Result.Failure<int>(pagoPendiente.Errors);
+
+                //!!!!!!! MOVER ESTE METODO A CONFIRMAR PAGO.
+                //var stockResult = _productoService.DescontarStock(productos, items);
+                //if (!stockResult.Success)
+                //    return Result.Failure<int>(stockResult.Errors);
+                crearOrden.Value.OrdenItems = ordenItemsResult.Value;
 
                 await _unitOfWorkRepository.SaveChangesAsync();
 
@@ -130,7 +135,7 @@ namespace E_Commerce.Application.Services
                 IdApplicationUser = userId,
                 IdMetodoEnvio = request.IdMetodoEnvio,
                 Total = total,
-                EstadoOrden = Shared.Enums.EstadoOrden.Creada,
+                EstadoOrden = Shared.Enums.EstadoOrden.PendientePago,
             };
 
             if (request.IdMetodoEnvio == 1)
@@ -156,14 +161,13 @@ namespace E_Commerce.Application.Services
 
             if (request.IdMetodoEnvio == 1 && request.IdDomicilio <= 0)
                 return Result.BadRequest<Unit>("Debes seleccionar un punto de entrega.");
-            if (request.IdMetodoEnvio == 1 && request.IdDomicilio > 0
-                && string.IsNullOrWhiteSpace(request.AlturaSnapshot)
+            if (request.IdMetodoEnvio == 1 && request.IdDomicilio > 0 && request.AlturaSnapshot < 0
                 && string.IsNullOrWhiteSpace(request.CiudadSnapshot)
                 && string.IsNullOrWhiteSpace(request.CalleSnapshot)
                 && string.IsNullOrWhiteSpace(request.CodigoPostaSnapshot))
                 return Result.BadRequest<Unit>("No se han cargado los datos adicionales.");
-            if (request.Total <= 0)
-                return Result.BadRequest<Unit>("Ha fallado el calculo Total.");
+            //if (request.Total <= 0)
+            //    return Result.BadRequest<Unit>("Ha fallado el calculo Total.");
 
             return Result.Success();
         }

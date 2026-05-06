@@ -32,13 +32,11 @@ else
                 {
                     <MudPaper Class="pa-3 d-flex align-center" Elevation="1">
 
-                        <!-- Imagen -->
                         <MudImage Src="@item.ProductoUrlImagen"
                                   Width="80"
                                   Height="80"
                                   Class="me-3 rounded" />
 
-                        <!-- Info -->
                         <div class="flex-grow-1">
 
                             <MudText Typo="Typo.subtitle1">
@@ -49,7 +47,6 @@ else
                                 Modelo: @item.ModeloNombre
                             </MudText>
 
-                            <!-- Controles cantidad -->
                             <MudStack Row AlignItems="AlignItems.Center" Spacing="1" Class="mt-2">
 
                                 <MudIconButton Icon="@Icons.Material.Filled.Remove"
@@ -68,12 +65,10 @@ else
 
                         </div>
 
-                        <!-- Precio -->
                         <MudText Typo="Typo.subtitle2" Class="mx-3">
                             $@item.CarritoPrecio
                         </MudText>
 
-                        <!-- Eliminar -->
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
                                        OnClick="() => Eliminar(item)" />
@@ -82,7 +77,6 @@ else
                 }
                 <MudDivider Class="my-2" />
 
-                <!-- Total -->
                 <MudStack Row Justify="Justify.SpaceBetween">
                     <MudText Typo="Typo.h6">Total</MudText>
                     <MudText Typo="Typo.h6">

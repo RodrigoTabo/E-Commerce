@@ -1,0 +1,39 @@
+﻿@using E_Commerce.Shared.DTOs.Pagos
+<div class="card p-3">
+
+    <h5>Transferencia bancaria</h5>
+
+    <div class="alert alert-info">
+        Alias: MI.ALIAS<br />
+        CBU: 000000000000<br />
+        Titular: Juan Perez
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <span>Total:</span>
+        <strong>$@Total</strong>
+    </div>
+
+    <button class="btn btn-success mt-3"
+            @onclick="Continuar">
+        Continuar
+    </button>
+
+</div>
+
+@code {
+
+    [Parameter] public PagoRequestDTO Pago { get; set; } = new();
+    [Parameter] public decimal Total { get; set; }
+    [Parameter] public EventCallback OnNext { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Pago.IdMetodoPago = 1;
+    }
+
+    private async Task Continuar()
+    {
+        await OnNext.InvokeAsync();
+    }
+}

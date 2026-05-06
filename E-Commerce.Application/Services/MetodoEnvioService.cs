@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Application.Interfaces.MetodoEnvios;
+using E_Commerce.Shared.DTOs.MetodoEnvios;
 using ROP;
 using System;
 using System.Collections.Generic;
@@ -6,10 +7,20 @@ using System.Text;
 
 namespace E_Commerce.Application.Services
 {
-    public class MetodoEnvioService(IMetodoEnvioRepository metodoEnvioRepository : IMetodoEnvioService
+    public class MetodoEnvioService(IMetodoEnvioRepository metodoEnvioRepository) : IMetodoEnvioService
     {
 
         private readonly IMetodoEnvioRepository _metodoEnvioRepository = metodoEnvioRepository;
+
+        public async Task<Result<List<MetodoEnvioDTO>>> GetAllAsync()
+        {
+            var result = await _metodoEnvioRepository.GetAllAsync();
+
+            if (!result.Any())
+                return Result.NotFound<List<MetodoEnvioDTO>>("La lista esta vacia.");
+
+            return Result.Success(result);
+        }
 
         public async Task<Result<Unit>> MetodoEnvioExistente(int IdMetodoEnvio)
         {

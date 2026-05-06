@@ -1,0 +1,161 @@
+﻿@page "/perfil"
+@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.User
+@inject UserApi userApi
+
+@if (User == null)
+{
+    <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Cargando tus datos...</p>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 bg-white">
+        <form>
+            <div class="row align-items-center mb-5 pb-4 border-bottom">
+                <div class="col-auto">
+                    <div class="rounded-circle border border-primary-subtle overflow-hidden" style="width: 96px; height: 96px;">
+                        <img alt="Profile" class="w-100 h-100 object-fit-cover" src="@User.UrlImagen" />
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="form-label fw-semibold d-block mb-1">Foto de Perfil</label>
+                    <p class="small text-muted mb-3">Recomendado: JPG o PNG de al menos 400x400px.</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary btn-sm px-3 fw-semibold" type="button" disabled="@(!isEditing)">Subir Nueva Foto</button>
+                        <button class="btn btn-outline-secondary btn-sm px-3 fw-semibold" type="button" disabled="@(!isEditing)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <label class="form-label fw-medium small mb-2" for="nombre">Nombre</label>
+                    <input class="form-control py-2 px-3 border-secondary-subtle" id="nombre"
+                           @bind="editModel.Nombre" disabled="@(!isEditing)" placeholder="Ingresa tu nombre" type="text" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-medium small mb-2" for="apellido">Apellido</label>
+                    <input class="form-control py-2 px-3 border-secondary-subtle" id="apellido"
+                           @bind="editModel.Apellido" disabled="@(!isEditing)" placeholder="Ingresa tu apellido" type="text" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-medium small mb-2" for="dni">DNI / Documento de Identidad</label>
+                    <input class="form-control py-2 px-3 border-secondary-subtle" id="dni"
+                           @bind="editModel.DNI" disabled="@(!isEditing)" placeholder="00.000.000-0" type="text" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-medium small mb-2" for="urlImagen">URL de Imagen (Solo Lectura)</label>
+                    <div class="input-group">
+                        <input class="form-control py-2 px-3 border-secondary-subtle bg-light-subtle" readonly type="text" value="@User.UrlImagen" />
+                        <button class="btn btn-outline-secondary px-3" type="button">Copiar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 py-4 border-top">
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded-3 h-100">
+                        <div class="d-flex align-items-center gap-2 text-primary mb-2">
+                            <span class="material-symbols-outlined fs-5">verified_user</span>
+                            <span class="small fw-bold text-uppercase">Estado de Cuenta</span>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold px-2 py-1">ACTIVA</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded-3 h-100">
+                        <div class="d-flex align-items-center gap-2 text-primary mb-2">
+                            <span class="material-symbols-outlined fs-5">calendar_today</span>
+                            <span class="small fw-bold text-uppercase">Miembro desde</span>
+                        </div>
+                        <div class="fw-semibold text-dark">@User.CreateAt?.ToString("MMMM, yyyy")</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded-3 h-100">
+                        <div class="d-flex align-items-center gap-2 text-primary mb-2">
+                            <span class="material-symbols-outlined fs-5">admin_panel_settings</span>
+                            <span class="small fw-bold text-uppercase">Rol</span>
+                        </div>
+                        <div class="fw-semibold text-dark">Administrador Normal</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-5 pt-4 border-top">
+                @if (!isEditing)
+                {
+                    <button type="button" class="btn btn-primary px-5 py-2 shadow-sm fw-bold" @onclick="HabilitarEdicion">
+                        Editar Perfil
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-link text-secondary text-decoration-none px-4 fw-medium" @onclick="Cancelar">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary px-5 py-2 shadow-sm fw-bold" @onclick="GuardarCambios">
+                        Guardar Cambios
+                    </button>
+                }
+            </div>
+        </form>
+    </div>
+}
+
+@code {
+    private UserRequestDTO? User { get; set; }
+    private UserRequestDTO editModel = new();
+    private string? Error;
+    private bool isEditing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPerfilUser();
+    }
+
+    private async Task LoadPerfilUser()
+    {
+        try
+        {
+            User = await userApi.GetByUserId();
+            ResetEditModel();
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private void HabilitarEdicion() => isEditing = true;
+
+    private void Cancelar()
+    {
+        ResetEditModel(); // Descartamos cambios volviendo a copiar el original
+        isEditing = false;
+    }
+
+    private async Task GuardarCambios()
+    {
+        await userApi.UpdateById(editModel);
+        isEditing = false;
+    }
+
+    private void ResetEditModel()
+    {
+        if (User != null)
+        {
+            editModel = new UserRequestDTO
+            {
+                Nombre = User.Nombre,
+                Apellido = User.Apellido,
+                DNI = User.DNI,
+                UrlImagen = User.UrlImagen
+            };
+        }
+    }
+}

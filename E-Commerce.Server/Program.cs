@@ -1,10 +1,17 @@
 using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Carritos;
+using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
+using E_Commerce.Application.Interfaces.MetodoEnvios;
+using E_Commerce.Application.Interfaces.MetodoPagos;
 using E_Commerce.Application.Interfaces.Modelos;
+using E_Commerce.Application.Interfaces.Ordenes;
+using E_Commerce.Application.Interfaces.OrdenItems;
+using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Application.Interfaces.Tokens;
+using E_Commerce.Application.Interfaces.User;
 using E_Commerce.Application.Services;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
@@ -104,6 +111,19 @@ builder.Services.AddScoped<ICarritoItemsService, CarritoItemsService>();
 builder.Services.AddScoped<ICarritoItemsRepository, CarritoItemsRepository>();
 builder.Services.AddScoped<ICarritoService, CarritoService>();
 builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
+builder.Services.AddScoped<IOrdenService, OrdenService>();
+builder.Services.AddScoped<IOrdenRepository, OrdenRepository>();
+builder.Services.AddScoped<IOrdenItemService, OrdenItemService>();
+builder.Services.AddScoped<IMetodoEnvioService, MetodoEnvioService>();
+builder.Services.AddScoped<IMetodoEnvioRepository, MetodoEnvioRepository>();
+builder.Services.AddScoped<IDomicilioService, DomicilioService>();
+builder.Services.AddScoped<IDomicilioRepository, DomicilioRepository>();
+builder.Services.AddScoped<IMetodoPagoService, MetodoPagoService>();
+builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
+builder.Services.AddScoped<IPagoService, PagoService>();
+builder.Services.AddScoped<IPagoRepository, PagoRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

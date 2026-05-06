@@ -45,5 +45,9 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddScoped<AuthApi>();
 builder.Services.AddScoped<ProductoApi>();
 builder.Services.AddScoped<CarritoApi>();
+builder.Services.AddScoped<MetodoEnvioApi>();
+builder.Services.AddScoped<DomicilioApi>();
+builder.Services.AddScoped<OrdenApi>();
+builder.Services.AddScoped<UserApi>();
 
 await builder.Build().RunAsync();
