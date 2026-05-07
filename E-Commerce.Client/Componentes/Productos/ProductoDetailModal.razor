@@ -1,117 +1,200 @@
 ﻿@using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
 @using E_Commerce.Shared.DTOs.Productos
+@using E_Commerce.Shared.DTOs.Reviews
+@using System.Security.Claims
 @inject ProductoApi productoApi
+@inject ReviewApi reviewApi
+@inject AuthenticationStateProvider AuthStateProvider
 
-@if (Cargando)
+@if (Cargando && Model == null)
 {
-    <MudProgressCircular Indeterminate="true" />
-
+    <div class="d-flex justify-content-center p-5">
+        <div class="spinner-border"></div>
+    </div>
 }
 else if (Model is not null)
 {
-    <!-- 2. Ventana Modal -->
-    <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
+    <MudDialog MaxWidth="MaxWidth.False" FullWidth="true" Style="width:80vw; max-width:80vw;">
         <DialogContent>
-            <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="@Cancel" />
-            <MudGrid>
-                <!-- Imagen -->
-                <MudItem xs="12">
-                    <MudImage Src="@Model.UrlImagen" Alt="Producto" Class="rounded-lg" />
-                </MudItem>
 
-                <!-- Contenido -->
-                <MudItem xs="12">
-                    <MudStack Spacing="2">
+            <!-- Cerrar -->
+            <div class="d-flex justify-content-end">
+                <button class="btn" @onclick="Cancel">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
 
-                        <!-- Header -->
-                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                            <MudText Typo="Typo.h6">@Model.Nombre</MudText>
-                        </MudStack>
+            <div class="row">
+                <div class="col-12 col-md-7">
+                    <div style="height: 450px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="@Model.UrlImagen"
+                             style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+                    </div>
+                </div>
 
-                        <!-- Precio -->
-                        <MudText Typo="Typo.h5" Color="Color.Primary">@Model.Precio</MudText>
+                <div class="col-12 col-md-5 d-flex flex-column gap-2">
+                    <h4>@Model.Nombre</h4>
+                    <h5>$@Model.Precio</h5>
+                    <p>@Model.Descripcion</p>
 
-                        <!-- Descripción -->
-                        <MudText Typo="Typo.body2">
-                           @Model.MarcaNombre
-                        </MudText>
+                    <button class="btn btn-primary">
+                        Agregar al carrito
+                    </button>
+                </div>
+            </div>
 
-                        <!-- Detalles -->
-                        <MudText Typo="Typo.body2">
-                            @Model.Descripcion
-                        </MudText>
+            <hr />
 
-                        <!-- Cantidad -->
-                        @* <MudNumericField T="int" Label="Cantidad" @bind-Value="@Model.Stock" Min="1" /> *@
+            <!-- Reviews -->
+            <div>
+                <h6>Reseñas (@Model.ReviewDTO.Count)</h6>
 
-                        <!-- Botones -->
-                        <MudStack Row="true" Spacing="2">
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary">
-                                Agregar al carrito
-                            </MudButton>
+                @foreach (var review in Model.ReviewDTO)
+                {
+                    <div class="card mb-2">
+                        <div class="card-body">
 
-                            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Disabled="true">
-                                Sin stock
-                            </MudButton>
-                        </MudStack>
+                            <div class="d-flex justify-content-between">
+                                <span>@review.UsuarioNombre</span>
 
-                        <!-- Categorías -->
-                        <MudText Typo="Typo.caption">
-                            Categorías: Clothing, Men's Clothes, Tops & T-Shirts
-                        </MudText>
+                                <div>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= review.rating ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </div>
+                            </div>
 
-                    </MudStack>
-                </MudItem>
-            </MudGrid>
+                            <p>@review.comentario</p>
 
-        </DialogContent>
-    </MudDialog>
-}
-else if (Error is not null)
-{
-    <MudText Color="Color.Error">@Error</MudText>
-}
+                            @if (review.UsuarioId == currentUserId)
+                            {
+                                <button class="btn btn-sm btn-link text-danger"
+                                        @onclick="() => EliminarReview(review.Id)">
+                                    Eliminar
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Nueva review -->
+            <div class="mt-3">
+                <h6>Deja tu opinión</h6>
+
+                <!-- Rating -->
+                <div class="mb-2">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        int starIndex = i;
+
+                        <i class="bi @(starIndex <= nuevaReview.Rating ? "bi-star-fill" : "bi-star")"
+                               style="cursor:pointer;"
+                               @onclick="() => SeleccionarRating(starIndex)">
+                        </i>
+                    }
+                </div>
+
+                <!-- Comentario -->
+                <textarea class="form-control mb-2"
+                          rows="3"
+                              @bind="nuevaReview.Comentario">
+                </textarea>
+
+                    <!-- Acciones -->
+                    <div class="d-flex justify-content-between">
+                        @if (Error != null)
+                        {
+                            <small class="text-danger">@Error</small>
+                        }
+
+                        <button class="btn btn-primary"
+                                @onclick="EnviarComentario"
+                                disabled="@(nuevaReview.Rating == 0 || string.IsNullOrWhiteSpace(nuevaReview.Comentario) || Cargando)">
+                            @if (Cargando)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            Publicar
+                        </button>
+                    </div>
+                </div>
+
+            </DialogContent>
+        </MudDialog>
+    }
+
+    
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
-
-    [Parameter]
-    public int Id { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; }
 
     private string? Error;
     private bool Cargando;
-
+    private Guid? currentUserId;
     private ProductoResponseDTO Model { get; set; }
-
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
-
-    private void Cancel() => MudDialog.Cancel();
+    private CrearReviewDTO nuevaReview = new();
 
     protected override async Task OnInitializedAsync()
-        => await LoadProductoById();
+    {
+        await LoadProductoById();
+        await GetCurrentUserId();
+    }
 
+    protected override void OnParametersSet()
+    {
+        nuevaReview.IdProducto = Id;
+    }
+
+    private async Task GetCurrentUserId()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var idString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (Guid.TryParse(idString, out var parsed))
+        {
+            currentUserId = parsed;
+        }
+    }
 
     public async Task LoadProductoById()
     {
         Cargando = true;
-        Error = null;
         try
         {
-            if (Id != 0)
-            {
-                Model = await productoApi.GetByIdAsync(Id);
-            }
-
+            if (Id != 0) Model = await productoApi.GetByIdAsync(Id);
         }
-        catch (HttpApiException ex)
-        {
-            Error = ex.Message;
-        }
-        finally
-        {
-            Cargando = false;
-        }
-
+        catch (Exception ex) { Error = ex.Message; }
+        finally { Cargando = false; }
     }
+
+    private void SeleccionarRating(int estrellas)
+    {
+        nuevaReview.Rating = estrellas;
+        StateHasChanged();
+    }
+
+    public async Task EnviarComentario()
+    {
+        if (Cargando) return;
+        Cargando = true;
+        Error = null;
+
+        try
+        {
+            await reviewApi.CreateAsync(nuevaReview);
+            
+            nuevaReview = new CrearReviewDTO { IdProducto = Id, Rating = 0 };
+            await LoadProductoById();
+        }
+        catch (Exception ex) { Error = "Error al publicar"; }
+        finally { Cargando = false; }
+    }
+
+    private async Task EliminarReview(int id) { /* Lógica de eliminar */ }
+    private void Cancel() => MudDialog.Cancel();
 }

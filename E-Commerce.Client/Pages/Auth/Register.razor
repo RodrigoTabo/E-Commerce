@@ -1,0 +1,83 @@
+﻿@page "/register"
+@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Shared.DTOs.User
+@inject AuthApi authApi
+@inject NavigationManager Nav
+
+<div class="d-flex justify-center align-center" style="height: 100vh; background-color: #f5f5f5;">
+    <MudCard Style="width: 400px; padding: 20px; border-radius: 15px;">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5" Align="Align.Center"><b>Crear Cuenta</b></MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        
+        <MudCardContent>
+            <MudTextField @bind-Value="model.UrlImagen" Label="urlImagen" Variant="Variant.Outlined" Class="mb-3" />
+            <MudTextField @bind-Value="model.Nombre" Label="Nombre" Variant="Variant.Outlined" Class="mb-3" />
+            <MudTextField @bind-Value="model.Apellido" Label="Apellido" Variant="Variant.Outlined" Class="mb-3" />
+            <MudTextField @bind-Value="model.DNI" Label="DNI" Variant="Variant.Outlined" Class="mb-3" />
+            <MudTextField @bind-Value="model.Email" Label="Email" Variant="Variant.Outlined" Class="mb-3" />
+            <MudTextField @bind-Value="model.Password" Label="Contraseña" Variant="Variant.Outlined" InputType="InputType.Password" Class="mb-3" />
+            <MudTextField @bind-Value="model.PasswordConfirm" Label="Confirmar contraseña" Variant="Variant.Outlined" InputType="InputType.Password" Class="mb-3" />
+            
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Class="mt-2">@errorMessage</MudAlert>
+            }
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       FullWidth="true"
+                       Size="Size.Large"
+                       OnClick="HandleRegister"
+                       Disabled="_processing">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Procesando...</MudText>
+                }
+                else
+                {
+                    <MudText>Registrarse</MudText>
+                }
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</div>
+
+@code {
+    private UserRegisterDTO model = new();
+    private bool _processing = false;
+    private string? errorMessage;
+
+    private async Task HandleRegister()
+    {
+        _processing = true;
+        errorMessage = null;
+
+        try
+        {
+            var result = await authApi.RegisterAsync(model);
+            
+            if (result != null)
+            {
+                Nav.NavigateTo("/");
+            }
+            else
+            {
+                errorMessage = "No se pudo completar el registro. Intente con otro email.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error de conexión con el servidor.";
+        }
+        finally
+        {
+            _processing = false;
+        }
+    }
+}

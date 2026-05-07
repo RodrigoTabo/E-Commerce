@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "E-Commerce.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-1w763LOTSpTz1Bj32FryvH52eouHrF3HFTFq5qhn3Kc=",
+    "hash": "sha256-0kefx5KB8wMfmCURu6EMWLyHuMTXWzmFta7r8SYPMsE=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.mx9wzm9o5h.js"
@@ -1302,28 +1302,28 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "E-Commerce.Shared.wasm",
-        "name": "E-Commerce.Shared.5bj560h663.wasm",
-        "integrity": "sha256-AUcVAu5cZXxybpUjqUqS14pIRsq2j+u4L4WRCtt/yA8=",
+        "name": "E-Commerce.Shared.kxo7b7gd1e.wasm",
+        "integrity": "sha256-+CDty1tjPwc/SHXmAykJSyFwrG/FN5VrOkv/Nc+Hfws=",
         "cache": "force-cache"
       },
       {
         "virtualPath": "E-Commerce.Client.wasm",
-        "name": "E-Commerce.Client.lkyn8xzcul.wasm",
-        "integrity": "sha256-O5VW/l8zdG2xZBVVagb+o44Doo8quRboXh6iGJPMLRA=",
+        "name": "E-Commerce.Client.8t3338rk8h.wasm",
+        "integrity": "sha256-9BYsRJ5ZIVfiJmB3Eijv3p+PeH/coggLQVqgflNCaNQ=",
         "cache": "force-cache"
       }
     ],
     "pdb": [
       {
         "virtualPath": "E-Commerce.Shared.pdb",
-        "name": "E-Commerce.Shared.wagkr2qrwb.pdb",
-        "integrity": "sha256-iDI88gWrJhdI8u4zFLfcLG8uPorX5xCn/kU4TyrJcnM=",
+        "name": "E-Commerce.Shared.krd1p9ewv8.pdb",
+        "integrity": "sha256-EKc0moMfSA6+JmthtboKJh8V7mlQEGL6KQkZ4QDQtWE=",
         "cache": "force-cache"
       },
       {
         "virtualPath": "E-Commerce.Client.pdb",
-        "name": "E-Commerce.Client.c6oi475ek7.pdb",
-        "integrity": "sha256-HOWuij1+lT+byLzd5RWaJM5LVBnDppLdYa2XUpgRCOA=",
+        "name": "E-Commerce.Client.n87cxmkhjq.pdb",
+        "integrity": "sha256-WfeE+6gvP03ClZgOl7Q/qEmtVw9XafFnRmQAmS8DsZY=",
         "cache": "force-cache"
       }
     ],

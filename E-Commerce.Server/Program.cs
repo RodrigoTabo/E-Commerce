@@ -10,6 +10,7 @@ using E_Commerce.Application.Interfaces.Ordenes;
 using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
+using E_Commerce.Application.Interfaces.Reviews;
 using E_Commerce.Application.Interfaces.Tokens;
 using E_Commerce.Application.Interfaces.User;
 using E_Commerce.Application.Services;
@@ -124,6 +125,8 @@ builder.Services.AddScoped<IPagoService, PagoService>();
 builder.Services.AddScoped<IPagoRepository, PagoRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

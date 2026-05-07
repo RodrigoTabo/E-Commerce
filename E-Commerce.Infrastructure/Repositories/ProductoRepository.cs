@@ -2,6 +2,7 @@
 using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
 using E_Commerce.Shared.DTOs.Productos;
+using E_Commerce.Shared.DTOs.Reviews;
 using Microsoft.EntityFrameworkCore;
 using ROP;
 
@@ -29,19 +30,31 @@ namespace E_Commerce.Infrastructure.Repositories
         {
             var producto = await _context.Productos
                 .Where(p => p.Id == id)
-                .Select(p => new ProductoResponseDTO(
-                    p.Id,
-                    p.Nombre,
-                    p.Descripcion,
-                    p.Precio,
-                    p.Stock,
-                    p.UrlImagen,
-                    p.Modelo != null ? p.Modelo.Marca.Nombre : "",
-                    p.Modelo != null ? p.Modelo.TipoProducto.Nombre : "",
-                    p.Modelo.Nombre,
-                    p.ApplicationUser.Nombre,
-                    p.CreatedAt
-                ))
+                .Select(p => new ProductoResponseDTO
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Descripcion = p.Descripcion,
+                    Precio = p.Precio,
+                    Stock = p.Stock,
+                    UrlImagen = p.UrlImagen,
+                    MarcaNombre = p.Modelo != null ? p.Modelo.Marca.Nombre : "",
+                    CategoriaNombre = p.Modelo != null ? p.Modelo.TipoProducto.Nombre : "",
+                    Modelo = p.Modelo.Nombre,
+                    NombreVendedor = p.ApplicationUser.Nombre,
+                    CreateAt = p.CreatedAt,
+                    ReviewDTO = p.Reviews.Select(r => new ReviewDTO
+                    {
+                        Id= r.Id,
+                        comentario = r.Comentario,
+                        rating = r.Rating,
+                        UsuarioId = r.IdApplicationUser,
+                        UsuarioNombre = r.ApplicationUser.Nombre + r.ApplicationUser.Apellido,
+                        CreateAt = r.CreatedAt
+                    }).ToList(),
+                    PromedioEstrellas = p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0,
+                    TotalReviews = p.Reviews.Count()
+                })
                 .SingleOrDefaultAsync();
 
             return producto;

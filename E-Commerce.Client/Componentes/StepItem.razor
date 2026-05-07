@@ -1,9 +1,7 @@
 ﻿<div class="text-center flex-fill">
 
     <div class="rounded-circle mx-auto mb-1 d-flex align-items-center justify-content-center
-        @(Completo ? "bg-success text-white" :
-                   Activo ? "bg-primary text-white" :
-                   "bg-light text-muted")"
+        @(Completo ? "bg-success text-white" : Activo ? "bg-primary text-white" : "bg-light text-muted")"
          style="width:40px; height:40px;">
 
         @(Completo ? "✔" : Numero)

@@ -7,12 +7,20 @@
       "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{628771B5-6E20-D42B-4A84-687898E4E075}|E-Commerce.Server\\E-Commerce.Server.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.server\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{628771B5-6E20-D42B-4A84-687898E4E075}|E-Commerce.Server\\E-Commerce.Server.csproj|solutionrelative:e-commerce.server\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\reviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.client\\pages\\perfil.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|solutionrelative:e-commerce.client\\pages\\perfil.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\productoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\productoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\pagoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\pagoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\ordenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,40 +46,66 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Server\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "E-Commerce.Server\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Server\\Controllers\\UserController.cs",
-              "RelativeToolTip": "E-Commerce.Server\\Controllers\\UserController.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAQwB8AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T23:01:22.518Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\UserService.cs",
               "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\UserService.cs",
               "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\UserService.cs",
               "RelativeToolTip": "E-Commerce.Application\\Services\\UserService.cs",
-              "ViewState": "AgIAADcAAAAAAAAAAADgv0kAAABUAAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAowEYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T22:58:59.437Z",
+              "WhenOpened": "2026-05-06T22:37:44.197Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ReviewService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\ReviewService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\ReviewService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\ReviewService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Services\\ReviewService.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAowEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T22:37:39.571Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Perfil.razor",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Pages\\Perfil.razor",
-              "RelativeDocumentMoniker": "E-Commerce.Client\\Pages\\Perfil.razor",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Pages\\Perfil.razor",
-              "RelativeToolTip": "E-Commerce.Client\\Pages\\Perfil.razor",
-              "ViewState": "AgIAAH4AAAAAAAAAAAAAAI4AAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-05T22:43:37.884Z"
+              "Title": "ProductoService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\ProductoService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\ProductoService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\ProductoService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Services\\ProductoService.cs",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAswMoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T22:37:33.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PagoService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\PagoService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\PagoService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\PagoService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Services\\PagoService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwC0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T22:37:28.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "OrdenService.cs",
+              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
+              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\OrdenService.cs",
+              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\OrdenService.cs",
+              "RelativeToolTip": "E-Commerce.Application\\Services\\OrdenService.cs",
+              "ViewState": "AgIAAKEAAAAAAAAAAAAwwK8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T22:37:22.473Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -1,9 +1,11 @@
-﻿<CascadingAuthenticationState>
+﻿@using E_Commerce.Client.Pages.Auth
+<CascadingAuthenticationState>
     <Router AppAssembly="typeof(Program).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
                 <NotAuthorized>
                     No Autorizado
+                    <Login />
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="routeData" Selector="h1" />

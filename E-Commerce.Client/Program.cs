@@ -49,5 +49,6 @@ builder.Services.AddScoped<MetodoEnvioApi>();
 builder.Services.AddScoped<DomicilioApi>();
 builder.Services.AddScoped<OrdenApi>();
 builder.Services.AddScoped<UserApi>();
+builder.Services.AddScoped<ReviewApi>();
 
 await builder.Build().RunAsync();

@@ -142,7 +142,7 @@
 
             await JwtAuthStateProvider.MarkUserAsAuthenticatedAsync(result.Token);
 
-            Navigation.NavigateTo("/sucursales");
+            Navigation.NavigateTo("/", true);
         }
         catch (HttpApiException ex)
         {

@@ -160,19 +160,20 @@ namespace E_Commerce.Application.Services
 
         private ProductoResponseDTO MapToDto(Producto p)
         {
-            return new ProductoResponseDTO(
-                p.Id,
-                p.Nombre,
-                p.Descripcion,
-                p.Precio,
-                p.Stock,
-                p.UrlImagen ?? "Imagen no cargada.",
-                p.Modelo?.Marca?.Nombre ?? "Sin Marca",
-                p.Modelo?.TipoProducto?.Nombre ?? "Sin Tipo",
-                p.Modelo?.Nombre ?? "Sin Modelo",
-                p.ApplicationUser?.Nombre ?? "Sin Usuario",
-                p.CreatedAt
-             );
+            return new ProductoResponseDTO
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Descripcion = p.Descripcion,
+                Precio = p.Precio,
+                Stock = p.Stock,
+                UrlImagen = p.UrlImagen ?? "Imagen no cargada.",
+                MarcaNombre = p.Modelo?.Marca?.Nombre ?? "Sin Marca",
+                CategoriaNombre = p.Modelo?.TipoProducto?.Nombre ?? "Sin Tipo",
+                Modelo = p.Modelo?.Nombre ?? "Sin Modelo",
+                NombreVendedor = p.ApplicationUser?.Nombre ?? "Sin Usuario",
+                CreateAt = p.CreatedAt
+            };
         }
 
         private Result<CreateProductoRequestDTO> ValidateProductoRequest(CreateProductoRequestDTO dto)

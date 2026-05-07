@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Client.Common;
 using E_Commerce.Shared.DTOs.Auth;
+using E_Commerce.Shared.DTOs.User;
 using System.Net.Http.Json;
 
 namespace E_Commerce.Client.ApiRoutes
@@ -12,7 +13,7 @@ namespace E_Commerce.Client.ApiRoutes
         private readonly TokenStorageService _tokenStorageService = tokenStorageService;
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/login", request);
+            var response = await _httpClient.PostAsJsonAsync("api/auth/login", request);
             response.EnsureSuccessStatusCode();
 
             var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
@@ -24,15 +25,21 @@ namespace E_Commerce.Client.ApiRoutes
 
             return result;
         }
-        public async Task<LoginResponse> SelectBranchAsync(string sucursalId)
+
+        public async Task<LoginResponse> RegisterAsync(UserRegisterDTO request)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/auth/select-branch", sucursalId);
+            var response = await _httpClient.PostAsJsonAsync("api/auth/register", request);
             response.EnsureSuccessStatusCode();
 
             var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-            if (result is null) throw new Exception("Error al obtener el token de sucursal.");
+
+            if (result is null)
+                throw new Exception("No se pudo leer la respuesta de login.");
+
+            await _tokenStorageService.SetTokenAsync(result.Token);
 
             return result;
         }
+
     }
 }

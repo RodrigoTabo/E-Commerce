@@ -5,43 +5,64 @@
 @inject IDialogService DialogService
 @inject CarritoApi carritoApi
 
-<section class="py-5">
-    @foreach (var item in Items)
-    {
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="@item.UrlImagen" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">@item.Nombre</h5>
+<div id="productCarousel" class="carousel slide" data-bs-ride="false" style="max-width: 1600px; margin: auto;">
+    
+    <div class="carousel-inner p-4">
+        
+        <div class="carousel-item active">
+            <div class="row g-4">
+                @foreach (var item in Items.Take(4))
+                {
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="card h-100 border-0 shadow-lg position-relative rounded-4 overflow-hidden">
+                            
+                            @* <button class="btn btn-light position-absolute top-0 end-0 m-3 shadow-sm rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px; z-index: 10; color: #ff4757;">
+                                <i class="oi oi-heart"></i>
+                            </button> *@
+
+                            <div class="ratio ratio-1x1 bg-white p-4">
+                                <img src="@item.UrlImagen" class="object-fit-contain" alt="@item.Nombre">
+                            </div>
+                            
+                            <div class="card-body text-right d-flex flex-column justify-content-right">
+                                <h5 class="card-title mb-1 text-truncate">@item.Nombre</h5>
+                                <p class="card-text fs-5">$ @item.Precio</p>
+                            </div>
+
+                            <div class="card-footer p-3 pt-0 border-0 bg-transparent">
+                                <div class="d-grid">
+                                    @* <button @onclick="@(() => AddCarrito(item.Id, item.Stock))" class="btn btn-primary fw-bold py-2">
+                                        Añadir al carrito
+                                    </button> *@
+                                    <button @onclick="@(() => OpenDialogAsync(item.Id))" class="btn btn-primary fw-bold py-2">
+                                        Ver detalles
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <span class="text-muted text-decoration-line-through">@item.Precio</span>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <MudButton @onclick="@(() => AddCarrito(item.Id, item.Stock))" StartIcon="@Icons.Material.Filled.AddShoppingCart" Variant="Variant.Filled" Color="Color.Primary">
-                                Add Carrito
-                            </MudButton>
-                            <MudButton @onclick="@(() => OpenDialogAsync(item.Id))" StartIcon="@Icons.Material.Filled.RemoveRedEye" Variant="Variant.Filled" Color="Color.Primary">
-                                Detalles
-                            </MudButton>
-                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
-
-    }
-</section>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev"
+            style="width: 5%; left: -2.5rem;" @onclick="Anterior">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next"
+            style="width: 5%; right: -2.5rem;" @onclick="Siguiente">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+    </button>
+</div>
 @code {
 
     [Parameter]
     public List<ProductoResponseDTO> Items { get; set; } = new();
     [Parameter]
     public bool Loading { get; set; }
-
     private string? Error;
+    int posicion = 0;
 
     private async Task OpenDialogAsync(int Id)
     {
@@ -69,6 +90,27 @@
         {
             Error = ex.Message;
         }
+    }
 
+    private void Siguiente()
+    {
+        var primero = Items.FirstOrDefault();
+        if (primero != null)
+        {
+            Items.Remove(primero);
+            Items.Add(primero);
+        }
+        StateHasChanged();
+    }
+
+    private void Anterior()
+    {
+        var ultimo = Items.LastOrDefault();
+        if (ultimo != null)
+        {
+            Items.Remove(ultimo);
+            Items.Insert(0, ultimo);
+        }
+        StateHasChanged();
     }
 }
