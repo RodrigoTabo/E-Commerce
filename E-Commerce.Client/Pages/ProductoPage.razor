@@ -1,0 +1,54 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.Productos
+@using E_Commerce.Shared.DTOs.Productos
+@inject ProductoApi productoApi
+@page "/producto"
+
+<ProductoTable Items="@items"
+               OnCreate="AbrirModalCrear"
+               OnEdit="AbrirModalEditar"
+               OnDelete="AbrirModalEliminar" />
+<ProductoModal @ref="modalInstancia" OnAccionCompletada="LoadProductosAsync" />
+
+@code {
+    private List<ProductoResponseDTO> items { get; set; } = new();
+    private ProductoModal modalInstancia;
+    private string? Error;
+    private bool Cargando;
+
+    protected override async Task OnInitializedAsync() => await LoadProductosAsync();
+
+    private async Task LoadProductosAsync()
+    {
+        Cargando = true;
+        Error = null;
+        try
+        {
+            items = await productoApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    private void AbrirModalCrear() => modalInstancia.Abrir();
+
+    private void AbrirModalEditar(int id)
+    {
+        var item = items.FirstOrDefault(p => p.Id == id);
+        if (item != null) modalInstancia.Abrir(item.Id, item.Nombre, item.Descripcion, item.UrlImagen, item.IdModelo, false);
+    }
+
+    private void AbrirModalEliminar(int id)
+    {
+        var item = items.FirstOrDefault(p => p.Id == id);
+        if (item != null) modalInstancia.Abrir(item.Id, item.Nombre, item.Descripcion, item.UrlImagen, item.IdModelo, true);
+    }
+
+}

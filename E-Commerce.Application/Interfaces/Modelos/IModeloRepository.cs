@@ -7,6 +7,6 @@ namespace E_Commerce.Application.Interfaces.Modelos
 {
     public interface IModeloRepository
     {
-        Task<Modelo?> GetByIdAsync(int id);
+        Task<Modelo?> GetByIdAsync(int? id);
     }
 }

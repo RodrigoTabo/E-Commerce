@@ -1,3 +1,5 @@
+using E_Commerce.Application.Interfaces.Atributos;
+using E_Commerce.Application.Interfaces.AtributoValores;
 using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Carritos;
@@ -95,7 +97,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInte
 // ------------------------------------- FluentValidator ------------------------------------------------
 
 // ------------------------------------- SERVICIOS ------------------------------------------------
-// Los servicios que tengan un comentario al costado, es para diferenciar y reconocer a que esta ligado y configurado.
+// Los servicios que tengan un comentario al costado son para diferenciar y reconocer a que esta ligado y configurado.
 builder.Services.AddProblemDetails(); //MIDDLEWARE
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); //JWT
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>(); //JWT
@@ -107,7 +109,7 @@ builder.Services.AddScoped<IModeloService, ModeloService>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IGenerarTokenService, GenerarTokenService>();
-builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>(); // Inserts DB
 builder.Services.AddScoped<ICarritoItemsService, CarritoItemsService>();
 builder.Services.AddScoped<ICarritoItemsRepository, CarritoItemsRepository>();
 builder.Services.AddScoped<ICarritoService, CarritoService>();
@@ -127,6 +129,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IAtributoService, AtributoService>();
+builder.Services.AddScoped<IAtributoRepository, AtributoRepository>();
+builder.Services.AddScoped<IAtributoValorService, AtributoValorService>();
+builder.Services.AddScoped<IAtributoValorRepository, AtributoValorRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

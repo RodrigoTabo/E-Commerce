@@ -29,7 +29,7 @@ namespace E_Commerce.Application.Services
                     Orden = orden,
                     IdProducto = producto.Id,
                     Cantidad = item.Cantidad,
-                    PrecioUnitario = producto.Precio,
+                    //PrecioUnitario = producto.Precio,
                 };
 
                 items.Add(ordenItem);

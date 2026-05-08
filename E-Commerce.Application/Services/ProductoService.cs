@@ -62,15 +62,14 @@ namespace E_Commerce.Application.Services
             var producto = new Producto
             {
                 Nombre = dto.Nombre,
-                Stock = dto.Stock,
-                Precio = dto.Precio,
+                //Stock = dto.Stock,
+                //Precio = dto.Precio,
                 UrlImagen = dto.UrlImagen,
                 Descripcion = dto.Descripcion,
                 IdModelo = dto.IdModelo,
                 IdApplicationUser = userId.Value
             };
 
-            // 5. Guardar
             await _productoRepository.AddAsync(producto);
             await _unitOfWorkRepository.SaveChangesAsync();
 
@@ -86,6 +85,26 @@ namespace E_Commerce.Application.Services
 
             // Usamos tu validador de DTO
             return ValidateProductoById(producto);
+        }
+
+        public async Task<Result<Unit>> UpdateAsync(UpdateProductoRequestDTO request)
+        {
+            var producto = await _productoRepository.GetProductoByIdAsync(request.Id);
+            if (producto is null)
+                return Result.NotFound<Unit>("El producto no existe.");
+
+            var modelo = await _modeloService.GetModeloByIdAsync(request.IdModelo);
+            if (!modelo.Success)
+                return Result.NotFound<Unit>("El modelo no existe.");
+
+            producto.Nombre = request.Nombre;
+            producto.Descripcion = request.Descripcion;
+            producto.UrlImagen = request.UrlImagen;
+            producto.IdModelo = request.IdModelo;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+
+            return Result.Success();
         }
 
         public async Task<Result<bool>> DeleteAsync(int id)
@@ -114,14 +133,14 @@ namespace E_Commerce.Application.Services
                 if (!productosDict.TryGetValue(item.IdProducto, out var producto))
                     return Result.Failure<Unit>($"Producto {item.IdProducto} no existe.");
 
-                if (producto.Stock < item.Cantidad)
-                    return Result.Failure<Unit>($"El producto {producto.Nombre} no tiene stock");
+                //if (producto.Stock < item.Cantidad)
+                //    return Result.Failure<Unit>($"El producto {producto.Nombre} no tiene stock");
             }
 
             foreach (var item in carritoItems)
             {
                 var producto = productosDict[item.IdProducto];
-                producto.Stock -= item.Cantidad;
+                //producto.Stock -= item.Cantidad;
             }
 
             return Result.Success();
@@ -150,10 +169,10 @@ namespace E_Commerce.Application.Services
 
         private async Task<Result<CreateProductoRequestDTO>> ValidateModelo(CreateProductoRequestDTO dto)
         {
-            var modeloResult = await _modeloService.GetByIdAsync(dto.IdModelo);
+            //var modeloResult = await _modeloService.GetByIdAsync(dto.IdModelo);
 
-            if (!modeloResult.Success)
-                return Result.NotFound<CreateProductoRequestDTO>("El Modelo no existe.");
+            //if (!modeloResult.Success)
+            //    return Result.NotFound<CreateProductoRequestDTO>("El Modelo no existe.");
 
             return Result.Success(dto);
         }
@@ -165,12 +184,13 @@ namespace E_Commerce.Application.Services
                 Id = p.Id,
                 Nombre = p.Nombre,
                 Descripcion = p.Descripcion,
-                Precio = p.Precio,
-                Stock = p.Stock,
+                //Precio = p.Precio,
+                //Stock = p.Stock,
                 UrlImagen = p.UrlImagen ?? "Imagen no cargada.",
                 MarcaNombre = p.Modelo?.Marca?.Nombre ?? "Sin Marca",
                 CategoriaNombre = p.Modelo?.TipoProducto?.Nombre ?? "Sin Tipo",
                 Modelo = p.Modelo?.Nombre ?? "Sin Modelo",
+                IdModelo = p.IdModelo,
                 NombreVendedor = p.ApplicationUser?.Nombre ?? "Sin Usuario",
                 CreateAt = p.CreatedAt
             };
@@ -186,10 +206,10 @@ namespace E_Commerce.Application.Services
                 errores.Add(Error.Create("Añade una Descripcion."));
             if (string.IsNullOrWhiteSpace(dto.UrlImagen))
                 errores.Add(Error.Create("Añade una Imagen."));
-            if (dto.Precio <= 0)
-                errores.Add(Error.Create("Añade el Precio."));
-            if (dto.Stock <= 0)
-                errores.Add(Error.Create("Añade el Stock."));
+            //if (dto.Precio <= 0)
+            //    errores.Add(Error.Create("Añade el Precio."));
+            //if (dto.Stock <= 0)
+            //    errores.Add(Error.Create("Añade el Stock."));
             if (dto.IdModelo <= 0)
                 errores.Add(Error.Create("Añade el Modelo."));
 
@@ -198,6 +218,5 @@ namespace E_Commerce.Application.Services
 
             return Result.Success(dto);
         }
-
     }
 }

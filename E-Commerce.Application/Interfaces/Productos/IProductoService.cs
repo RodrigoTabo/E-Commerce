@@ -16,5 +16,6 @@ namespace E_Commerce.Application.Interfaces.Productos
         Task<Result<bool>> DeleteAsync(int id);
         Task<Result<List<Producto>>> ListaProductosByIds(List<int> IdsProductos);
         Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems);
+        Task<Result<Unit>> UpdateAsync(UpdateProductoRequestDTO request);
     }
 }

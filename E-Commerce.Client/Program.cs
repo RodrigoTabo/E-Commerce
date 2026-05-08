@@ -50,5 +50,7 @@ builder.Services.AddScoped<DomicilioApi>();
 builder.Services.AddScoped<OrdenApi>();
 builder.Services.AddScoped<UserApi>();
 builder.Services.AddScoped<ReviewApi>();
+builder.Services.AddScoped<AtributoApi>();
+builder.Services.AddScoped<AtributoValorApi>();
 
 await builder.Build().RunAsync();

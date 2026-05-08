@@ -94,8 +94,8 @@ namespace E_Commerce.Application.Services
 
             var nuevaCantidad = obtenerItemCarrito.Value.Cantidad + 1;
 
-            if (productoStock.Value.Stock < nuevaCantidad)
-                return Result.Conflict<CarritoDto?>("No hay stock suficiente");
+            //if (productoStock.Value.Stock < nuevaCantidad)
+            //    return Result.Conflict<CarritoDto?>("No hay stock suficiente");
 
             obtenerItemCarrito.Value.Cantidad = nuevaCantidad;
 

@@ -1,6 +1,5 @@
 ﻿using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Shared.DTOs.Productos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ROP;
 
@@ -50,6 +49,19 @@ namespace E_Commerce.Server.Controllers
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 
             return Created($"api/productos/{result.Value}", new { result.Value });
+        }
+
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PutAsync([FromBody] UpdateProductoRequestDTO request)
+        {
+            var result = await _productoService.UpdateAsync(request);
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Ok(result.Value);
         }
     }
 }

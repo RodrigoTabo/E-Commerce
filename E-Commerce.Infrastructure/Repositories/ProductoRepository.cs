@@ -35,8 +35,8 @@ namespace E_Commerce.Infrastructure.Repositories
                     Id = p.Id,
                     Nombre = p.Nombre,
                     Descripcion = p.Descripcion,
-                    Precio = p.Precio,
-                    Stock = p.Stock,
+                    //Precio = p.Precio,
+                    //Stock = p.Stock,
                     UrlImagen = p.UrlImagen,
                     MarcaNombre = p.Modelo != null ? p.Modelo.Marca.Nombre : "",
                     CategoriaNombre = p.Modelo != null ? p.Modelo.TipoProducto.Nombre : "",
@@ -59,6 +59,9 @@ namespace E_Commerce.Infrastructure.Repositories
 
             return producto;
         }
+
+        public async Task<Producto?> GetProductoByIdAsync(int id)
+            => await _context.Productos.Where(p => p.Id == id).SingleOrDefaultAsync();
 
         public async Task<List<Producto>> ListaProductosByIds(List<int> IdsProductos)
             => await _context.Productos.AsNoTracking().Where(p => IdsProductos.Contains(p.Id)).ToListAsync();

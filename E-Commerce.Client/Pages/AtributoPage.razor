@@ -1,0 +1,65 @@
+﻿@page "/atributo"
+@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.Atributo
+@using E_Commerce.Client.Componentes.ListItem
+@using E_Commerce.Shared.DTOs.Atributos
+@inject AtributoApi atributoApi
+
+<div class="container mt-4">
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <div class="alert alert-danger">@Error</div>
+    }
+
+    <ListItemComponent Rows="GetAtributosRows()"
+                       OnCreate="AbrirModalCrear"
+                       OnEdit="AbrirModalEditar"
+                       OnDelete="AbrirModalEliminar" />
+
+    <AtributoModal @ref="modalInstancia" OnAccionCompletada="LoadAtributosAsync" />
+</div>
+
+@code {
+    private AtributoModal modalInstancia;
+    private List<AtributosResponseDTO> atributos = new();
+    public string? Error;
+
+    protected override async Task OnInitializedAsync() => await LoadAtributosAsync();
+
+    private async Task LoadAtributosAsync()
+    {
+        try
+        {
+            atributos = await atributoApi.GetAllAsync();
+            StateHasChanged();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private List<ListItemComponent.TableRow> GetAtributosRows()
+    {
+        return atributos.Select(a => new ListItemComponent.TableRow
+        {
+            Id = a.Id,
+            Col1 = a.Nombre
+        }).ToList();
+    }
+
+    private void AbrirModalCrear() => modalInstancia.Abrir();
+
+    private void AbrirModalEditar(int id)
+    {
+        var attr = atributos.FirstOrDefault(a => a.Id == id);
+        if (attr != null) modalInstancia.Abrir(attr.Id, attr.Nombre, false);
+    }
+
+    private void AbrirModalEliminar(int id)
+    {
+        var attr = atributos.FirstOrDefault(a => a.Id == id);
+        if (attr != null) modalInstancia.Abrir(attr.Id, attr.Nombre, true);
+    }
+}

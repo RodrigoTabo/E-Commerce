@@ -116,6 +116,51 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("E_Commerce.Domain.Entities.Atributo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique();
+
+                    b.ToTable("Atributos");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.AtributoValor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IdAtributo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Valor")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdAtributo", "Valor")
+                        .IsUnique();
+
+                    b.ToTable("atributoValores");
+                });
+
             modelBuilder.Entity("E_Commerce.Domain.Entities.Carrito", b =>
                 {
                     b.Property<int>("Id")
@@ -632,13 +677,6 @@ namespace E_Commerce.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Precio")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Stock")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -655,9 +693,49 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     b.HasIndex("Nombre");
 
-                    b.HasIndex("Precio", "Nombre");
-
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoAtributoVariante", b =>
+                {
+                    b.Property<int>("IdProductoVariante")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdAtributoValor")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdProductoVariante", "IdAtributoValor");
+
+                    b.HasIndex("IdAtributoValor");
+
+                    b.ToTable("productoAtributoVariantes");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoVariante", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IdProducto")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Precio")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdProducto");
+
+                    b.HasIndex("Precio", "IdProducto");
+
+                    b.ToTable("ProductoVariantes");
                 });
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.Provincia", b =>
@@ -740,7 +818,7 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("IdApplicationUser")
+                    b.Property<Guid?>("IdApplicationUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("IdProducto")
@@ -757,7 +835,8 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.HasIndex("IdApplicationUser");
 
                     b.HasIndex("IdProducto", "IdApplicationUser")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IdApplicationUser] IS NOT NULL");
 
                     b.ToTable("Reviews");
                 });
@@ -909,6 +988,17 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.AtributoValor", b =>
+                {
+                    b.HasOne("E_Commerce.Domain.Entities.Atributo", "Atributo")
+                        .WithMany("AtributoValores")
+                        .HasForeignKey("IdAtributo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Atributo");
                 });
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.Carrito", b =>
@@ -1097,6 +1187,36 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.Navigation("Modelo");
                 });
 
+            modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoAtributoVariante", b =>
+                {
+                    b.HasOne("E_Commerce.Domain.Entities.AtributoValor", "AtributoValor")
+                        .WithMany("ProductoAtributoVariantes")
+                        .HasForeignKey("IdAtributoValor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("E_Commerce.Domain.Entities.ProductoVariante", "ProductoVariante")
+                        .WithMany("ProductoAtributoVariantes")
+                        .HasForeignKey("IdProductoVariante")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AtributoValor");
+
+                    b.Navigation("ProductoVariante");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoVariante", b =>
+                {
+                    b.HasOne("E_Commerce.Domain.Entities.Producto", "Producto")
+                        .WithMany("ProductoVariantes")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("E_Commerce.Domain.Entities.Provincia", b =>
                 {
                     b.HasOne("E_Commerce.Domain.Entities.Pais", "Pais")
@@ -1113,8 +1233,7 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.HasOne("E_Commerce.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("Reviews")
                         .HasForeignKey("IdApplicationUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("E_Commerce.Domain.Entities.Producto", "Producto")
                         .WithMany("Reviews")
@@ -1193,6 +1312,16 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.Navigation("Reviews");
                 });
 
+            modelBuilder.Entity("E_Commerce.Domain.Entities.Atributo", b =>
+                {
+                    b.Navigation("AtributoValores");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.AtributoValor", b =>
+                {
+                    b.Navigation("ProductoAtributoVariantes");
+                });
+
             modelBuilder.Entity("E_Commerce.Domain.Entities.Carrito", b =>
                 {
                     b.Navigation("CarritoItems");
@@ -1250,7 +1379,14 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     b.Navigation("OrdenItems");
 
+                    b.Navigation("ProductoVariantes");
+
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoVariante", b =>
+                {
+                    b.Navigation("ProductoAtributoVariantes");
                 });
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.Provincia", b =>

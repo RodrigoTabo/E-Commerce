@@ -35,12 +35,24 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/AtributoValor/AtributoModalValor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQXRyaWJ1dG9WYWxvclxBdHJpYnV0b01vZGFsVmFsb3IucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Atributo/AtributoModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQXRyaWJ1dG9cQXRyaWJ1dG9Nb2RhbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Carritos/CarritoList.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ2Fycml0b3NcQ2Fycml0b0xpc3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Carritos/CarritoModal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ2Fycml0b3NcQ2Fycml0b01vZGFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/ListItem/ListItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTGlzdEl0ZW1cTGlzdEl0ZW1Db21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/MetodoPagos/MetodoPagoTransferencia.razor]
@@ -71,8 +83,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvRm9ybS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoTable.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/StepItem.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcU3RlcEl0ZW0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/AtributoPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXRyaWJ1dG9QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/AtributoValorPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXRyaWJ1dG9WYWxvclBhZ2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Auth/Login.razor]
@@ -93,6 +121,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Perfil.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyZmlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/ProductoPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9QYWdlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Weather.razor]

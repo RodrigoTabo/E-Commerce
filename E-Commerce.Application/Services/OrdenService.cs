@@ -127,7 +127,7 @@ namespace E_Commerce.Application.Services
                 if (!productosDict.TryGetValue(item.IdProducto, out var producto))
                     return Result.Failure<Orden>($"Producto {item.IdProducto} no existe.");
 
-                total += producto.Precio * item.Cantidad;
+                //total += producto.Precio * item.Cantidad;
             }
 
             var orden = new Orden

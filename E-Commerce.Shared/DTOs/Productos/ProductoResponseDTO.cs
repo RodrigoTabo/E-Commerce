@@ -11,12 +11,11 @@ namespace E_Commerce.Shared.DTOs.Productos
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public decimal Precio { get; set; }
-        public int Stock { get; set; }
         public string UrlImagen { get; set; }
         public string MarcaNombre { get; set; }
         public string CategoriaNombre { get; set; }
         public string Modelo { get; set; }
+        public int? IdModelo { get; set; }
         public string NombreVendedor { get; set; }
         public DateTime CreateAt { get; set; }
         public List<ReviewDTO> ReviewDTO { get; set; } = new();

@@ -1,0 +1,103 @@
+﻿@using E_Commerce.Shared.DTOs.Productos
+
+<div class="row justify-content-center">
+    <div class="col-12 col-xxl-10">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Gestión productos</h5>
+            <button type="button"
+                    class="mb-0 btn btn-dark btn-sm shadow-sm"
+                    @onclick="OnCreate">
+                <i class="bi bi-plus-lg"></i> Crear
+            </button>
+        </div>
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-3">Imagen</th>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Marca, modelo y categoria</th>
+                            <th>Vendedor</th>
+                            <th>⭐ Promedio</th>
+                            <th>Reviews</th>
+                            <th>Fecha Creación</th>
+                            <th class="text-end pe-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Items is not null && Items.Any())
+                        {
+                            @foreach (var item in Items)
+                            {
+                                <tr>
+                                    <td class="ps-3">
+                                        @if (!string.IsNullOrEmpty(item.UrlImagen))
+                                        {
+                                            <img src="@item.UrlImagen"
+                                                 alt="@item.Nombre"
+                                                 class="rounded"
+                                                 style="width: 50px; height: 50px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light border rounded d-flex align-items-center justify-content-center"
+                                                 style="width: 50px; height: 50px;">
+                                                <i class="bi bi-image text-muted"></i>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>@item.Id</td>
+                                    <td class="fw-semibold text-dark">@item.Nombre </td>
+                                    <td>@item.Modelo</td>
+                                    <td>@item.NombreVendedor</td>
+                                    <td><span class="badge bg-warning text-dark"> @item.PromedioEstrellas</span></td>
+                                    <td>@item.TotalReviews</td>
+                                    <td>@item.CreateAt.ToString("dd/MM/yyyy")  </td>
+                                    <td class="text-end pe-3">
+                                        <div class="btn-group">
+
+                                            <button class="btn btn-outline-secondary btn-sm border-0"
+                                                    @onclick="() => OnEdit.InvokeAsync(item.Id)">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                            <button class="btn btn-outline-danger btn-sm border-0"
+                                                    @onclick="() => OnDelete.InvokeAsync(item.Id)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="11" class="text-center py-4 text-muted">
+                                    No hay datos disponibles.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public List<ProductoResponseDTO> Items { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnCreate { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnEdit { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnDelete { get; set; }
+}

@@ -1,0 +1,97 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Shared.DTOs.Atributos
+@inject AtributoApi atributoApi
+
+@if (Ver)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header @(EsEliminacion ? "bg-danger" : "bg-dark") text-white">
+                    <h5 class="modal-title">@GetTitulo()</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="Cerrar"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    @if (EsEliminacion)
+                    {
+                        <div class="text-center">
+                            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 2rem;"></i>
+                            <p class="mt-2">¿Estás seguro de eliminar el atributo <strong>@AtributoNombre</strong>?</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre del Atributo</label>
+                            <input type="text" class="form-control" @bind="AtributoNombre" placeholder="Ej: Talle, Color..." />
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" @onclick="Cerrar">Cancelar</button>
+                    <button class="btn @(EsEliminacion ? "btn-danger" : "btn-dark")" @onclick="Confirmar">
+                        @GetTextoBoton()
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    public bool Ver { get; set; }
+    public int? Id { get; set; }
+    public bool EsEliminacion { get; set; }
+    public string AtributoNombre { get; set; } = "";
+
+    [Parameter] public EventCallback OnAccionCompletada { get; set; }
+
+    public void Abrir(int? id = null, string nombre = "", bool eliminar = false)
+    {
+        Id = id;
+        AtributoNombre = nombre;
+        EsEliminacion = eliminar;
+        Ver = true;
+        StateHasChanged();
+    }
+
+    public void Cerrar() => Ver = false;
+
+    private string GetTitulo() => EsEliminacion ? "Confirmar Eliminación" : (Id == null ? "Nuevo Atributo" : "Editar Atributo");
+    private string GetTextoBoton() => EsEliminacion ? "Eliminar" : (Id == null ? "Crear" : "Guardar Cambios");
+    private async Task Confirmar()
+    {
+        try
+        {
+            if (EsEliminacion)
+            {
+                // await atributoApi.DeleteAsync(Id.Value);
+            }
+            else if (Id == null)
+            {
+                var request = new CreateAtributoRequestDTO { Nombre = AtributoNombre };
+                await atributoApi.CreateAsync(request);
+            }
+            else
+            {
+                var request = new UpdateAtributoRequestDTO
+                {
+                    Id = Id.Value,
+                    Nombre = AtributoNombre
+                };
+            
+                await atributoApi.PutAsync(request);
+            }
+
+            await OnAccionCompletada.InvokeAsync();
+            Cerrar();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error en la operación: " + ex.Message);
+        }
+    }
+}

@@ -30,8 +30,8 @@ namespace E_Commerce.Application.Services
 
             int cantidadFinal = item is null ? dto.Cantidad : item.Cantidad + dto.Cantidad;
 
-            if (producto.Stock < cantidadFinal)
-                return Result.BadRequest<CarritoItem>("No hay stock suficiente");
+            //if (producto.Stock < cantidadFinal)
+            //    return Result.BadRequest<CarritoItem>("No hay stock suficiente");
 
             if (item is not null)
             {
@@ -44,7 +44,7 @@ namespace E_Commerce.Application.Services
                     IdCarrito = carritoId,
                     IdProducto = dto.ProductoId,
                     Cantidad = dto.Cantidad,
-                    Precio = producto.Precio
+                    //Precio = producto.Precio
                 };
 
                 await _carritoItemsRepository.AgregarProducto(item);

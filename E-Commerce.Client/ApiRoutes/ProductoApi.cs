@@ -1,6 +1,5 @@
 ﻿using E_Commerce.Client.Common;
 using E_Commerce.Shared.DTOs.Productos;
-using System.Net.Http.Headers;
 
 namespace E_Commerce.Client.ApiRoutes
 {
@@ -10,7 +9,6 @@ namespace E_Commerce.Client.ApiRoutes
 
         public async Task<List<ProductoResponseDTO>> GetAllAsync()
         {
-
             var client = await _apiHttpClientProvider.GetClientAsync();
             return await client.GetJsonOrThrowAsync<List<ProductoResponseDTO>>("api/productos");
         }
@@ -26,6 +24,12 @@ namespace E_Commerce.Client.ApiRoutes
             var client = await _apiHttpClientProvider.GetClientAsync();
             var created =  await client.PostJsonOrThrowAsync<CreateProductoRequestDTO, CreatedIdResponse>("api/productos", request);
             return created.Id;
+        }
+
+        public async Task PutAsync(UpdateProductoRequestDTO request)
+        {
+            var client = await _apiHttpClientProvider.GetClientAsync();
+            await client.PutJsonOrThrowAsync<UpdateProductoRequestDTO>("api/productos/update", request);
         }
 
         private class CreatedIdResponse

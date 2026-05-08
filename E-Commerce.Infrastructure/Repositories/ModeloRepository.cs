@@ -12,7 +12,7 @@ namespace E_Commerce.Infrastructure.Repositories
     {
         private ECommerceDBContext _context = context;
 
-        public async Task<Modelo?> GetByIdAsync(int id)
+        public async Task<Modelo?> GetByIdAsync(int? id)
             => await _context.Modelos
                     .Include(m => m.Marca)
                     .Include(m => m.TipoProducto)

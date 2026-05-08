@@ -12,20 +12,27 @@ namespace E_Commerce.Application.Services
     {
         private readonly IModeloRepository _modeloRepository = modeloRepository;
 
-
-        public async Task<Result<ModeloResponseDTO>> GetByIdAsync(int id)
+        public async Task<Result<ModeloResponseDTO>> GetByIdAsync(int? id)
         {
             var modelo = await _modeloRepository.GetByIdAsync(id);
 
             var validation = validateModelos(modelo);
             if (!validation.Success)
-            {
                 return Result.Failure<ModeloResponseDTO>(validation.Errors);
-            }
+            
 
             var dto = MapToResponseDTO(validation.Value!);
 
             return Result.Success(dto);
+        }
+
+        public async Task<Result<Modelo>> GetModeloByIdAsync(int? id)
+        {
+            var modelo = await _modeloRepository.GetByIdAsync(id);
+            if(modelo is null)
+                return Result.NotFound<Modelo>("El Modelo no existe");
+
+            return Result.Success(modelo);
         }
 
         //METODOS PRIVADOS
@@ -48,6 +55,7 @@ namespace E_Commerce.Application.Services
                 m.TipoProducto?.Nombre ?? "Sin Tipo"
                 );
         }
+
     }
 
 }

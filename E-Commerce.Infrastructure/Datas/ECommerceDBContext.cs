@@ -11,6 +11,8 @@ namespace E_Commerce.Infrastructure.Datas
     {
         public ECommerceDBContext(DbContextOptions<ECommerceDBContext> options) : base(options) {}
         public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
+        public DbSet<Atributo> Atributos => Set<Atributo>();
+        public DbSet<AtributoValor> atributoValores => Set<AtributoValor>();
         public DbSet<Carrito> Carritos => Set<Carrito>();
         public DbSet<CarritoItem> CarritoItems => Set<CarritoItem>();
         public DbSet<Ciudad> Ciudades => Set<Ciudad>();
@@ -25,6 +27,8 @@ namespace E_Commerce.Infrastructure.Datas
         public DbSet<Pago> Pagos => Set<Pago>();
         public DbSet<Pais> Paises => Set<Pais>();
         public DbSet<Producto> Productos => Set<Producto>();
+        public DbSet<ProductoAtributoVariante> productoAtributoVariantes => Set<ProductoAtributoVariante>();
+        public DbSet<ProductoVariante> ProductoVariantes => Set<ProductoVariante>();
         public DbSet<Provincia> Provincias => Set<Provincia>();
         public DbSet<Review> Reviews => Set<Review>();
         public DbSet<TipoProducto> TipoProductos => Set<TipoProducto>();

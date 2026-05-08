@@ -28,7 +28,7 @@ namespace E_Commerce.Infrastructure.Repositories
                         {
                             ProductoId = ci.IdProducto,
                             ProductoNombre = ci.Producto.Nombre,
-                            ProductoStock = ci.Producto.Stock,
+                            //ProductoStock = ci.Producto.Stock,
                             ProductoUrlImagen = ci.Producto.UrlImagen,
                             ModeloNombre = ci.Producto.Modelo.Nombre,
                             CarritoPrecio = ci.Precio,

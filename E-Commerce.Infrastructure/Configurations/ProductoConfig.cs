@@ -15,11 +15,8 @@ namespace E_Commerce.Infrastructure.Configurations
 
             b.HasIndex(p => p.Nombre);
             b.HasIndex(p => p.IdModelo);
-            b.HasIndex(p => new { p.Precio, p.Nombre });
 
             b.Property(b => b.Nombre).IsRequired().HasMaxLength(100);
-            b.Property(b => b.Stock).IsRequired();
-            b.Property(b => b.Precio).IsRequired().HasPrecision(18, 2);
             b.Property(b => b.UrlImagen).IsRequired().HasMaxLength(500);
             b.Property(b => b.Descripcion).IsRequired().HasMaxLength(2000);
 
