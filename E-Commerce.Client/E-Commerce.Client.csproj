@@ -20,4 +20,8 @@
 		<ProjectReference Include="..\E-Commerce.Shared\E-Commerce.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Pages\Configuracion\Componentes\" />
+	</ItemGroup>
+
 </Project>

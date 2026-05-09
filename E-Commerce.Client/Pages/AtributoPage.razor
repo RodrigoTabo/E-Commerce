@@ -1,38 +1,59 @@
 ﻿@page "/atributo"
 @using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
-@using E_Commerce.Client.Componentes.Atributo
 @using E_Commerce.Client.Componentes.ListItem
+@using E_Commerce.Client.Componentes.Modal
 @using E_Commerce.Shared.DTOs.Atributos
+
 @inject AtributoApi atributoApi
 
 <div class="container mt-4">
-    @if (!string.IsNullOrEmpty(Error))
+
+    @if (!string.IsNullOrWhiteSpace(Error))
     {
-        <div class="alert alert-danger">@Error</div>
+        <div class="alert alert-danger">
+            @Error
+        </div>
     }
 
-    <ListItemComponent Rows="GetAtributosRows()"
-                       OnCreate="AbrirModalCrear"
-                       OnEdit="AbrirModalEditar"
-                       OnDelete="AbrirModalEliminar" />
+    <ListItemComponent Title="Gestión de Atributos"
+                       CreateButtonText="Crear Atributo"
+                       Columns="columns"
+                       Rows="GetRows()"
+                       OnCreate="AbrirCrear"
+                       OnEdit="AbrirEditar"
+                       OnDelete="AbrirEliminar" />
 
-    <AtributoModal @ref="modalInstancia" OnAccionCompletada="LoadAtributosAsync" />
+    <CrudModal @ref="modal"
+               OnConfirm="ConfirmarOperacion" />
+
 </div>
 
 @code {
-    private AtributoModal modalInstancia;
-    private List<AtributosResponseDTO> atributos = new();
-    public string? Error;
 
-    protected override async Task OnInitializedAsync() => await LoadAtributosAsync();
+    private CrudModal modal = default!;
 
-    private async Task LoadAtributosAsync()
+    private List<AtributosResponseDTO> atributos = [];
+
+    private string? Error;
+
+    private readonly List<string> columns =
+    [
+        "Nombre"
+    ];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAtributosAsync();
+    }
+
+    private async Task CargarAtributosAsync()
     {
         try
         {
+            Error = null;
+
             atributos = await atributoApi.GetAllAsync();
-            StateHasChanged();
         }
         catch (HttpApiException ex)
         {
@@ -40,26 +61,90 @@
         }
     }
 
-    private List<ListItemComponent.TableRow> GetAtributosRows()
+    private List<ListItemComponent.TableRow> GetRows()
     {
         return atributos.Select(a => new ListItemComponent.TableRow
         {
             Id = a.Id,
-            Col1 = a.Nombre
+
+            Values =
+            [
+                a.Nombre
+            ]
         }).ToList();
     }
 
-    private void AbrirModalCrear() => modalInstancia.Abrir();
-
-    private void AbrirModalEditar(int id)
+    private void AbrirCrear()
     {
-        var attr = atributos.FirstOrDefault(a => a.Id == id);
-        if (attr != null) modalInstancia.Abrir(attr.Id, attr.Nombre, false);
+        modal.Open(
+            entityName: "Atributo",
+            label: "Nombre del atributo",
+            placeholder: "Ej: Color, Talle..."
+        );
     }
 
-    private void AbrirModalEliminar(int id)
+    private void AbrirEditar(int id)
     {
-        var attr = atributos.FirstOrDefault(a => a.Id == id);
-        if (attr != null) modalInstancia.Abrir(attr.Id, attr.Nombre, true);
+        var atributo = atributos.FirstOrDefault(a => a.Id == id);
+
+        if (atributo is null)
+            return;
+
+        modal.Open(
+            entityName: "Atributo",
+            label: "Nombre del atributo",
+            placeholder: "Ej: Color, Talle...",
+            id: atributo.Id,
+            itemName: atributo.Nombre
+        );
+    }
+
+    private void AbrirEliminar(int id)
+    {
+        var atributo = atributos.FirstOrDefault(a => a.Id == id);
+
+        if (atributo is null)
+            return;
+
+        modal.Open(
+            entityName: "Atributo",
+            label: "",
+            placeholder: "",
+            id: atributo.Id,
+            itemName: atributo.Nombre,
+            isDelete: true
+        );
+    }
+
+    private async Task ConfirmarOperacion(CrudModal.ModalResult result)
+    {
+        try
+        {
+            if (result.IsDelete)
+            {
+                // await atributoApi.DeleteAsync(result.Id!.Value);
+            }
+            else if (result.Id is null)
+            {
+                await atributoApi.CreateAsync(new CreateAtributoRequestDTO
+                {
+                    Nombre = result.Name
+                });
+            }
+            else
+            {
+                await atributoApi.PutAsync(new UpdateAtributoRequestDTO
+                {
+                    Id = result.Id.Value,
+                    Nombre = result.Name
+                });
+            }
+
+            await CargarAtributosAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
     }
 }

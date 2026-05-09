@@ -52,5 +52,9 @@ builder.Services.AddScoped<UserApi>();
 builder.Services.AddScoped<ReviewApi>();
 builder.Services.AddScoped<AtributoApi>();
 builder.Services.AddScoped<AtributoValorApi>();
+builder.Services.AddScoped<ModeloApi>();
+builder.Services.AddScoped<MarcaApi>();
+builder.Services.AddScoped<TipoProductoApi>();
+
 
 await builder.Build().RunAsync();

@@ -1,0 +1,225 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.ListItem
+@using E_Commerce.Client.Componentes.Modal
+@using E_Commerce.Shared.DTOs.Marcas
+@using E_Commerce.Shared.DTOs.Modelos
+@using E_Commerce.Shared.DTOs.TipoProducto
+@inject ModeloApi modeloApi
+@inject MarcaApi marcaApi
+@inject TipoProductoApi tipoProductoApi
+
+<ListItemComponent Title="Gestión de Modelos"
+                   CreateButtonText="Crear Modelo"
+                   Columns="colums"
+                   Rows="GetAtributosRows()"
+                   OnCreate="AbrirCrear"
+                   OnEdit="AbrirEditar"
+                   OnDelete="AbrirEliminar" />
+
+<CrudModal @ref="modal"
+           OnConfirm="ConfirmarOperacion" />
+
+@code {
+
+    private CrudModal modal = default!;
+
+    private List<ModeloResponseDTO> modelos = [];
+    private List<MarcaDTO> marcas = [];
+    private List<TipoProductoDTO> tipoProductos = [];
+
+    private string? Error;
+
+    private List<string> colums =
+    [
+        "Nombre",
+        "Marca",
+        "Tipo de Producto"
+    ];
+
+    protected override async Task OnInitializedAsync()
+        => await LoadDataAsync();
+
+    
+
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            Error = null;
+
+            modelos = await modeloApi.GetAsync();
+
+            marcas = await marcaApi.GetAllAsync();
+
+            tipoProductos = await tipoProductoApi.GetAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private List<ListItemComponent.TableRow> GetAtributosRows()
+    {
+        return modelos.Select(m => new ListItemComponent.TableRow
+        {
+            Id = m.Id,
+            Values =
+            [
+                m.Nombre,
+                m.Marca,
+                m.TipoProducto
+            ]
+        }).ToList();
+    }
+
+    private void AbrirCrear()
+    {
+        modal.Fields =
+        [
+            new()
+        {
+            Label = "Nombre",
+            Value = "",
+            Type = "text"
+        },
+
+        new()
+        {
+            Label = "Marca",
+            Type = "select",
+            Options = marcas.Select(x => new CrudModal.SelectOption
+            {
+                Value = x.Id.ToString(),
+                Text = x.Nombre
+            }).ToList()
+        },
+
+        new()
+        {
+            Label = "Tipo de Producto",
+            Type = "select",
+            Options = tipoProductos.Select(x => new CrudModal.SelectOption
+            {
+                Value = x.Id.ToString(),
+                Text = x.Nombre
+            }).ToList()
+        }
+        ];
+
+        modal.Open(
+            entityName: "Modelo",
+            label: "",
+            placeholder: ""
+        );
+    }
+
+    private void AbrirEditar(int id)
+    {
+        var modelo = modelos.FirstOrDefault(x => x.Id == id);
+
+        if (modelo is null)
+            return;
+
+        modal.Fields =
+        [
+            new()
+        {
+            Label = "Nombre",
+            Value = modelo.Nombre,
+            Type = "text"
+        },
+
+        new()
+        {
+            Label = "Marca",
+            Value = modelo.IdMarca.ToString(),
+            Type = "select",
+            Options = marcas.Select(x => new CrudModal.SelectOption
+            {
+                Value = x.Id.ToString(),
+                Text = x.Nombre
+            }).ToList()
+        },
+
+        new()
+        {
+            Label = "Tipo de Producto",
+            Value = modelo.IdTipoProducto.ToString(),
+            Type = "select",
+            Options = tipoProductos.Select(x => new CrudModal.SelectOption
+            {
+                Value = x.Id.ToString(),
+                Text = x.Nombre
+            }).ToList()
+        }
+        ];
+
+        modal.Open(
+            entityName: "Modelo",
+            label: "",
+            placeholder: "",
+            id: modelo.Id
+        );
+    }
+
+    private void AbrirEliminar(int id)
+    {
+        var modelo = modelos.FirstOrDefault(x => x.Id == id);
+
+        if (modelo is null)
+            return;
+
+        modal.Open(
+            entityName: "Modelo",
+            label: "",
+            placeholder: "",
+            id: modelo.Id,
+            itemName: modelo.Nombre,
+            isDelete: true
+        );
+    }
+
+    private async Task ConfirmarOperacion(CrudModal.ModalResult result)
+    {
+        try
+        {
+            var nombre = modal.Fields[0].Value;
+
+            var idMarca = int.Parse(modal.Fields[1].Value);
+
+            var idTipoProducto = int.Parse(modal.Fields[2].Value);
+
+            if (result.IsDelete)
+            {
+                // await modeloApi.DeleteAsync(result.Id!.Value);
+            }
+            else if (result.Id is null)
+            {
+                await modeloApi.PostAsync(new CreateModeloDTO
+                {
+                    Nombre = nombre,
+                    IdMarca = idMarca,
+                    IdTipoProducto = idTipoProducto
+                });
+            }
+            else
+            {
+                await modeloApi.PutAsync(new ModeloResponseDTO
+                {
+                    Id = result.Id.Value,
+                    Nombre = nombre,
+                    IdMarca = idMarca,
+                    IdTipoProducto = idTipoProducto
+                });
+            }
+
+            await LoadDataAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+}

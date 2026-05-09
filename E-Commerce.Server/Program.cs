@@ -5,6 +5,7 @@ using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Carritos;
 using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
+using E_Commerce.Application.Interfaces.Marcas;
 using E_Commerce.Application.Interfaces.MetodoEnvios;
 using E_Commerce.Application.Interfaces.MetodoPagos;
 using E_Commerce.Application.Interfaces.Modelos;
@@ -13,6 +14,7 @@ using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Application.Interfaces.Reviews;
+using E_Commerce.Application.Interfaces.TipoProductos;
 using E_Commerce.Application.Interfaces.Tokens;
 using E_Commerce.Application.Interfaces.User;
 using E_Commerce.Application.Services;
@@ -133,6 +135,10 @@ builder.Services.AddScoped<IAtributoService, AtributoService>();
 builder.Services.AddScoped<IAtributoRepository, AtributoRepository>();
 builder.Services.AddScoped<IAtributoValorService, AtributoValorService>();
 builder.Services.AddScoped<IAtributoValorRepository, AtributoValorRepository>();
+builder.Services.AddScoped<IMarcaService, MarcaService>();
+builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
+builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
+builder.Services.AddScoped<ITipoProductoRepository, TipoProductoRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

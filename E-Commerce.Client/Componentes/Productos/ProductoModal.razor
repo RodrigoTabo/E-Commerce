@@ -1,6 +1,9 @@
 ﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.Modelos
 @using E_Commerce.Shared.DTOs.Productos
 @inject ProductoApi productoApi
+@inject ModeloApi modeloApi
 
 @if (Ver)
 {
@@ -65,16 +68,19 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Modelo ID</label>
-
-                                <input type="number"
-                                       class="form-control"
-                                       @bind="IdModelo" />
+                                <label class="form-label fw-bold">Modelo, Marca y Tipo</label>
+                                <select class="form-select" @bind="IdModelo" aria-label="Default select example">
+                                    @if (modelosItems != null)
+                                    {
+                                        @foreach (var item in modelosItems)
+                                        {
+                                            <option value="@item.Id">@item.ModeloMarcaProducto</option>
+                                        }
+                                    }
+                                </select>
                             </div>
                         }
-
                     </div>
-
                     <div class="modal-footer">
                         <button class="btn btn-light"
                                 @onclick="Cerrar">
@@ -96,6 +102,8 @@
 
     [Parameter]
     public EventCallback OnAccionCompletada { get; set; }
+    private List<ModeloDetalleDTO> modelosItems { get; set; } = new();
+    private string? Error;
 
     public bool Ver { get; set; }
     public bool EsEliminacion { get; set; }
@@ -104,6 +112,7 @@
     public string Descripcion { get; set; } = string.Empty;
     public string UrlImagen { get; set; } = string.Empty;
     public int? IdModelo { get; set; }
+
 
     public async Task Abrir(
         int? id = null,
@@ -189,9 +198,26 @@
 
             Cerrar();
         }
-        catch (Exception ex)
+        catch (HttpApiException ex)
         {
             Console.WriteLine($"Error en la operación: {ex.Message}");
         }
     }
+
+    protected override async Task OnInitializedAsync()
+    => await LoadModelosAsync();
+
+    private async Task LoadModelosAsync()
+    {
+        Error = null;
+        try
+        {
+            modelosItems = await modeloApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
 }

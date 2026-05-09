@@ -35,14 +35,6 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/AtributoValor/AtributoModalValor.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQXRyaWJ1dG9WYWxvclxBdHJpYnV0b01vZGFsVmFsb3IucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Atributo/AtributoModal.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQXRyaWJ1dG9cQXRyaWJ1dG9Nb2RhbC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Carritos/CarritoList.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcQ2Fycml0b3NcQ2Fycml0b0xpc3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -57,6 +49,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/MetodoPagos/MetodoPagoTransferencia.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTWV0b2RvUGFnb3NcTWV0b2RvUGFnb1RyYW5zZmVyZW5jaWEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Modal/CrudModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcTW9kYWxcQ3J1ZE1vZGFsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Ordenes/ConfirmarOrden.razor]
@@ -77,10 +73,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoDetailModal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvRGV0YWlsTW9kYWwucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoForm.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50ZXNcUHJvZHVjdG9zXFByb2R1Y3RvRm9ybS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Componentes/Productos/ProductoModal.razor]
@@ -111,6 +103,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aFxSZWdpc3Rlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Configuracion/ConfiguracionPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlndXJhY2lvblxDb25maWd1cmFjaW9uUGFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Configuracion/MarcaCrud.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlndXJhY2lvblxNYXJjYUNydWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Configuracion/ModeloCrud.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlndXJhY2lvblxNb2RlbG9DcnVkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Configuracion/TipoProductoCrud.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlndXJhY2lvblxUaXBvUHJvZHVjdG9DcnVkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -125,10 +133,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/ProductoPage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9QYWdlLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Rodrii/source/repos/E-Commerce/E-Commerce.Client/_Imports.razor]

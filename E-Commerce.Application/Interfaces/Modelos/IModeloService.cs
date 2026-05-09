@@ -9,7 +9,15 @@ namespace E_Commerce.Application.Interfaces.Modelos
 {
     public interface IModeloService
     {
+
+        //VALIDACIONES
         Task<Result<ModeloResponseDTO>> GetByIdAsync(int? id);
+        Task<Result<List<ModeloDetalleDTO>>> GetAllMoMaProAsync();
         Task<Result<Modelo>> GetModeloByIdAsync(int? id);
+
+        //CRUD
+        Task<Result<List<ModeloResponseDTO>>> GetAllAsync();
+        Task<Result<int>> CreateAsync(CreateModeloDTO request);
+        Task<Result<Unit>> UpdateAsync(ModeloResponseDTO request);
     }
 }

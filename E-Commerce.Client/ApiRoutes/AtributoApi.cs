@@ -24,7 +24,7 @@ namespace E_Commerce.Client.ApiRoutes
         public async Task PutAsync(UpdateAtributoRequestDTO request)
         {
             var client = await _apiHttpClientProvider.GetClientAsync();
-            await client.PutJsonOrThrowAsync<UpdateAtributoRequestDTO>("api/atributo/update", request);
+            await client.PutJsonOrThrowAsync("api/atributo/update", request);
         }
 
         private class CreatedIdResponse

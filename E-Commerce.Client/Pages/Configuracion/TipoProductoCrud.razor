@@ -1,0 +1,126 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.ListItem
+@using E_Commerce.Client.Componentes.Modal
+@using E_Commerce.Shared.DTOs.TipoProducto
+@inject TipoProductoApi tipoProductoApi
+
+<ListItemComponent Title="Gestión Tipos de Productos" 
+                    CreateButtonText="Crear Tipo de Producto"
+                    Columns="colums"
+                    Rows="GetAtributosRows()"
+                    OnCreate="AbrirCrear"
+                    OnEdit="AbrirEditar"
+                    OnDelete="AbrirEliminar"/>
+
+<CrudModal @ref="modal"
+           OnConfirm="ConfirmarOperacion" />
+
+@code {
+
+    private CrudModal modal = default!;
+
+    private List<TipoProductoDTO> tipoProductos = [];
+
+    private string? Error;
+
+    private List<string> colums = ["Nombre"];
+
+    protected override async Task OnInitializedAsync()
+        => await LoadTipoProductoAsync();
+
+    private async Task LoadTipoProductoAsync()
+    {
+        try
+        {
+            Error = null;
+            tipoProductos = await tipoProductoApi.GetAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private List<ListItemComponent.TableRow> GetAtributosRows()
+    {
+        return tipoProductos.Select(m => new ListItemComponent.TableRow
+        {
+            Id = m.Id,
+            Values = [m.Nombre]
+        }).ToList();
+    }
+
+    private void AbrirCrear()
+    {
+        modal.Open(
+            entityName: "Tipo de Productos",
+            label: "Nombre del Tipo",
+            placeholder: "Ej: Buzos, Calzados, Remeras..."
+        );
+    }
+
+    private void AbrirEditar(int id)
+    {
+        var marca = tipoProductos.FirstOrDefault(a => a.Id == id);
+
+        if (marca is null)
+            return;
+
+        modal.Open(
+            entityName: "Tipo de Productos",
+            label: "Nombre del Tipo",
+            placeholder: "Ej: Buzos, Calzados, Remeras...",
+            id: marca.Id,
+            itemName: marca.Nombre
+        );
+    }
+    private void AbrirEliminar(int id)
+    {
+        var tipoProducto = tipoProductos.FirstOrDefault(a => a.Id == id);
+
+        if (tipoProducto is null)
+            return;
+
+        modal.Open(
+            entityName: "Tipo de Productos",
+            label: "",
+            placeholder: "",
+            id: tipoProducto.Id,
+            itemName: tipoProducto.Nombre,
+            isDelete: true
+        );
+    }
+
+    private async Task ConfirmarOperacion(CrudModal.ModalResult result)
+    {
+        try
+        {
+            if (result.IsDelete)
+            {
+                // await tipoProductoApi.DeleteAsync(result.Id!.Value);
+            }
+            else if (result.Id is null)
+            {
+                await tipoProductoApi.Postasync(new CreateTipoProductoDTO
+                {
+                    Nombre = result.Name
+                });
+            }
+            else
+            {
+                await tipoProductoApi.PutAsync(new TipoProductoDTO
+                {
+                    Id = result.Id.Value,
+                    Nombre = result.Name
+                });
+            }
+
+            await LoadTipoProductoAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+}

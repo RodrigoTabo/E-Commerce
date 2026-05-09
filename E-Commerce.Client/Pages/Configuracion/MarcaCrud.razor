@@ -1,0 +1,130 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.ListItem
+@using E_Commerce.Client.Componentes.Modal
+@using E_Commerce.Shared.DTOs.Marcas
+@inject MarcaApi marcaApi
+
+<ListItemComponent Title="Gestión de Marcas"
+                   CreateButtonText="Crear Marcas"
+                   Columns="columns"
+                   Rows="GetAtributosRows()"
+                   OnCreate="AbrirCrear"
+                   OnEdit="AbrirEditar"
+                   OnDelete="AbrirEliminar" />
+
+<CrudModal @ref="modal"
+           OnConfirm="ConfirmarOperacion" />
+
+@code {
+
+    private CrudModal modal = default!;
+
+    private List<MarcaDTO> marcas = [];
+
+    private string? Error;
+
+    private List<string> columns = ["Nombre"];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMarcasAsync();
+    }
+
+    private async Task LoadMarcasAsync()
+    {
+        try
+        {
+            Error = null;
+            marcas = await marcaApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private List<ListItemComponent.TableRow> GetAtributosRows()
+    {
+        return marcas.Select(m => new ListItemComponent.TableRow
+        {
+            Id = m.Id,
+            Values = [m.Nombre]
+        }).ToList();
+    }
+
+    
+    private void AbrirCrear()
+    {
+        modal.Open(
+            entityName: "Marca",
+            label: "Nombre de la marca",
+            placeholder: "Ej: Nike, Adidas..."
+        );
+    }
+
+    private void AbrirEditar(int id)
+    {
+        var marca = marcas.FirstOrDefault(a => a.Id == id);
+
+        if (marca is null)
+            return;
+
+        modal.Open(
+            entityName: "Marca",
+            label: "Nombre de la marca",
+            placeholder: "Ej: Nike, Adidas...",
+            id: marca.Id,
+            itemName: marca.Nombre
+        );
+    }
+
+    private void AbrirEliminar(int id)
+    {
+        var marca = marcas.FirstOrDefault(a => a.Id == id);
+
+        if (marca is null)
+            return;
+
+        modal.Open(
+            entityName: "Marca",
+            label: "",
+            placeholder: "",
+            id: marca.Id,
+            itemName: marca.Nombre,
+            isDelete: true
+        );
+    }
+
+    private async Task ConfirmarOperacion(CrudModal.ModalResult result)
+    {
+        try
+        {
+            if (result.IsDelete)
+            {
+                // await atributoApi.DeleteAsync(result.Id!.Value);
+            }
+            else if (result.Id is null)
+            {
+                await marcaApi.CreateAsync(new CreateMarcaDTO
+                {
+                    Nombre = result.Name
+                });
+            }
+            else
+            {
+                await marcaApi.PutAsync(new MarcaDTO
+                {
+                    Id = result.Id.Value,
+                    Nombre = result.Name
+                });
+            }
+
+            await LoadMarcasAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+}
