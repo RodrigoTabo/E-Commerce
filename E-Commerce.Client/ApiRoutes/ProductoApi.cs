@@ -13,10 +13,10 @@ namespace E_Commerce.Client.ApiRoutes
             return await client.GetJsonOrThrowAsync<List<ProductoResponseDTO>>("api/productos");
         }
 
-        public async Task<ProductoResponseDTO> GetByIdAsync(int id)
+        public async Task<ProductoDetalleDTO> GetByIdAsync(int id)
         {
             var client = await _apiHttpClientProvider.GetClientAsync();
-            return await client.GetJsonOrThrowAsync<ProductoResponseDTO>($"api/productos/{id}");
+            return await client.GetJsonOrThrowAsync<ProductoDetalleDTO>($"api/productos/{id}");
         }
 
         public async Task<int> CreateAsync(CreateProductoRequestDTO request)

@@ -1,6 +1,4 @@
-﻿using E_Commerce.Application.Interfaces.CarritoItems;
-using E_Commerce.Application.Interfaces.OrdenItems;
-using E_Commerce.Application.Interfaces.Productos;
+﻿using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Domain.Entities;
 using ROP;
 using System;
@@ -21,8 +19,8 @@ namespace E_Commerce.Application.Services
 
             foreach (var item in carritoItems)
             {
-                if (!productosDict.TryGetValue(item.IdProducto, out var producto))
-                    return Result.Failure<List<OrdenItem>>($"Producto {item.IdProducto} no existe.");
+                if (!productosDict.TryGetValue(item.IdProductoVariante, out var producto))
+                    return Result.Failure<List<OrdenItem>>($"Producto {item.IdProductoVariante} no existe.");
 
                 var ordenItem = new OrdenItem
                 {

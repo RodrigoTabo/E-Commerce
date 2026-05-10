@@ -1,9 +1,7 @@
 ﻿@using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
-@using E_Commerce.Shared.DTOs.Carritos
 @using E_Commerce.Shared.DTOs.Productos
 @inject IDialogService DialogService
-@inject CarritoApi carritoApi
 
 <div id="productCarousel" class="carousel slide" data-bs-ride="false" style="max-width: 1600px; margin: auto;">
     
@@ -74,22 +72,6 @@
         var dialog = await DialogService.ShowAsync<ProductoDetailModal>("Simple Dialog", parameters, options);
         var result = await dialog.Result;
 
-    }
-
-    private async Task AddCarrito(int Id, int cantidad)
-    {
-
-        Error = null;
-        try
-        {
-            var dto = new AgregarCarritoDTO(Id, cantidad);
-
-            await carritoApi.CreateAsync(dto);
-        }
-        catch (HttpApiException ex)
-        {
-            Error = ex.Message;
-        }
     }
 
     private void Siguiente()

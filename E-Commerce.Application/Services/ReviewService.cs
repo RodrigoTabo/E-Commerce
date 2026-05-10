@@ -54,10 +54,10 @@ namespace E_Commerce.Application.Services
 
         private async Task<Result<Unit>> ValidarProducto(int IdProducto)
         {
-            var productoExistente = await _productoService.GetByIdAsync(IdProducto);
+            //var productoExistente = await _productoService.GetByIdAsync(IdProducto);
 
-            if (productoExistente.Value is null)
-                return Result.NotFound<Unit>("El producto no existe.");
+            //if (productoExistente.Value is null)
+            //    return Result.NotFound<Unit>("El producto no existe.");
 
             return Result.Success();
         }

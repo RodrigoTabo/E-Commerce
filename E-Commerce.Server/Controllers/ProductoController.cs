@@ -27,9 +27,9 @@ namespace E_Commerce.Server.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProductoResponseDTO>> GetByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<ProductoDetalleDTO>> GetByIdAsync([FromRoute] int id)
         {
-            var result = await _productoService.GetByIdAsync(id);
+            var result = await _productoService.GetProductoDetalleAsync(id);
 
             if (!result.Success)
                 return StatusCode((int)result.HttpStatusCode, result.Errors);

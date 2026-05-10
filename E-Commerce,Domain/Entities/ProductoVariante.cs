@@ -12,5 +12,6 @@ namespace E_Commerce.Domain.Entities
         public decimal Precio { get; set; }
         public int Stock { get; set; }
         public List<ProductoAtributoVariante> ProductoAtributoVariantes { get; set; }
+        public List<CarritoItem> CarritoItems { get; set; } = new();
     }
 }

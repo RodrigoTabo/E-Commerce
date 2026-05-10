@@ -12,15 +12,15 @@ namespace E_Commerce.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<CarritoItem> b)
         {
             b.HasKey(b => b.Id);
-            b.HasIndex(b => new { b.IdCarrito, b.IdProducto }).IsUnique();
+            b.HasIndex(b => new { b.IdCarrito, b.IdProductoVariante }).IsUnique();
 
             b.Property(b => b.Cantidad).IsRequired();
             b.Property(b => b.Precio).IsRequired().HasPrecision(18, 2);
 
 
-            b.HasOne(b => b.Producto)
+            b.HasOne(b => b.ProductoVariante)
                 .WithMany(b => b.CarritoItems)
-                .HasForeignKey(b => b.IdProducto)
+                .HasForeignKey(b => b.IdProductoVariante)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

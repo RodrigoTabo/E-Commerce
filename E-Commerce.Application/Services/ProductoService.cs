@@ -24,12 +24,10 @@ namespace E_Commerce.Application.Services
         {
             var productos = await _productoRepository.GetAllAsync();
 
-            // Usamos tu validador (Convertimos IEnumerable a List para que coincida con tu firma)
             var validation = ValidateProductos(productos?.ToList());
             if (!validation.Success)
                 return Result.Failure<List<ProductoResponseDTO>>(validation.Errors);
 
-            // Mapeo manual
             var dtos = new List<ProductoResponseDTO>();
             foreach (var p in validation.Value)
             {
@@ -49,9 +47,9 @@ namespace E_Commerce.Application.Services
             var dto = validation.Value;
 
             // 2. Validar modelo
-            var modeloResult = await ValidateModelo(dto);
-            if (!modeloResult.Success)
-                return Result.Failure<int>(modeloResult.Errors);
+            //var modeloResult = await ValidateModelo(dto);
+            //if (!modeloResult.Success)
+            //    return Result.Failure<int>(modeloResult.Errors);
 
             // 3. Usuario actual
             var userId = _currentUserService.UserId;
@@ -62,8 +60,6 @@ namespace E_Commerce.Application.Services
             var producto = new Producto
             {
                 Nombre = dto.Nombre,
-                //Stock = dto.Stock,
-                //Precio = dto.Precio,
                 UrlImagen = dto.UrlImagen,
                 Descripcion = dto.Descripcion,
                 IdModelo = dto.IdModelo,
@@ -76,14 +72,13 @@ namespace E_Commerce.Application.Services
             return Result.Success(producto.Id);
         }
 
-        public async Task<Result<ProductoResponseDTO>> GetByIdAsync(int id)
+        public async Task<Result<ProductoDetalleDTO>> GetProductoDetalleAsync(int id)
         {
-            var producto = await _productoRepository.GetByIdAsync(id);
+            var producto = await _productoRepository.GetProductoDetalleAsync(id);
 
             if (producto == null)
-                return Result.NotFound<ProductoResponseDTO>("No hay productos");
+                return Result.NotFound<ProductoDetalleDTO>("No hay productos");
 
-            // Usamos tu validador de DTO
             return ValidateProductoById(producto);
         }
 
@@ -123,28 +118,28 @@ namespace E_Commerce.Application.Services
 
         }
 
-        public Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems)
-        {
-            var productosDict = productos
-                .ToDictionary(p => p.Id);
+        //public Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems)
+        //{
+        //    var productosDict = productos
+        //        .ToDictionary(p => p.Id);
 
-            foreach (var item in carritoItems)
-            {
-                if (!productosDict.TryGetValue(item.IdProducto, out var producto))
-                    return Result.Failure<Unit>($"Producto {item.IdProducto} no existe.");
+        //    foreach (var item in carritoItems)
+        //    {
+        //        if (!productosDict.TryGetValue(item.IdProducto, out var producto))
+        //            return Result.Failure<Unit>($"Producto {item.IdProducto} no existe.");
 
-                //if (producto.Stock < item.Cantidad)
-                //    return Result.Failure<Unit>($"El producto {producto.Nombre} no tiene stock");
-            }
+        //        //if (producto.Stock < item.Cantidad)
+        //        //    return Result.Failure<Unit>($"El producto {producto.Nombre} no tiene stock");
+        //    }
 
-            foreach (var item in carritoItems)
-            {
-                var producto = productosDict[item.IdProducto];
-                //producto.Stock -= item.Cantidad;
-            }
+        //    foreach (var item in carritoItems)
+        //    {
+        //        var producto = productosDict[item.IdProducto];
+        //        //producto.Stock -= item.Cantidad;
+        //    }
 
-            return Result.Success();
-        }
+        //    return Result.Success();
+        //}
 
 
         private Result<List<Producto>> ValidateProductos(List<Producto>? productos)
@@ -157,25 +152,16 @@ namespace E_Commerce.Application.Services
             return Result.Success(productos);
         }
 
-        private Result<ProductoResponseDTO> ValidateProductoById(ProductoResponseDTO dto)
+        private Result<ProductoDetalleDTO> ValidateProductoById(ProductoDetalleDTO dto)
         {
             if (dto is null)
             {
-                return Result.NotFound<ProductoResponseDTO>("No hay productos");
+                return Result.NotFound<ProductoDetalleDTO>("No hay productos");
             }
 
             return Result.Success(dto);
         }
 
-        private async Task<Result<CreateProductoRequestDTO>> ValidateModelo(CreateProductoRequestDTO dto)
-        {
-            //var modeloResult = await _modeloService.GetByIdAsync(dto.IdModelo);
-
-            //if (!modeloResult.Success)
-            //    return Result.NotFound<CreateProductoRequestDTO>("El Modelo no existe.");
-
-            return Result.Success(dto);
-        }
 
         private ProductoResponseDTO MapToDto(Producto p)
         {

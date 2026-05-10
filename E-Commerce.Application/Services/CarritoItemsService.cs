@@ -1,6 +1,6 @@
 ﻿using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
-using E_Commerce.Application.Interfaces.Productos;
+using E_Commerce.Application.Interfaces.ProductoVariantes;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Carritos;
 using ROP;
@@ -12,27 +12,34 @@ namespace E_Commerce.Application.Services
 {
     public class CarritoItemsService(ICarritoItemsRepository carritoItemsRepository,
         IUnitOfWorkRepository unitOfWorkRepository,
-        IProductoRepository productoRepository) : ICarritoItemsService
+        IProductoVarianteService productoVarianteService) : ICarritoItemsService
     {
         private ICarritoItemsRepository _carritoItemsRepository = carritoItemsRepository;
-        private IProductoRepository _productoRepository = productoRepository;
         private IUnitOfWorkRepository _unitOfWorkRepository = unitOfWorkRepository;
+        private IProductoVarianteService _productoVarianteService = productoVarianteService;
 
         public async Task<Result<CarritoItem>> AgregarCarritoItems(AgregarCarritoDTO dto, int carritoId)
         {
-            var item = await _carritoItemsRepository
-                .ValidarProductoExistente(dto.ProductoId, carritoId);
 
-            var producto = await _productoRepository.GetByIdAsync(dto.ProductoId);
+            //Obtenemos el producto variante para validar.
+            var productoVariante = await _productoVarianteService.GetProductoVarianteById(dto.IdProductoVariante);
 
-            if (producto is null)
-                return Result.NotFound<CarritoItem>("El producto no existe");
+            if (!productoVariante.Success)
+                return Result.NotFound<CarritoItem>("La variante del producto no existe");
 
-            int cantidadFinal = item is null ? dto.Cantidad : item.Cantidad + dto.Cantidad;
+            //Obtenemos el carritoItem si existe, sino, lo creamos.
+            var item = await _carritoItemsRepository.ValidarCarritoItemExistente(dto.IdProductoVariante, carritoId);
 
-            //if (producto.Stock < cantidadFinal)
-            //    return Result.BadRequest<CarritoItem>("No hay stock suficiente");
+            //Si el productovariante es nuevo, le asignamos el stock seleccionado
+            //Si ya existe y modifico, le agregamos el nuevo stock seleccionado.
+            int cantidadFinal = item is null ? dto.Stock : item.Cantidad + dto.Stock;
 
+            //Si no hay stock, lanzamos error.
+            if (productoVariante.Value.Stock < cantidadFinal)
+                return Result.BadRequest<CarritoItem>("No hay stock suficiente");
+
+            //Con esto nos aseguramos de que actualice el objeto dependiendo si existe o no.
+            //Si existe, lo actualiza, sino, lo crea.
             if (item is not null)
             {
                 item.Cantidad = cantidadFinal;
@@ -42,26 +49,26 @@ namespace E_Commerce.Application.Services
                 item = new CarritoItem
                 {
                     IdCarrito = carritoId,
-                    IdProducto = dto.ProductoId,
-                    Cantidad = dto.Cantidad,
-                    //Precio = producto.Precio
+                    IdProductoVariante = dto.IdProductoVariante,
+                    Cantidad = dto.Stock,
+                    Precio = productoVariante.Value.Precio
                 };
-
-                await _carritoItemsRepository.AgregarProducto(item);
+                //Agregamos el productoVariante a la DB.
+                await _carritoItemsRepository.AgregarProductoVarianteEnCarritoItem(item);
             }
-
+            //Lo guardamos y retornamos el item.
             await _unitOfWorkRepository.SaveChangesAsync();
-
             return Result.Success(item);
         }
 
-        public async Task<Result<CarritoItem?>> ObtenerItemCarrito(int IdProducto, Guid? userId)
+        public async Task<Result<CarritoItem?>> ObtenerItemCarrito(int IdProductoVariante, Guid? userId)
         {
-            var carritoItem = await _carritoItemsRepository.ObtenerItemCarrito(IdProducto, userId);
-
+            //1. Obtenemos los items del carrito del user.
+            var carritoItem = await _carritoItemsRepository.ObtenerItemCarrito(IdProductoVariante, userId);
+            //2. Retornamos error no existen.
             if (!carritoItem.Success)
-                return Result.NotFound<CarritoItem?>("El producto no existe");
-
+                return Result.NotFound<CarritoItem?>("La variante del producto no existe");
+            //3. Retornamos el valor si existe.
             return Result.Success(carritoItem.Value);
 
         }
@@ -76,6 +83,7 @@ namespace E_Commerce.Application.Services
             return Result.Success(obtenerCarritoByIdUser);
         }
 
+        //Removemos los items del carrito padre.
         public async Task RemoverProducto(CarritoItem request)
             => await _carritoItemsRepository.RemoverProducto(request);
     }

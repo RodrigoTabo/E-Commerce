@@ -26,11 +26,11 @@ namespace E_Commerce.Infrastructure.Repositories
                     {
                         Items = c.CarritoItems.Select(ci => new CarritoItemDto
                         {
-                            ProductoId = ci.IdProducto,
-                            ProductoNombre = ci.Producto.Nombre,
-                            //ProductoStock = ci.Producto.Stock,
-                            ProductoUrlImagen = ci.Producto.UrlImagen,
-                            ModeloNombre = ci.Producto.Modelo.Nombre,
+                            IdProductoVariante = ci.ProductoVariante.Id,
+                            ProductoNombre = ci.ProductoVariante.Producto.Nombre,
+                            ProductoStock = ci.ProductoVariante.Stock,
+                            ProductoUrlImagen = ci.ProductoVariante.Producto.UrlImagen,
+                            ModeloNombre = ci.ProductoVariante.Producto.Modelo.Nombre,
                             CarritoPrecio = ci.Precio,
                             CarritoCantidad = ci.Cantidad
                         }).ToList(),

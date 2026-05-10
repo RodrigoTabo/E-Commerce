@@ -1,7 +1,9 @@
 ﻿using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
+using E_Commerce.Shared.DTOs.AtributoValores;
 using E_Commerce.Shared.DTOs.Productos;
+using E_Commerce.Shared.DTOs.ProductoVariantes;
 using E_Commerce.Shared.DTOs.Reviews;
 using Microsoft.EntityFrameworkCore;
 using ROP;
@@ -26,39 +28,46 @@ namespace E_Commerce.Infrastructure.Repositories
                 .Include(p => p.ApplicationUser)
                 .ToListAsync();
 
-        public async Task<ProductoResponseDTO> GetByIdAsync(int id)
-        {
-            var producto = await _context.Productos
-                .Where(p => p.Id == id)
-                .Select(p => new ProductoResponseDTO
-                {
-                    Id = p.Id,
-                    Nombre = p.Nombre,
-                    Descripcion = p.Descripcion,
-                    //Precio = p.Precio,
-                    //Stock = p.Stock,
-                    UrlImagen = p.UrlImagen,
-                    MarcaNombre = p.Modelo != null ? p.Modelo.Marca.Nombre : "",
-                    CategoriaNombre = p.Modelo != null ? p.Modelo.TipoProducto.Nombre : "",
-                    Modelo = p.Modelo.Nombre,
-                    NombreVendedor = p.ApplicationUser.Nombre,
-                    CreateAt = p.CreatedAt,
-                    ReviewDTO = p.Reviews.Select(r => new ReviewDTO
+        public async Task<ProductoDetalleDTO?> GetProductoDetalleAsync(int id)
+            => await _context.Productos
+                    .Where(p => p.Id == id)
+                    .Select(p => new ProductoDetalleDTO
                     {
-                        Id= r.Id,
-                        comentario = r.Comentario,
-                        rating = r.Rating,
-                        UsuarioId = r.IdApplicationUser,
-                        UsuarioNombre = r.ApplicationUser.Nombre + r.ApplicationUser.Apellido,
-                        CreateAt = r.CreatedAt
-                    }).ToList(),
-                    PromedioEstrellas = p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0,
-                    TotalReviews = p.Reviews.Count()
-                })
-                .SingleOrDefaultAsync();
-
-            return producto;
-        }
+                        Id = p.Id,
+                        Nombre = p.Nombre,
+                        UrlImagen = p.UrlImagen,
+                        Descripcion = p.Descripcion,
+                        CategoriaNombre = p.Modelo.TipoProducto.Nombre,
+                        MarcaNombre = p.Modelo.Marca.Nombre,
+                        Modelo = p.Modelo.Nombre,
+                        NombreVendedor = p.ApplicationUser.Nombre + " " + p.ApplicationUser.Apellido,
+                        FechaPublicado = p.CreatedAt,
+                        ReviewDTO = p.Reviews.Select(r => new ReviewDTO
+                        {
+                            Id = r.Id,
+                            comentario = r.Comentario,
+                            rating = r.Rating,
+                            UsuarioId = r.IdApplicationUser,
+                            UsuarioNombre = r.ApplicationUser.Nombre + r.ApplicationUser.Apellido,
+                            CreateAt = r.CreatedAt
+                        }).ToList(),
+                        PromedioEstrellas = p.Reviews.Any() ? p.Reviews.Average(r => r.Rating) : 0,
+                        TotalReviews = p.Reviews.Count(),
+                        Variantes = p.ProductoVariantes.Select(pv => new ProductoVarianteDTO
+                        {
+                            Id = pv.Id,
+                            Precio = pv.Precio,
+                            Stock = pv.Stock,
+                            Atributos = pv.ProductoAtributoVariantes.Select(av => new AtributoValorDTO
+                            {
+                                Id = av.AtributoValor.Id,
+                                Atributo = av.AtributoValor.Atributo.Nombre,
+                                Valor = av.AtributoValor.Valor
+                            })
+                            .ToList()
+                        })
+                        .ToList()
+                    }).SingleOrDefaultAsync();
 
         public async Task<Producto?> GetProductoByIdAsync(int id)
             => await _context.Productos.Where(p => p.Id == id).SingleOrDefaultAsync();

@@ -119,7 +119,7 @@ else
         Error = null;
         try
         {
-            await carritoApi.SumarCantidad(item.ProductoId);
+            await carritoApi.SumarCantidad(item.IdProductoVariante);
             await RecargarCarrito();
         }
         catch (HttpApiException ex)
@@ -138,7 +138,7 @@ else
         Error = null;
         try
         {
-            await carritoApi.RestarCantidad(item.ProductoId);
+            await carritoApi.RestarCantidad(item.IdProductoVariante);
             await RecargarCarrito();
         }
         catch (HttpApiException ex)

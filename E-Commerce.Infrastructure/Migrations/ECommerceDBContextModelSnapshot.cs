@@ -200,7 +200,7 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.Property<int>("IdCarrito")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProducto")
+                    b.Property<int>("IdProductoVariante")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Precio")
@@ -209,9 +209,9 @@ namespace E_Commerce.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProducto");
+                    b.HasIndex("IdProductoVariante");
 
-                    b.HasIndex("IdCarrito", "IdProducto")
+                    b.HasIndex("IdCarrito", "IdProductoVariante")
                         .IsUnique();
 
                     b.ToTable("CarritoItems");
@@ -669,7 +669,7 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.Property<Guid>("IdApplicationUser")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IdModelo")
+                    b.Property<int?>("IdModelo")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -1020,15 +1020,15 @@ namespace E_Commerce.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_Commerce.Domain.Entities.Producto", "Producto")
+                    b.HasOne("E_Commerce.Domain.Entities.ProductoVariante", "ProductoVariante")
                         .WithMany("CarritoItems")
-                        .HasForeignKey("IdProducto")
+                        .HasForeignKey("IdProductoVariante")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Carrito");
 
-                    b.Navigation("Producto");
+                    b.Navigation("ProductoVariante");
                 });
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.Ciudad", b =>
@@ -1179,8 +1179,7 @@ namespace E_Commerce.Infrastructure.Migrations
                     b.HasOne("E_Commerce.Domain.Entities.Modelo", "Modelo")
                         .WithMany("Productos")
                         .HasForeignKey("IdModelo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ApplicationUser");
 
@@ -1373,8 +1372,6 @@ namespace E_Commerce.Infrastructure.Migrations
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.Producto", b =>
                 {
-                    b.Navigation("CarritoItems");
-
                     b.Navigation("Favoritos");
 
                     b.Navigation("OrdenItems");
@@ -1386,6 +1383,8 @@ namespace E_Commerce.Infrastructure.Migrations
 
             modelBuilder.Entity("E_Commerce.Domain.Entities.ProductoVariante", b =>
                 {
+                    b.Navigation("CarritoItems");
+
                     b.Navigation("ProductoAtributoVariantes");
                 });
 

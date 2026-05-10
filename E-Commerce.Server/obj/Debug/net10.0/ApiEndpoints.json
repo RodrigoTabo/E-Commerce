@@ -894,7 +894,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "E_Commerce.Shared.DTOs.Productos.ProductoResponseDTO",
+        "Type": "E_Commerce.Shared.DTOs.Productos.ProductoDetalleDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",

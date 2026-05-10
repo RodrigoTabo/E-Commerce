@@ -13,14 +13,14 @@ namespace E_Commerce.Infrastructure.Repositories
     {
         private readonly ECommerceDBContext _context = context;
 
-        public async Task AgregarProducto(CarritoItem carrito)
+        public async Task AgregarProductoVarianteEnCarritoItem(CarritoItem carrito)
             => await _context.CarritoItems.AddAsync(carrito);
 
-        public async Task<Result<CarritoItem?>> ObtenerItemCarrito(int IdProducto, Guid? userId)
+        public async Task<Result<CarritoItem?>> ObtenerItemCarrito(int IdProductoVariante, Guid? userId)
             => await _context.CarritoItems
                 .Include(ci => ci.Carrito)
                 .SingleOrDefaultAsync(ci =>
-                    ci.IdProducto == IdProducto &&
+                    ci.IdProductoVariante == IdProductoVariante &&
                     ci.Carrito.IdApplicationUser == userId);
 
         public async Task<List<CarritoItem?>> ObtenerItemCarritoByIdUser(Guid? userId)
@@ -31,8 +31,10 @@ namespace E_Commerce.Infrastructure.Repositories
         public async Task RemoverProducto(CarritoItem request)
             => _context.CarritoItems.Remove(request);
 
-        public async Task<CarritoItem?> ValidarProductoExistente(int productoId, int carritoId)
-            => await _context.CarritoItems.Where(p => p.IdProducto == productoId && p.IdCarrito == carritoId).SingleOrDefaultAsync();
+        public async Task<CarritoItem?> ValidarCarritoItemExistente(int idProductoVariante, int carritoId)
+            => await _context.CarritoItems
+            .Where(p => p.IdProductoVariante == idProductoVariante && p.IdCarrito == carritoId)
+            .SingleOrDefaultAsync();
 
     }
 }

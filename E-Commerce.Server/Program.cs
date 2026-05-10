@@ -13,6 +13,7 @@ using E_Commerce.Application.Interfaces.Ordenes;
 using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
+using E_Commerce.Application.Interfaces.ProductoVariantes;
 using E_Commerce.Application.Interfaces.Reviews;
 using E_Commerce.Application.Interfaces.TipoProductos;
 using E_Commerce.Application.Interfaces.Tokens;
@@ -139,6 +140,8 @@ builder.Services.AddScoped<IMarcaService, MarcaService>();
 builder.Services.AddScoped<IMarcaRepository, MarcaRepository>();
 builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
 builder.Services.AddScoped<ITipoProductoRepository, TipoProductoRepository>();
+builder.Services.AddScoped<IProductoVarianteService, ProductoVarianteService>();
+builder.Services.AddScoped<IProductoVarianteRepository, ProductoVarianteRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

@@ -6,7 +6,7 @@ namespace E_Commerce.Shared.DTOs.Carritos
 {
     public class CarritoItemDto
     {
-        public int ProductoId { get; set; }
+        public int IdProductoVariante { get; set; }
         public string? ProductoNombre { get; set; }
         public int ProductoStock { get; set; }
         public string? ProductoUrlImagen { get; set; }

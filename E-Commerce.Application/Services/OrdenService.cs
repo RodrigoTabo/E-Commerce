@@ -53,7 +53,7 @@ namespace E_Commerce.Application.Services
                     return Result.BadRequest<int>("Carrito vacío.");
 
                 var productosIds = carritoItems.Value
-                    .Select(x => x.IdProducto)
+                    .Select(x => x.IdProductoVariante)
                     .Distinct()
                     .ToList();
 
@@ -124,8 +124,8 @@ namespace E_Commerce.Application.Services
 
             foreach (var item in carritoitems)
             {
-                if (!productosDict.TryGetValue(item.IdProducto, out var producto))
-                    return Result.Failure<Orden>($"Producto {item.IdProducto} no existe.");
+                if (!productosDict.TryGetValue(item.IdProductoVariante, out var producto))
+                    return Result.Failure<Orden>($"Producto {item.IdProductoVariante} no existe.");
 
                 //total += producto.Precio * item.Cantidad;
             }
