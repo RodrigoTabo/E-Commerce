@@ -5,7 +5,6 @@
 @using E_Commerce.Shared.DTOs.Reviews
 @using E_Commerce.Shared.DTOs.Carritos
 @using System.Security.Claims
-
 @inject CarritoApi carritoApi
 @inject ProductoApi productoApi
 @inject ReviewApi reviewApi
@@ -343,7 +342,6 @@ else if (Model is not null)
         try
         {
             var dto = new AgregarCarritoDTO(selectedVariantId, cantidadSeleccionada);
-
             await carritoApi.CreateAsync(dto);
         }
         catch (HttpApiException ex)

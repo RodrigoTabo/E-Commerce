@@ -10,5 +10,6 @@ namespace E_Commerce.Application.Interfaces.ProductoVariantes
     {
         Task<Result<ProductoVariante>> GetProductoVarianteById(int Id);
         Task<Result<int>> GetStockById(int Id);
+        Task<Result<List<ProductoVariante>>> ListaProductosVariantesByIds(List<int> IdsProductosVariantes);
     }
 }

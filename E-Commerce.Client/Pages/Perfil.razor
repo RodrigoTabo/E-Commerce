@@ -72,7 +72,7 @@ else
                             <span class="material-symbols-outlined fs-5">calendar_today</span>
                             <span class="small fw-bold text-uppercase">Miembro desde</span>
                         </div>
-                        <div class="fw-semibold text-dark">@User.CreateAt?.ToString("MMMM, yyyy")</div>
+                        <div class="fw-semibold text-dark">@User.CreateAt.ToString("MMMM, yyyy")</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -125,7 +125,7 @@ else
             User = await userApi.GetByUserId();
             ResetEditModel();
         }
-        catch (Exception ex)
+        catch (HttpApiException ex)
         {
             Error = ex.Message;
         }

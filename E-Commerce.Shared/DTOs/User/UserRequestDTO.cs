@@ -11,6 +11,6 @@ namespace E_Commerce.Shared.DTOs.User
         public string Apellido { get; set; } = null!;
         public string? UrlImagen { get; set; } = null!;
         public string DNI { get; set; } = null!;
-        public DateTime? CreateAt { get; set; }
+        public DateTime CreateAt { get; set; }
     }
 }

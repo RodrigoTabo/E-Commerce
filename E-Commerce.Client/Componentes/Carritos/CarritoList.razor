@@ -1,7 +1,10 @@
 ﻿@using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
+@using E_Commerce.Client.Servicio
 @using E_Commerce.Shared.DTOs.Carritos
 @inject CarritoApi carritoApi
+@inject CarritoStateService carritoStateService
+@implements IDisposable
 
 <div class="container">
 
@@ -17,9 +20,7 @@
     @if (carrito is null)
     {
         <div class="d-flex justify-content-center my-4">
-            <div class="spinner-border text-info" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
+            <div class="spinner-border text-info"></div>
         </div>
     }
     else
@@ -29,61 +30,36 @@
             @foreach (var item in carrito.Items)
             {
                 <div class="col-12">
-
                     <div class="card shadow-sm">
-                        <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+                        <div class="card-body d-flex justify-content-between flex-wrap">
 
                             <div class="d-flex align-items-center gap-3">
                                 <img src="@item.ProductoUrlImagen"
-                                     alt="Producto"
-                                     style="width:70px; height:70px; object-fit:cover; border-radius:8px;" />
+                                     style="width:70px;height:70px;object-fit:cover;border-radius:8px;" />
 
                                 <div>
-                                    <h6 class="mb-1">Producto</h6>
-                                    <small class="text-muted">Nombre: @item.ProductoNombre</small>
+                                    <h6 class="mb-1">@item.ProductoNombre</h6>
+                                    <small class="text-muted">@item.ModeloNombre</small>
                                 </div>
                             </div>
 
-                            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-
-                                <div>
-                                    <h6 class="mb-1">Modelo</h6>
-                                    <small class="text-muted">@item.ModeloNombre </small>
-                                </div>
-
+                            <div>
+                                <h6>Cantidad</h6>
+                                <small>@item.CarritoCantidad</small>
                             </div>
 
-                            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-
-                                <div>
-                                    <h6 class="mb-1">Cantidad</h6>
-                                    <small class="text-muted">@item.CarritoCantidad </small>
-                                </div>
-
-                            </div>
-
-                            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-
-                                <div>
-                                    <h6 class="mb-1">Precio unitario</h6>
-                                    <small class="text-muted"> $@item.CarritoPrecio </small>
-                                </div>
-
+                            <div>
+                                <h6>Precio</h6>
+                                <small>$@item.CarritoPrecio</small>
                             </div>
 
                         </div>
                     </div>
-
                 </div>
             }
 
         </div>
     }
-    <div class="card-footer bg-white border-0 mt-2 d-flex justify-content-end">
-    <button type="submit" class="btn btn-primary px-auto" @onclick="Continuar">
-        Continuar
-    </button>
-</div>
 </div>
 
 
@@ -94,10 +70,15 @@
 
     [Parameter] public EventCallback<CarritoDto> OnNext { get; set; }
 
-
     protected override async Task OnInitializedAsync()
     {
+        carritoStateService.OnChange += RecargarCarritoWrapper;
         carrito = await carritoApi.CarritoUser();
+    }
+
+    private async void RecargarCarritoWrapper()
+    {
+        await RecargarCarrito();
     }
 
     async Task RecargarCarrito()
@@ -111,4 +92,8 @@
         await OnNext.InvokeAsync(carrito);
     }
 
+    public void Dispose()
+    {
+        carritoStateService.OnChange -= RecargarCarritoWrapper;
+    }
 }

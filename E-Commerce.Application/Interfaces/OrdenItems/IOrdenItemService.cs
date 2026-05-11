@@ -8,6 +8,6 @@ namespace E_Commerce.Application.Interfaces.OrdenItems
 {
     public interface IOrdenItemService
     {
-        Result<List<OrdenItem>> CrearOrdenItem(Orden orden, List<Producto> productos, List<CarritoItem> carritoItems);
+        Result<List<OrdenItem>> CrearOrdenItem(Orden orden, List<ProductoVariante> productos, List<CarritoItem> carritoItems);
     }
 }

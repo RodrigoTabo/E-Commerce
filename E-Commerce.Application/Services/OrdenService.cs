@@ -7,10 +7,12 @@ using E_Commerce.Application.Interfaces.Ordenes;
 using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Application.Interfaces.Pagos;
 using E_Commerce.Application.Interfaces.Productos;
+using E_Commerce.Application.Interfaces.ProductoVariantes;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Orden;
 using E_Commerce.Shared.DTOs.Pagos;
 using ROP;
+using System.ComponentModel.DataAnnotations;
 
 namespace E_Commerce.Application.Services
 {
@@ -20,7 +22,7 @@ namespace E_Commerce.Application.Services
         IDomicilioService domicilioService,
         ICurrentUserService currentUserService,
         ICarritoItemsService carritoItemsService,
-        IProductoService productoService,
+        IProductoVarianteService productoVarianteService,
         IOrdenItemService ordenItemService,
         IPagoService pagoService) : IOrdenService
     {
@@ -30,7 +32,7 @@ namespace E_Commerce.Application.Services
         private readonly IDomicilioService _domicilioService = domicilioService;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository = unitOfWorkRepository;
         private readonly ICurrentUserService _currentUserService = currentUserService;
-        private readonly IProductoService _productoService = productoService;
+        private readonly IProductoVarianteService _productoVarianteService = productoVarianteService;
         private readonly ICarritoItemsService _carritoItemsService = carritoItemsService;
         private readonly IPagoService _pagoService = pagoService;
 
@@ -39,40 +41,56 @@ namespace E_Commerce.Application.Services
             await _unitOfWorkRepository.BeginTransactionAsync();
             try
             {
+                //1. Traemos el usuario logeado del contexto.
                 var userId = _currentUserService.UserId;
 
+                //2. Si no existe, retornamos error.
                 if (userId is null)
                     return Result.Conflict<int>("Debes conectarte para esta acción.");
 
+                //3. Traemos el carrito mediante userId.
                 var carritoItems = await _carritoItemsService.ObtenerItemCarritoByIdUser(userId);
 
+                //4. Si no tiene carrito, retornamos error.
                 if (!carritoItems.Success)
                     return Result.Failure<int>(carritoItems.Errors);
 
+                //5. Si el carrito esta vacio, le retornamos aviso.
                 if (!carritoItems.Value.Any())
                     return Result.BadRequest<int>("Carrito vacío.");
 
+                //6. Seleccionamos los IdProductosVariantes y los distingimos en una lista.
                 var productosIds = carritoItems.Value
                     .Select(x => x.IdProductoVariante)
                     .Distinct()
                     .ToList();
 
-                var productosResult = await _productoService.ListaProductosByIds(productosIds);
+                //7. Buscamos los productos mediante la lista de Ids anterior.
+                var productoVarianteResult = await _productoVarianteService.ListaProductosVariantesByIds(productosIds);
 
-                if (!productosResult.Success)
-                    return Result.Failure<int>(productosResult.Errors);
+                //8. Si el resultado arroja error, lo retornamos.
+                if (!productoVarianteResult.Success)
+                    return Result.Failure<int>(productoVarianteResult.Errors);
 
-                var productos = productosResult.Value;
+                //9. Guardamos todo en variables.
+                var productoVariante = productoVarianteResult.Value;
                 var items = carritoItems.Value;
 
-                var crearOrden = await CrearOrden(request, productos, items, userId);
+                //10. Creamos la orden del usuario
+                var crearOrden = await CrearOrden(request, productoVariante, items, userId);
+
+                //11. Si la orden fallo, retornamos y cortamos todo.
                 if (!crearOrden.Success)
                     return Result.Failure<int>(crearOrden.Errors);
 
-                var ordenItemsResult = _ordenItemService.CrearOrdenItem(crearOrden.Value, productos, items);
+                //12. Creamos las ordenes de items
+                var ordenItemsResult = _ordenItemService.CrearOrdenItem(crearOrden.Value, productoVariante, items);
+
+                //13. Si tira error retornamos.
                 if (!ordenItemsResult.Success)
                     return Result.Failure<int>(ordenItemsResult.Errors);
 
+                //14. Colocamos el pago en pendiente para que el usuario cargue el comprobante.
                 var pagoPendiente = await _pagoService.CrearPagoAsync(crearOrden.Value, pagorequest);
                 if (!pagoPendiente.Success)
                     return Result.Failure<int>(pagoPendiente.Errors);
@@ -96,40 +114,51 @@ namespace E_Commerce.Application.Services
             }
         }
 
-        private async Task<Result<Orden>> CrearOrden(CreateOrdenRequest request, List<Producto> productos, List<CarritoItem> carritoitems, Guid? userId)
+        private async Task<Result<Orden>> CrearOrden(CreateOrdenRequest request, List<ProductoVariante> productoVariantes, List<CarritoItem> carritoitems, Guid? userId)
         {
-
+            //Variable en caso que el metodo de envio sea DOMICILIO.
             Domicilio? domicilio = null;
 
+            //1. Validar campos cargados.
             var validarDTO = ValidarDTO(request);
+
+            //2. Retornamos errores de validaciones
             if (!validarDTO.Success)
                 return Result.Failure<Orden>(validarDTO.Errors);
 
-            var validarIdMetodo = await _metodoEnvioService.MetodoEnvioExistente(request.IdMetodoEnvio);
-            if (!validarIdMetodo.Success)
-                return Result.NotFound<Orden>(validarIdMetodo.Errors);
+            //3. Valida Metodo Envio existente.
+            var validarIdMetodoEnvio = await _metodoEnvioService.MetodoEnvioExistente(request.IdMetodoEnvio);
 
+            //4. Retornamos errores de metodos envio
+            if (!validarIdMetodoEnvio.Success)
+                return Result.NotFound<Orden>(validarIdMetodoEnvio.Errors);
+
+            //5. Si el metodo envio es domicilio
             if (request.IdMetodoEnvio == 1)
             {
+                //6. Validamos el domicilio seleccionado.
                 var validarIdDomicilio = await _domicilioService.ValidarDomicilioExistente(request.IdDomicilio);
+                //7. Retornamos errores de domicilio.
+
                 if (!validarIdDomicilio.Success)
                     return Result.NotFound<Orden>(validarIdDomicilio.Errors);
+                //8. Guardamos en la variable el obj domicilio.
                 domicilio = validarIdDomicilio.Value;
             }
-
-            var productosDict = productos
-                .ToDictionary(p => p.Id);
-
+            //9. Obtenemos una lista de Ids cargados en el carritoItem y lo convertimos en diccionario.
+            var productoVariantesDict = productoVariantes.ToDictionary(p => p.Id);
+            //10. variable para calcular total.
             decimal total = 0;
-
+            //11. recorremos el carritoitem, seleccionamos el Idproductovariante para validar que exista en el carrito.
+            //calculamos el precio de la DB del productovariante y lo multiplicamos por la cantidad que eligio el usuario, esto evita romper precios del front.
             foreach (var item in carritoitems)
             {
-                if (!productosDict.TryGetValue(item.IdProductoVariante, out var producto))
-                    return Result.Failure<Orden>($"Producto {item.IdProductoVariante} no existe.");
+                if (!productoVariantesDict.TryGetValue(item.IdProductoVariante, out var productovariante))
+                    return Result.Failure<Orden>($"Variante {item.IdProductoVariante} no existe.");
 
-                //total += producto.Precio * item.Cantidad;
+                total += productovariante.Precio * item.Cantidad;
             }
-
+            //12. Creamos la nueva orden.
             var orden = new Orden
             {
                 IdApplicationUser = userId,
@@ -137,7 +166,7 @@ namespace E_Commerce.Application.Services
                 Total = total,
                 EstadoOrden = Shared.Enums.EstadoOrden.PendientePago,
             };
-
+            //13. Si el metodo es domicilio, cargamos los datos del domicilio en la orden.
             if (request.IdMetodoEnvio == 1)
             {
                 orden.IdDomicilio = domicilio.Id;
@@ -148,9 +177,8 @@ namespace E_Commerce.Application.Services
                     + domicilio.Ciudad.Provincia.Pais.Nombre;
                 orden.CodigoPostalSnapshot = domicilio.CodigoPostal;
             }
-
+            //14.Guardamos y devolvemos.
             await _ordenRepository.AddAsync(orden);
-
             return Result.Success(orden);
         }
 
@@ -166,8 +194,8 @@ namespace E_Commerce.Application.Services
                 && string.IsNullOrWhiteSpace(request.CalleSnapshot)
                 && string.IsNullOrWhiteSpace(request.CodigoPostaSnapshot))
                 return Result.BadRequest<Unit>("No se han cargado los datos adicionales.");
-            //if (request.Total <= 0)
-            //    return Result.BadRequest<Unit>("Ha fallado el calculo Total.");
+            if (request.Total <= 0)
+                return Result.BadRequest<Unit>("Ha fallado el calculo Total.");
 
             return Result.Success();
         }

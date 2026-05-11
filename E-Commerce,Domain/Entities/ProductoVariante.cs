@@ -13,5 +13,6 @@ namespace E_Commerce.Domain.Entities
         public int Stock { get; set; }
         public List<ProductoAtributoVariante> ProductoAtributoVariantes { get; set; }
         public List<CarritoItem> CarritoItems { get; set; } = new();
+        public List<OrdenItem> OrdenItems { get; set; } = new();
     }
 }

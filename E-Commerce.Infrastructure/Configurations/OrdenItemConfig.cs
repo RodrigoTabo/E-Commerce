@@ -22,9 +22,9 @@ namespace E_Commerce.Infrastructure.Configurations
                 .HasForeignKey(o => o.IdOrden)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            b.HasOne(p => p.Producto)
+            b.HasOne(p => p.ProductoVariante)
                 .WithMany(o => o.OrdenItems)
-                .HasForeignKey(p => p.IdProducto)
+                .HasForeignKey(p => p.IdProductoVariante)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -28,5 +28,16 @@ namespace E_Commerce.Application.Services
                 return Result.Conflict<int>("La variante del producto no tiene stock");
             return Result.Success(stock);
         }
+
+        public async Task<Result<List<ProductoVariante>>> ListaProductosVariantesByIds(List<int> IdsProductosVariantes)
+        {
+            var productoVarianteList = await _productoVarianteRepository.ListaProductosVariantesByIds(IdsProductosVariantes);
+
+            if (!productoVarianteList.Any())
+                return Result.Conflict<List<ProductoVariante>>("Ha ocurrido un problema con la lista de las varientes de productos");
+
+            return Result.Success(productoVarianteList);
+
+        }
     }
 }

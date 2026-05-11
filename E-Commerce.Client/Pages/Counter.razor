@@ -1,120 +1,160 @@
 ﻿@page "/counter"
 @using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
 @using E_Commerce.Client.Componentes
 @using E_Commerce.Client.Componentes.Carritos
 @using E_Commerce.Client.Componentes.MetodoPagos
 @using E_Commerce.Client.Componentes.Ordenes
+@using E_Commerce.Client.Servicio
 @using E_Commerce.Shared.DTOs.OrdenCreate
 @using E_Commerce.Shared.DTOs.Pagos
 @using E_Commerce.Shared.DTOs.Orden
 @using E_Commerce.Shared.DTOs.Carritos
+@using E_Commerce.Shared.DTOs.User
 @inject OrdenApi ordenApi
+@inject CarritoApi carritoApi
+@inject CarritoStateService carritoStateService
+@inject UserApi userApi
+@implements IDisposable
+
 
 <div class="container mt-4">
-
-    <div class="steps-wrapper mb-4">
-        <StepItem Numero="1" Titulo="Carrito" Activo="step >= 1" Completo="step > 1" />
-        <StepItem Numero="2" Titulo="Envío" Activo="step >= 2" Completo="step > 2" />
-        <StepItem Numero="3" Titulo="Pago" Activo="step >= 3" Completo="step > 3" />
-        <StepItem Numero="4" Titulo="Confirmar" Activo="step >= 4" Completo="false" />
-    </div>
-
-    <div class="row g-4">
-
-        <div class="col-lg-8">
-
-            @if (step == 1)
-            {
-                <CarritoList OnNext="IrPaso2" />
-            }
-
-            @if (step == 2)
-            {
-                <OrdenForm Model="orden" OnNext="IrPaso3" />
-            }
-
-            @if (step == 3)
-            {
-                <MetodoPagoTransferencia Pago="pago" Total="Total" OnNext="IrPaso4" />
-            }
-
-            @if (step == 4)
-            {
-                <ConfirmarOrden Orden="orden" Carrito="carrito" Pago="pago" Total="Total" OnConfirm="ConfirmarTodo" />
-            }
-
-        </div>
-
-        <div class="col-lg-4">
-
-            <div class="card shadow-sm p-3 sticky-top" style="top:20px;">
-
-                <h5>Resumen</h5>
-
-                <hr />
-
-                <div class="d-flex justify-content-between">
-                    <span>Total</span>
-                    <strong>$@Total</strong>
-                </div>
-
-                <div class="mt-3">
-                    <small class="text-muted">
-                        Paso actual: @step de 4
-                    </small>
-                </div>
-
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="steps-wrapper mb-4">
+                <StepItem Numero="1" Titulo="Envío" Activo="step >= 1" Completo="step > 1" />
+                <StepItem Numero="2" Titulo="Pago" Activo="step >= 2" Completo="step > 2" />
+                <StepItem Numero="3" Titulo="Confirmar" Activo="step >= 3" Completo="false" />
             </div>
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-7">
 
+                    @if (User is not null)
+                    {
+                        <div class="card shadow-sm p-3 mb-3">
+                            <h5 class="fw-bold">Datos del comprador</h5>
+
+                            <div><strong>Nombre:</strong> @User.Nombre @User.Apellido</div>
+                            <div><strong>Email:</strong> @User.Email</div>
+                            <div><strong>Teléfono:</strong> @User.Email</div>
+                            <div><strong>DNI:</strong> @User.DNI</div>
+                        </div>
+                    }
+
+                    @if (step == 1)
+                    {
+                        <OrdenForm Model="state.Orden" OnNext="IrPaso2" />
+                    }
+
+                    @if (step == 2)
+                    {
+                        <MetodoPagoTransferencia Pago="state.Pago" Total="Total" OnNext="IrPaso3" />
+                    }
+
+                    @if (step == 3)
+                    {
+                        <ConfirmarOrden Orden="state.Orden"
+                                        Carrito="state.Carrito"
+                                        Pago="state.Pago"
+                                        Total="Total"
+                                        OnConfirm="ConfirmarTodo" />
+                    }
+
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card shadow-sm p-3 sticky-top" style="top:20px;">
+                        <h5>Tu Carrito</h5>
+                        <span>@ProductoTotal Productos</span>
+                        <CarritoList />
+                        <hr />
+                        <div class="d-flex justify-content-between">
+                            <span>Total</span>
+                            <strong>$@Total</strong>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                Checkout activo
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
-
 </div>
-
 @code {
 
     private int step = 1;
 
-    private CarritoDto? carrito;
-    private CreateOrdenRequest orden = new();
-    private PagoRequestDTO pago = new();
+    private CheckoutState state = new();
+    private UserRequestDTO? User { get; set; }
+    private string? Error;
 
-    private decimal Total =>
-        carrito?.Items.Sum(x => x.CarritoCantidad * x.CarritoPrecio) ?? 0;
+    private decimal Total => state.Carrito?.Items?.Sum(x => x.CarritoCantidad * x.CarritoPrecio) ?? 0;
 
-    private void IrPaso2(CarritoDto c)
+    private int ProductoTotal => state.Carrito?.Items?.Sum(x => x.CarritoCantidad) ?? 0;
+
+    protected override async Task OnInitializedAsync()
     {
-        carrito = c;
+        carritoStateService.OnChange += OnCarritoChanged;
+        state.Carrito = await carritoApi.CarritoUser();
+        await LoadPerfilUser();
+    }
+
+    private async Task LoadPerfilUser()
+    {
+        try
+        {
+            User = await userApi.GetByUserId();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private async void OnCarritoChanged()
+    {
+        state.Carrito = await carritoApi.CarritoUser();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        carritoStateService.OnChange -= OnCarritoChanged;
+    }
+
+
+    private void IrPaso2()
+    {
         step = 2;
     }
 
-    private void IrPaso3(CreateOrdenRequest o)
+    private void IrPaso3()
     {
-        orden = o;
         step = 3;
-    }
-
-    private void IrPaso4()
-    {
-        pago.MontoTotal = Total;
-        step = 4;
     }
 
     private async Task ConfirmarTodo()
     {
-        pago.MontoTotal = Total;   
-        pago.IdMetodoPago = 1; 
-
+        state.Pago.MontoTotal = Total;
+        state.Orden.Total = Total;
+        state.Pago.IdMetodoPago = 1;
 
         var request = new CrearOrdenConPagoRequest
         {
-            Orden = orden,
-            Pago = pago
+            Orden = state.Orden,
+            Pago = state.Pago
         };
 
         await ordenApi.CreateAsync(request);
-        Console.WriteLine("REQUEST:");
-        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(request));
+    }
+
+    public class CheckoutState
+    {
+        public CarritoDto? Carrito { get; set; }
+        public CreateOrdenRequest Orden { get; set; } = new();
+        public PagoRequestDTO Pago { get; set; } = new();
     }
 }

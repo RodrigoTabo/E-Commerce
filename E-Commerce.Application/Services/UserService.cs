@@ -56,6 +56,7 @@ namespace E_Commerce.Application.Services
                 Nombre = GetByUserId.Nombre,
                 Apellido = GetByUserId.Apellido,
                 DNI = GetByUserId.DNI,
+                Email = GetByUserId.Email,
                 UrlImagen = GetByUserId.UrlImagen,
                 CreateAt = GetByUserId.CreatedAt
             };

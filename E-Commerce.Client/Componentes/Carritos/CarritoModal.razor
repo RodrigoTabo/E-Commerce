@@ -1,7 +1,9 @@
 ﻿@using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
+@using E_Commerce.Client.Servicio
 @using E_Commerce.Shared.DTOs.Carritos
 @inject CarritoApi carritoApi
+@inject CarritoStateService carritoStateService
 
 @if (Cargando)
 {
@@ -121,6 +123,7 @@ else
         {
             await carritoApi.SumarCantidad(item.IdProductoVariante);
             await RecargarCarrito();
+            carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
         {
@@ -140,6 +143,7 @@ else
         {
             await carritoApi.RestarCantidad(item.IdProductoVariante);
             await RecargarCarrito();
+            carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
         {
@@ -159,6 +163,7 @@ else
         {
             // await carritoApi.EliminarItem(item.ProductoId);
             await RecargarCarrito();
+            carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
         {
@@ -174,6 +179,7 @@ else
     {
         carrito = await carritoApi.CarritoUser();
         StateHasChanged();
+        carritoStateService.SetMensaje();
     }
 
     void Cerrar() => MudDialog.Close();

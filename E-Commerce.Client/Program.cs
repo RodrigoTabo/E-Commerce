@@ -1,6 +1,7 @@
 using E_Commerce.Client;
 using E_Commerce.Client.ApiRoutes;
 using E_Commerce.Client.Common;
+using E_Commerce.Client.Servicio;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -55,6 +56,7 @@ builder.Services.AddScoped<AtributoValorApi>();
 builder.Services.AddScoped<ModeloApi>();
 builder.Services.AddScoped<MarcaApi>();
 builder.Services.AddScoped<TipoProductoApi>();
+builder.Services.AddScoped<CarritoStateService>();
 
 
 await builder.Build().RunAsync();

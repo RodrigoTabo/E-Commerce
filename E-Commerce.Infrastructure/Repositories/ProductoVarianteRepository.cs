@@ -2,6 +2,7 @@
 using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
 using Microsoft.EntityFrameworkCore;
+using ROP;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,5 +26,9 @@ namespace E_Commerce.Infrastructure.Repositories
             .Where(pv => pv.Id == Id)
             .Select(pv => pv.Stock)
             .SingleOrDefaultAsync();
+
+        public async Task<List<ProductoVariante>> ListaProductosVariantesByIds(List<int> IdsProductosVariantes)
+            => await _context.ProductoVariantes.AsNoTracking().Where(p => IdsProductosVariantes.Contains(p.Id)).ToListAsync();
+
     }
 }

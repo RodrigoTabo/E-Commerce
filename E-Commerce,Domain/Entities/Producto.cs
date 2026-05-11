@@ -20,7 +20,6 @@ namespace E_Commerce.Domain.Entities
         public DateTime? DeletedAt { get; set; }
         public List<Review> Reviews { get; set; } = new();
         public List<Favorito> Favoritos { get; set; } = new();
-        public List<OrdenItem> OrdenItems { get; set; } = new();
         public List<ProductoVariante> ProductoVariantes { get; set; } = new();
     }
 }
