@@ -9,7 +9,7 @@ namespace E_Commerce.Infrastructure.Datas
     //Configuracion base.
     public class ECommerceDBContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        public ECommerceDBContext(DbContextOptions<ECommerceDBContext> options) : base(options) {}
+        public ECommerceDBContext(DbContextOptions<ECommerceDBContext> options) : base(options) { }
         public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public DbSet<Atributo> Atributos => Set<Atributo>();
         public DbSet<AtributoValor> atributoValores => Set<AtributoValor>();

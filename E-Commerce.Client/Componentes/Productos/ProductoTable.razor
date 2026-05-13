@@ -57,14 +57,16 @@
                                     <td>@item.CreateAt.ToString("dd/MM/yyyy")  </td>
                                     <td class="text-end pe-3">
                                         <div class="btn-group">
-
                                             <button class="btn btn-outline-secondary btn-sm border-0"
                                                     @onclick="() => OnEdit.InvokeAsync(item.Id)">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-
                                             <button class="btn btn-outline-danger btn-sm border-0"
                                                     @onclick="() => OnDelete.InvokeAsync(item.Id)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm border-0"
+                                                    @onclick="() => OnProductoVariante.InvokeAsync(item.Id)">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -100,4 +102,6 @@
 
     [Parameter]
     public EventCallback<int> OnDelete { get; set; }
+    [Parameter]
+    public EventCallback<int> OnProductoVariante { get; set; }
 }

@@ -1,0 +1,216 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.ProductoVariantes
+@using E_Commerce.Shared.DTOs.Atributos
+@using E_Commerce.Shared.DTOs.AtributoValores
+
+@inject AtributoApi atributoApi
+@inject AtributoValorApi atributoValorApi
+@inject ProductoVarianteApi productoVarianteApi
+
+<div class="modal @(mostrar ? "d-block" : "d-none")"
+     tabindex="-1"
+     style="@(mostrar ? "background-color: rgba(0,0,0,0.5);" : "")">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header @(EsEliminacion ? "bg-danger text-white" : "bg-dark text-white")">
+                <h5 class="modal-title">@GetTitulo()</h5>
+                <button class="btn-close btn-close-white" @onclick="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+
+                @if (EsEliminacion)
+                {
+                    <div class="text-center p-3">
+                        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 2rem;"></i>
+                        <p class="mt-3">¿Estás seguro de eliminar esta variante?</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-3">
+                        <label class="fw-bold">Precio</label>
+                        <input class="form-control" type="number" @bind="request.Precio" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Stock</label>
+                        <input class="form-control" type="number" @bind="request.Stock" />
+                    </div>
+
+                    <hr />
+
+                    @foreach (var atributo in atributos)
+                    {
+                        <div class="mb-3">
+
+                            <label class="form-label d-flex align-items-center gap-2">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       checked="@seleccion.ContainsKey(atributo.Id)"
+                                       @onchange="e => ToggleAtributo(atributo.Id, (bool)e.Value!)" />
+
+                                <span>@atributo.Nombre</span>
+                            </label>
+
+                            @if (seleccion.ContainsKey(atributo.Id))
+                            {
+                                <select class="form-select"
+                                        value="@seleccion[atributo.Id]"
+                                        @onchange="e => SeleccionarValor(atributo.Id, e.Value?.ToString())">
+
+                                    <option value="0">Seleccione...</option>
+
+                                    @foreach (var valor in atributoValores.Where(v => v.IdAtributo == atributo.Id))
+                                    {
+                                        <option value="@valor.Id">@valor.Valor</option>
+                                    }
+
+                                </select>
+                            }
+
+                        </div>
+                    }
+                }
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @onclick="Cerrar">Cancelar</button>
+                <button class="btn @(EsEliminacion ? "btn-danger" : "btn-primary")"
+                        @onclick="Confirmar">
+                    @GetTextoBoton()
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public EventCallback OnAccionCompletada { get; set; }
+
+    private bool mostrar;
+    private bool EsEliminacion;
+    private int IdProducto;
+
+    private CreateProductoVarianteDTO request = new();
+
+    private List<AtributosResponseDTO> atributos = new();
+    private List<ListAtributoValorResponseDTO> atributoValores = new();
+
+    // 🔥 estado único
+    private Dictionary<int, int> seleccion = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        atributos = await atributoApi.GetAllAsync();
+        atributoValores = await atributoValorApi.GetAllAsync();
+    }
+
+    public void Abrir(int idProducto, ProductoVarianteDTO? variante = null, bool eliminar = false)
+    {
+        IdProducto = idProducto;
+        EsEliminacion = eliminar;
+
+        if (variante != null)
+        {
+            request = new CreateProductoVarianteDTO
+            {
+                Id = variante.Id,
+                IdProducto = idProducto,
+                Precio = variante.Precio,
+                Stock = variante.Stock
+            };
+
+            seleccion = new();
+
+            if (variante.Atributos != null)
+            {
+                foreach (var a in variante.Atributos)
+                {
+                    if (a != null && a.IdAtributo > 0)
+                        seleccion[a.IdAtributo] = a.IdValor;
+                }
+            }
+        }
+        else
+        {
+            request = new CreateProductoVarianteDTO
+            {
+                IdProducto = idProducto
+            };
+
+            seleccion = new();
+        }
+
+        mostrar = true;
+        StateHasChanged();
+    }
+
+    public void Cerrar() => mostrar = false;
+
+    private string GetTitulo() =>
+        EsEliminacion ? "Eliminar Variante" :
+        (request.Id == 0 ? "Crear Variante" : "Editar Variante");
+
+    private string GetTextoBoton() =>
+        EsEliminacion ? "Eliminar" :
+        (request.Id == 0 ? "Crear" : "Guardar");
+
+    private void ToggleAtributo(int atributoId, bool value)
+    {
+        if (value)
+            seleccion.TryAdd(atributoId, 0);
+        else
+            seleccion.Remove(atributoId);
+    }
+
+    private void SeleccionarValor(int atributoId, string? valor)
+    {
+        if (int.TryParse(valor, out int id) && id > 0)
+            seleccion[atributoId] = id;
+        else
+            seleccion.Remove(atributoId);
+    }
+
+    private async Task Confirmar()
+    {
+        if (EsEliminacion)
+        {
+            await OnAccionCompletada.InvokeAsync();
+            Cerrar();
+            return;
+        }
+
+        request.IdsAtributoValor = seleccion.Values
+            .Where(v => v > 0)
+            .Distinct()
+            .ToList();
+
+        if (request.Id == 0)
+        {
+            await productoVarianteApi.CreateAsync(request);
+        }
+        else
+        {
+            var updateDto = new UpdateProductoVarianteDTO
+            {
+                Id = request.Id,
+                IdProducto = IdProducto,
+                Precio = request.Precio,
+                Stock = request.Stock,
+                IdsAtributoValor = request.IdsAtributoValor
+            };
+
+            await productoVarianteApi.PutAsync(updateDto);
+        }
+
+        await OnAccionCompletada.InvokeAsync();
+        Cerrar();
+    }
+}

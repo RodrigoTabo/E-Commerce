@@ -1,8 +1,5 @@
 ﻿using E_Commerce.Domain.Entities.Common;
 using E_Commerce.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Domain.Entities
 {
@@ -22,8 +19,8 @@ namespace E_Commerce.Domain.Entities
         public EstadoOrden EstadoOrden { get; set; }
         public decimal Total { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }    
-        public DateTime? ExpiresAt { get; set; }    
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? ExpiresAt { get; set; }
         public List<OrdenItem> OrdenItems { get; set; } = new();
         public List<Pago> Pagos { get; set; } = new();
     }

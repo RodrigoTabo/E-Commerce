@@ -64,7 +64,7 @@ else if (Model is not null)
                             <div class="d-flex flex-wrap gap-2">
                                 @foreach (var v in Model.Variantes)
                                 {
-                                    var talle = v.Atributos.FirstOrDefault(a => a.Atributo == "Talle")?.Valor;
+                                    var talle = v.Atributos.FirstOrDefault(a => a.Nombre == "Talle")?.Valor;
 
                                     <button type="button"
                                             class="btn btn-sm @(selectedVariantId == v.Id ? "btn-dark" : "btn-outline-dark")"
@@ -332,7 +332,7 @@ else if (Model is not null)
 
     private async Task EliminarReview(int id)
     {
-        // TODO: implementar
+        // implementar
     }
 
     private async Task AddCarrito()

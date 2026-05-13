@@ -3,9 +3,6 @@ using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Domicilios;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -18,7 +15,7 @@ namespace E_Commerce.Application.Services
         public async Task<Result<List<DomicilioDTO>>> GetAllAsync()
         {
             var userId = _currentUserService.UserId;
-            if(userId is null)
+            if (userId is null)
                 return Result.BadRequest<List<DomicilioDTO>>("Debes estar conectado para esta acción");
 
             var result = await _domicilioRepository.GetAllAsync(userId);

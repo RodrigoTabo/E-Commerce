@@ -2,9 +2,6 @@
 using E_Commerce.Infrastructure.Datas;
 using E_Commerce.Shared.DTOs.MetodoEnvios;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Infrastructure.Repositories
 {

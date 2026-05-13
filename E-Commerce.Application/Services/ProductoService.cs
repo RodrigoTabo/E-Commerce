@@ -24,12 +24,13 @@ namespace E_Commerce.Application.Services
         {
             var productos = await _productoRepository.GetAllAsync();
 
-            var validation = ValidateProductos(productos?.ToList());
-            if (!validation.Success)
-                return Result.Failure<List<ProductoResponseDTO>>(validation.Errors);
+            if (productos is null || !productos.Any())
+            {
+                return Result.NotFound<List<ProductoResponseDTO>>("No hay productos");
+            }
 
             var dtos = new List<ProductoResponseDTO>();
-            foreach (var p in validation.Value)
+            foreach (var p in productos)
             {
                 dtos.Add(MapToDto(p));
             }
@@ -140,17 +141,6 @@ namespace E_Commerce.Application.Services
 
         //    return Result.Success();
         //}
-
-
-        private Result<List<Producto>> ValidateProductos(List<Producto>? productos)
-        {
-            if (productos is null || !productos.Any())
-            {
-                return Result.NotFound<List<Producto>>("No hay productos");
-            }
-
-            return Result.Success(productos);
-        }
 
         private Result<ProductoDetalleDTO> ValidateProductoById(ProductoDetalleDTO dto)
         {

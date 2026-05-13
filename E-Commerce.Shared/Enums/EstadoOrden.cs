@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Commerce.Shared.Enums
+﻿namespace E_Commerce.Shared.Enums
 {
     public enum EstadoOrden
     {
         PendientePago,
+        Procesando,
         Pagada,
         Preparando,
         Enviada,

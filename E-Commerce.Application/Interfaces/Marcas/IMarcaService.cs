@@ -1,8 +1,5 @@
 ﻿using E_Commerce.Shared.DTOs.Marcas;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Interfaces.Marcas
 {

@@ -1,8 +1,5 @@
 ﻿using E_Commerce.Domain.Entities.Common;
 using E_Commerce.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Domain.Entities
 {

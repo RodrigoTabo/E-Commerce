@@ -52,7 +52,7 @@ builder.Services.AddDbContext<ECommerceDBContext>(options =>
 
 //------------------------------------------IDENTITYCORE-----------------------------------------------
 builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => // Cambia AddIdentityCore por AddIdentity
+    .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequiredLength = 8;
@@ -159,7 +159,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Habilita la generación del documento OpenAPI (ya incluido por defecto en .NET 10)
     app.MapOpenApi();
+
+    // Habilita Swagger UI
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "API v1");
+    });
 }
 
 
@@ -187,6 +194,6 @@ try
 catch (Exception ex)
 {
     Console.WriteLine("DB/Seed error: " + ex.Message);
-}   
+}
 
 app.Run();

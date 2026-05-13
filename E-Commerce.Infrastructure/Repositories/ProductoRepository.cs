@@ -1,12 +1,10 @@
 ﻿using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
-using E_Commerce.Shared.DTOs.AtributoValores;
 using E_Commerce.Shared.DTOs.Productos;
 using E_Commerce.Shared.DTOs.ProductoVariantes;
 using E_Commerce.Shared.DTOs.Reviews;
 using Microsoft.EntityFrameworkCore;
-using ROP;
 
 namespace E_Commerce.Infrastructure.Repositories
 {
@@ -58,10 +56,11 @@ namespace E_Commerce.Infrastructure.Repositories
                             Id = pv.Id,
                             Precio = pv.Precio,
                             Stock = pv.Stock,
-                            Atributos = pv.ProductoAtributoVariantes.Select(av => new AtributoValorDTO
+                            Atributos = pv.ProductoAtributoVariantes.Select(av => new AtributoVarianteDTO
                             {
-                                Id = av.AtributoValor.Id,
-                                Atributo = av.AtributoValor.Atributo.Nombre,
+                                IdValor = av.AtributoValor.Id,
+                                Nombre = av.AtributoValor.Atributo.Nombre,
+                                IdAtributo = av.AtributoValor.Atributo.Id,
                                 Valor = av.AtributoValor.Valor
                             })
                             .ToList()

@@ -40,7 +40,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult>PostAsync(CreateModeloDTO request)
+        public async Task<IActionResult> PostAsync(CreateModeloDTO request)
         {
             var result = await _modeloService.CreateAsync(request);
             if (!result.Success)
@@ -54,7 +54,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult>PostAsync(ModeloResponseDTO request)
+        public async Task<IActionResult> PostAsync(ModeloResponseDTO request)
         {
             var result = await _modeloService.UpdateAsync(request);
             if (!result.Success)

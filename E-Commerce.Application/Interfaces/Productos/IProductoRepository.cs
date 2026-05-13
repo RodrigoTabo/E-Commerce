@@ -1,6 +1,5 @@
 ﻿using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Productos;
-using ROP;
 
 
 namespace E_Commerce.Application.Interfaces.Productos

@@ -1,8 +1,6 @@
 ﻿using E_Commerce.Application.Interfaces.MetodoEnvios;
-using E_Commerce.Shared.DTOs.MetodoEnvios;
 using E_Commerce.Shared.DTOs.Productos;
 using Microsoft.AspNetCore.Mvc;
-using ROP;
 
 namespace E_Commerce.Server.Controllers
 {

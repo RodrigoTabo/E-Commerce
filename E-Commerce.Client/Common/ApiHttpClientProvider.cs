@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-
-namespace E_Commerce.Client.Common
+﻿namespace E_Commerce.Client.Common
 {
     public class ApiHttpClientProvider(HttpClient httpClient)
     {

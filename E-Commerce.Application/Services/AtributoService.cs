@@ -3,9 +3,6 @@ using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Atributos;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {

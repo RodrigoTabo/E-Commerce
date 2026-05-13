@@ -1,7 +1,4 @@
 ﻿using E_Commerce.Domain.Entities.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Domain.Entities
 {
@@ -20,6 +17,6 @@ namespace E_Commerce.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
-        public List<Orden> Ordenes { get; set; } = null!; 
+        public List<Orden> Ordenes { get; set; } = null!;
     }
 }

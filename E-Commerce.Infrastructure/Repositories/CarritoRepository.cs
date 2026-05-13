@@ -4,9 +4,6 @@ using E_Commerce.Infrastructure.Datas;
 using E_Commerce.Shared.DTOs.Carritos;
 using Microsoft.EntityFrameworkCore;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Infrastructure.Repositories
 {

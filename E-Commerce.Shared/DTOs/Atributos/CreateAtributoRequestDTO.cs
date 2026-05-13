@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Commerce.Shared.DTOs.Atributos
+﻿namespace E_Commerce.Shared.DTOs.Atributos
 {
     public record CreateAtributoRequestDTO
     {

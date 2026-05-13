@@ -46,7 +46,7 @@ namespace E_Commerce.Server.Controllers
         {
             var result = await _carritoService.RestarCantidad(IdProducto);
 
-            if(!result.Success)
+            if (!result.Success)
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 
             return Ok(result.Value);
@@ -60,7 +60,7 @@ namespace E_Commerce.Server.Controllers
         {
             var result = await _carritoService.SumarCantidad(IdProducto);
 
-            if(!result.Success)
+            if (!result.Success)
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 
             return Ok(result.Value);

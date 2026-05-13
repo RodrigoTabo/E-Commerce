@@ -1,6 +1,5 @@
 ﻿using E_Commerce.Client.Common;
 using E_Commerce.Shared.DTOs.User;
-using System.Net.Http.Json;
 
 namespace E_Commerce.Client.ApiRoutes
 {

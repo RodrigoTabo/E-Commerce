@@ -1,7 +1,5 @@
 ﻿using E_Commerce.Domain.Entities;
-using E_Commerce.Infrastructure.Datas;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 public class IdentitySeedService
 {

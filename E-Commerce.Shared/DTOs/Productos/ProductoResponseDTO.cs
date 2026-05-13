@@ -1,8 +1,4 @@
 ﻿using E_Commerce.Shared.DTOs.Reviews;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace E_Commerce.Shared.DTOs.Productos
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Commerce.Domain.Entities
+﻿namespace E_Commerce.Domain.Entities
 {
     public class AtributoValor
     {
@@ -13,4 +9,3 @@ namespace E_Commerce.Domain.Entities
         public List<ProductoAtributoVariante> ProductoAtributoVariantes { get; set; }
     }
 }
-    

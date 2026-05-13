@@ -1,7 +1,4 @@
 ﻿using E_Commerce.Shared.DTOs.MetodoEnvios;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Interfaces.MetodoEnvios
 {

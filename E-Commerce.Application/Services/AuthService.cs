@@ -2,7 +2,6 @@
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.User;
-using Microsoft.AspNetCore.Identity;
 using ROP;
 
 namespace E_Commerce.Application.Services

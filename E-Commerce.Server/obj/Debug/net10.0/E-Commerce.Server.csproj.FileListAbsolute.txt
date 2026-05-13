@@ -174,10 +174,11 @@ C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\stat
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\E-Commer.A6F88492.Up2Date
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\E-Commerce.Server.dll
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\refint\E-Commerce.Server.dll
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\E-Commerce.Server.pdb
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\E-Commerce.Server.genruntimeconfig.cache
 C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\ref\E-Commerce.Server.dll
-C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\Rodrii\source\repos\E-Commerce\E-Commerce.Server\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll

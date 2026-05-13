@@ -6,13 +6,12 @@ using E_Commerce.Application.Interfaces.MetodoEnvios;
 using E_Commerce.Application.Interfaces.Ordenes;
 using E_Commerce.Application.Interfaces.OrdenItems;
 using E_Commerce.Application.Interfaces.Pagos;
-using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Application.Interfaces.ProductoVariantes;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Orden;
 using E_Commerce.Shared.DTOs.Pagos;
+using E_Commerce.Shared.Enums;
 using ROP;
-using System.ComponentModel.DataAnnotations;
 
 namespace E_Commerce.Application.Services
 {
@@ -35,6 +34,108 @@ namespace E_Commerce.Application.Services
         private readonly IProductoVarianteService _productoVarianteService = productoVarianteService;
         private readonly ICarritoItemsService _carritoItemsService = carritoItemsService;
         private readonly IPagoService _pagoService = pagoService;
+
+        public async Task<Result<Unit>> AprobarPagoAsync(int ordenId)
+        {
+            //1. Buscar si la orden existe y obtener el objeto para modificar estado.
+            var orden = await _ordenRepository.GetByIdAsync(ordenId);
+            if (orden is null)
+                return Result.NotFound<Unit>("La orden no existe.");
+
+            //2. Buscar si el pago enlazado a la orden existe y obtener el objeto para modificar estado.
+            var pago = await _pagoService.GetPagoByOrdenId(orden.Id);
+            if (!pago.Success)
+                return Result.Failure<Unit>(pago.Errors);
+
+            //3. Buscar los estados de ambos, si estan en estado pendiente,
+            if (!(pago.Value.EstadoPago == EstadoPago.Procesando && orden.EstadoOrden == EstadoOrden.Procesando))
+                return Result.Conflict<Unit>("La orden no se encuentra en un estado válido para aprobar el pago.");
+
+            //4.Cambiamos estados y guardamos.
+            var now = DateTime.UtcNow;
+            pago.Value.EstadoPago = EstadoPago.Aprobado;
+            pago.Value.UpdatedAt = now;
+            orden.EstadoOrden = EstadoOrden.Pagada;
+            orden.UpdatedAt = now;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return Result.Success();
+        }
+
+        public async Task<Result<Unit>> PrepararOrdenAsync(int ordenId)
+        {
+            //1. Buscar si la orden existe y obtener el objeto para modificar estado y validar.
+            var orden = await _ordenRepository.GetByIdAsync(ordenId);
+            if (orden is null)
+                return Result.NotFound<Unit>("La orden no existe.");
+
+            //2. Buscar si el pago enlazado a la orden existe para validar Pago Aprobado.
+            var pago = await _pagoService.GetPagoByOrdenId(orden.Id);
+            if (!pago.Success)
+                return Result.Failure<Unit>(pago.Errors);
+
+            //3. Buscar los estados de ambos, si estan en estado aprobados,
+            if (!(pago.Value.EstadoPago == EstadoPago.Aprobado && orden.EstadoOrden == EstadoOrden.Pagada))
+                return Result.Conflict<Unit>("La orden no se encuentra en un estado válido para preparar el pedido.");
+
+            //4.Cambiamos estados y guardamos.
+            var now = DateTime.UtcNow;
+            orden.EstadoOrden = EstadoOrden.Preparando;
+            orden.UpdatedAt = now;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return Result.Success();
+        }
+
+        public async Task<Result<Unit>> EnviarOrdenAsync(int ordenId)
+        {
+            //1. Buscar si la orden existe y obtener el objeto para modificar estado y validar.
+            var orden = await _ordenRepository.GetByIdAsync(ordenId);
+            if (orden is null)
+                return Result.NotFound<Unit>("La orden no existe.");
+
+            //2. Buscar si el pago enlazado a la orden existe para validar Pago Aprobado.
+            var pago = await _pagoService.GetPagoByOrdenId(orden.Id);
+            if (!pago.Success)
+                return Result.Failure<Unit>(pago.Errors);
+
+            //3. Buscar los estados de ambos, si estan en estado aprobado y preparados,
+            if (!(pago.Value.EstadoPago == EstadoPago.Aprobado && orden.EstadoOrden == EstadoOrden.Preparando))
+                return Result.Conflict<Unit>("La orden no se encuentra en un estado válido para enviar el pedido.");
+
+            //4.Cambiamos estados y guardamos.
+            var now = DateTime.UtcNow;
+            orden.EstadoOrden = EstadoOrden.Enviada;
+            orden.UpdatedAt = now;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return Result.Success();
+        }
+
+        public async Task<Result<Unit>> EntregarOrdenAsync(int ordenId)
+        {
+            //1. Buscar si la orden existe y obtener el objeto para modificar estado y validar.
+            var orden = await _ordenRepository.GetByIdAsync(ordenId);
+            if (orden is null)
+                return Result.NotFound<Unit>("La orden no existe.");
+
+            //2. Buscar si el pago enlazado a la orden existe para validar Pago Aprobado.
+            var pago = await _pagoService.GetPagoByOrdenId(orden.Id);
+            if (!pago.Success)
+                return Result.Failure<Unit>(pago.Errors);
+
+            //3. Buscar los estados de ambos, si estan en estado aprobado y enviada,
+            if (!(pago.Value.EstadoPago == EstadoPago.Aprobado && orden.EstadoOrden == EstadoOrden.Enviada))
+                return Result.Conflict<Unit>("La orden no se encuentra en un estado válido para entegar el pedido.");
+
+            //4.Cambiamos estados y guardamos.
+            var now = DateTime.UtcNow;
+            orden.EstadoOrden = EstadoOrden.Entregada;
+            orden.UpdatedAt = now;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return Result.Success();
+        }
 
         public async Task<Result<int>> CreateAsync(CreateOrdenRequest request, PagoRequestDTO pagorequest)
         {
@@ -113,6 +214,26 @@ namespace E_Commerce.Application.Services
                 throw;
             }
         }
+
+        public async Task<Result<OrdenDetailsDTO>> GetOrdenById(int id)
+        {
+            var orden = await _ordenRepository.GetOrdenById(id);
+            if (orden is null)
+                return Result.NotFound<OrdenDetailsDTO>("No existe la orden.");
+
+            return Result.Success(orden);
+        }
+
+        public async Task<Result<List<ListOrdenDTO>>> GetOrdenesAsync()
+        {
+            var ordenes = await _ordenRepository.GetOrdenesAsync();
+            if (ordenes is null || !ordenes.Any())
+                return Result.NotFound<List<ListOrdenDTO>>("La lista esta vacia.");
+
+            return Result.Success(ordenes);
+        }
+
+        //Metodos privados
 
         private async Task<Result<Orden>> CrearOrden(CreateOrdenRequest request, List<ProductoVariante> productoVariantes, List<CarritoItem> carritoitems, Guid? userId)
         {

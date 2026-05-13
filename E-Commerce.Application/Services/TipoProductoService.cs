@@ -3,9 +3,6 @@ using E_Commerce.Application.Interfaces.TipoProductos;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.TipoProducto;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -22,7 +19,7 @@ namespace E_Commerce.Application.Services
 
             //2. Validamos que el tipo de producto no exista.
             var id = await _tipoProductoRepository.GetIdByNombreAsync(request.Nombre);
-            if(id != 0)
+            if (id != 0)
                 return Result.Conflict<int>("El tipo de producto ya existe.");
 
             //3. Creamos el objeto, lo guardamos y lo retornamos Id.

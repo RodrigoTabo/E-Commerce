@@ -1,16 +1,11 @@
 ﻿using E_Commerce.Domain.Entities.Common;
-using E_Commerce.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Security.Principal;
-using System.Text;
 
 namespace E_Commerce.Domain.Entities
 {
     public class OrdenItem : IBaseEntity
     {
         public int Id { get; set; }
-        public Orden Orden  { get; set; } = null!;
+        public Orden Orden { get; set; } = null!;
         public int IdOrden { get; set; }
         public ProductoVariante ProductoVariante { get; set; } = null!;
         public int IdProductoVariante { get; set; }

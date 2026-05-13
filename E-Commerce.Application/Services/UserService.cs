@@ -1,12 +1,8 @@
 ﻿using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.User;
-using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.User;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -77,6 +73,6 @@ namespace E_Commerce.Application.Services
                 return Result.BadRequest<Unit>("El DNI no puede estar vacio.");
             return Result.Success();
         }
-    
+
     }
 }

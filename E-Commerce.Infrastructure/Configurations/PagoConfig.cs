@@ -1,15 +1,12 @@
 ﻿using E_Commerce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Infrastructure.Configurations
 {
     public class PagoConfig : IEntityTypeConfiguration<Pago>
     {
-        public void Configure (EntityTypeBuilder<Pago> b)
+        public void Configure(EntityTypeBuilder<Pago> b)
         {
             b.HasKey(b => b.Id);
 

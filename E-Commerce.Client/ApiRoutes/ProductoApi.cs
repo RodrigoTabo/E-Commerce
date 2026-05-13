@@ -22,7 +22,7 @@ namespace E_Commerce.Client.ApiRoutes
         public async Task<int> CreateAsync(CreateProductoRequestDTO request)
         {
             var client = await _apiHttpClientProvider.GetClientAsync();
-            var created =  await client.PostJsonOrThrowAsync<CreateProductoRequestDTO, CreatedIdResponse>("api/productos", request);
+            var created = await client.PostJsonOrThrowAsync<CreateProductoRequestDTO, CreatedIdResponse>("api/productos", request);
             return created.Id;
         }
 

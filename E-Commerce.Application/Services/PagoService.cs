@@ -4,9 +4,6 @@ using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Pagos;
 using E_Commerce.Shared.Enums;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -29,7 +26,16 @@ namespace E_Commerce.Application.Services
 
             await _pagoRepository.AddPagoAsync(nuevoPago);
 
-           return Result.Success();
+            return Result.Success();
+        }
+
+        public async Task<Result<Pago>> GetPagoByOrdenId(int ordenId)
+        {
+            var pago = await _pagoRepository.GetPagoByOrdenId(ordenId);
+            if (pago is null)
+                return Result.NotFound<Pago>("El pago de la orden no existe.");
+
+            return Result.Success(pago);
         }
 
         private async Task<Result<Unit>> ValidarMetodoPago(int IdMetodoPago)

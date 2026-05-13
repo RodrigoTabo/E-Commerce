@@ -4,9 +4,6 @@ using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.AtributoValores;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -72,5 +69,8 @@ namespace E_Commerce.Application.Services
             await _unitOfWorkRepository.SaveChangesAsync();
             return Result.Success();
         }
+
+        public async Task<bool> ValidarAtributosValor(List<int> idsAtributoValor)
+            => await _atributoValorRepository.ValidarAtributosValor(idsAtributoValor);
     }
 }

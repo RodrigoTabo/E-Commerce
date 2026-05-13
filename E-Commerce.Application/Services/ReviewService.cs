@@ -5,9 +5,6 @@ using E_Commerce.Application.Interfaces.Reviews;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Reviews;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -35,7 +32,7 @@ namespace E_Commerce.Application.Services
             if (!(request.Rating >= 1 && request.Rating <= 5))
                 return Result.BadRequest<int>("Puntuación invalida.");
 
-            if(string.IsNullOrWhiteSpace(request.Comentario))
+            if (string.IsNullOrWhiteSpace(request.Comentario))
                 return Result.BadRequest<int>("Debes asignar un comentario.");
 
             var newReview = new Review

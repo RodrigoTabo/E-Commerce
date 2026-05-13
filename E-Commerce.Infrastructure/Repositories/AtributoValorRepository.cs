@@ -36,5 +36,15 @@ namespace E_Commerce.Infrastructure.Repositories
             .Where(v => v.Valor == valor)
             .Select(i => (int?)i.Id)
             .SingleOrDefaultAsync() ?? 0;
+
+        public async Task<bool> ValidarAtributosValor(List<int> idsAtributoValor)
+        {
+            var existentes = await _context.atributoValores
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            return idsAtributoValor.All(id => existentes.Contains(id));
+        }
+
     }
 }

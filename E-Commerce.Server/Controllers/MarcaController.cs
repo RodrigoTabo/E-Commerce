@@ -26,7 +26,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync([FromBody]CreateMarcaDTO request)
+        public async Task<IActionResult> PostAsync([FromBody] CreateMarcaDTO request)
         {
             var result = await _marcaService.CreateAsync(request);
             if (!result.Success)
@@ -39,7 +39,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PutAsync([FromBody]MarcaDTO request)
+        public async Task<IActionResult> PutAsync([FromBody] MarcaDTO request)
         {
             var result = await _marcaService.UpdateAsync(request);
             if (!result.Success)

@@ -1,0 +1,154 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.User
+@inject UserApi userApi
+
+@if (User == null)
+{
+    <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Cargando tus datos...</p>
+    </div>
+}
+else
+{
+    <div class="card border border-dark rounded-0 bg-white mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-white border-bottom border-secondary-subtle px-4 py-3 d-flex justify-content-between align-items-center rounded-0">
+            <h5 class="m-0 fw-bolder text-uppercase" style="letter-spacing: 1px; font-size: 1rem;">Datos Personales</h5>
+
+            @if (!isEditing)
+            {
+                <button class="btn btn-link text-dark fw-bold text-decoration-none p-0 text-uppercase"
+                        style="font-size: 0.8rem; letter-spacing: 1px;"
+                        @onclick="HabilitarEdicion">
+                    [ Editar ]
+                </button>
+            }
+        </div>
+
+        <div class="card-body px-4 py-4">
+            <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-light">
+                <div class="border border-dark rounded-0 p-1" style="width: 80px; height: 80px;">
+                    <img alt="Profile" class="w-100 h-100 object-fit-cover rounded-0" src="@User.UrlImagen" />
+                </div>
+                @if (isEditing)
+                {
+                    <div class="d-flex flex-column gap-2">
+                        <button class="btn btn-dark btn-sm rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Subir Foto</button>
+                        <button class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Eliminar</button>
+                    </div>
+                }
+            </div>
+
+            <div class="vstack gap-4">
+                <div>
+                    <label class="fw-bold text-uppercase text-muted mb-1" style="font-size: 0.75rem;">Nombre</label>
+                    @if (isEditing)
+                    {
+                        <input class="form-control rounded-0 border-dark shadow-none" @bind="editModel.Nombre" />
+                    }
+                    else
+                    {
+                        <p class="mb-0 fw-semibold text-dark">@editModel.Nombre</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="fw-bold text-uppercase text-muted mb-1" style="font-size: 0.75rem;">Apellido</label>
+                    @if (isEditing)
+                    {
+                        <input class="form-control rounded-0 border-dark shadow-none" @bind="editModel.Apellido" />
+                    }
+                    else
+                    {
+                        <p class="mb-0 fw-semibold text-dark">@editModel.Apellido</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="fw-bold text-uppercase text-muted mb-1" style="font-size: 0.75rem;">DNI / Documento</label>
+                    @if (isEditing)
+                    {
+                        <input class="form-control rounded-0 border-dark shadow-none" @bind="editModel.DNI" />
+                    }
+                    else
+                    {
+                        <p class="mb-0 fw-semibold text-dark">@editModel.DNI</p>
+                    }
+                </div>
+
+                <div class="row g-0 py-3 bg-light px-3">
+                    <div class="col-6">
+                        <label class="d-block fw-bold text-uppercase text-muted mb-1" style="font-size: 0.65rem;">Miembro desde</label>
+                        <span class="small fw-bold">@User.CreateAt.ToString("MM/yyyy")</span>
+                    </div>
+                    <div class="col-6 text-end">
+                        <label class="d-block fw-bold text-uppercase text-muted mb-1" style="font-size: 0.65rem;">Rol</label>
+                        <span class="badge bg-dark rounded-0 text-uppercase">Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            @if (isEditing)
+            {
+                <div class="d-flex gap-2 mt-4 pt-4 border-top border-dark">
+                    <button class="btn btn-dark w-100 rounded-0 fw-bold text-uppercase py-2" @onclick="GuardarCambios">Guardar</button>
+                    <button class="btn btn-outline-dark w-100 rounded-0 fw-bold text-uppercase py-2" @onclick="Cancelar">Cancelar</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private UserRequestDTO? User { get; set; }
+    private UserRequestDTO editModel = new();
+    private string? Error;
+    private bool isEditing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPerfilUser();
+    }
+
+    private async Task LoadPerfilUser()
+    {
+        try
+        {
+            User = await userApi.GetByUserId();
+            ResetEditModel();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private void HabilitarEdicion() => isEditing = true;
+
+    private void Cancelar()
+    {
+        ResetEditModel();
+        isEditing = false;
+    }
+
+    private async Task GuardarCambios()
+    {
+        await userApi.UpdateById(editModel);
+        isEditing = false;
+    }
+
+    private void ResetEditModel()
+    {
+        if (User != null)
+        {
+            editModel = new UserRequestDTO
+            {
+                Nombre = User.Nombre,
+                Apellido = User.Apellido,
+                DNI = User.DNI,
+                UrlImagen = User.UrlImagen
+            };
+        }
+    }
+}

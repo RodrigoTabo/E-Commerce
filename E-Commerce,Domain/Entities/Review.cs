@@ -1,7 +1,4 @@
 ﻿using E_Commerce.Domain.Entities.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Domain.Entities
 {

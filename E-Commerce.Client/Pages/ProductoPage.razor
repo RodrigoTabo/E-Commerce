@@ -1,5 +1,6 @@
 ﻿@using E_Commerce.Client.ApiRoutes
 @using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.ProductoVariante
 @using E_Commerce.Client.Componentes.Productos
 @using E_Commerce.Shared.DTOs.Productos
 @inject ProductoApi productoApi
@@ -8,13 +9,16 @@
 <ProductoTable Items="@items"
                OnCreate="AbrirModalCrear"
                OnEdit="AbrirModalEditar"
-               OnDelete="AbrirModalEliminar" />
+               OnDelete="AbrirModalEliminar"
+               OnProductoVariante="AbrirModalProductoVariante" />
 
 <ProductoModal @ref="modalInstancia" OnAccionCompletada="LoadProductosAsync" />
+<ProductoVarianteModal @ref="modalProductoVariante" />
 
 @code {
     private List<ProductoResponseDTO> items { get; set; } = new();
     private ProductoModal modalInstancia;
+    private ProductoVarianteModal modalProductoVariante;
     private string? Error;
     private bool Cargando;
 
@@ -50,6 +54,16 @@
     {
         var item = items.FirstOrDefault(p => p.Id == id);
         if (item != null) modalInstancia.Abrir(item.Id, item.Nombre, item.Descripcion, item.UrlImagen, item.IdModelo, true);
+    }
+
+    private async Task AbrirModalProductoVariante(int id)
+    {
+        var item = items.FirstOrDefault(p => p.Id == id);
+
+        if (item is null)
+            return;
+
+        await modalProductoVariante.Abrir(item.Id);
     }
 
 }

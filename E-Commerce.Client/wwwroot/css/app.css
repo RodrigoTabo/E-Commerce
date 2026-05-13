@@ -113,3 +113,29 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* Quita el redondeo de TODO lo que use las clases de Bootstrap */
+.rounded,
+.rounded-top,
+.rounded-bottom,
+.rounded-start,
+.rounded-end,
+.form-control,
+.btn,
+.card,
+.dropdown-menu,
+.modal-content,
+.nav-pills .nav-link {
+    border-radius: 0 !important;
+}
+
+/* Ajuste específico para grupos de entrada (input-groups) */
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.input-group > :not(:last-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}

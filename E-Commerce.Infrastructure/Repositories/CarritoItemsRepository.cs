@@ -3,9 +3,6 @@ using E_Commerce.Domain.Entities;
 using E_Commerce.Infrastructure.Datas;
 using Microsoft.EntityFrameworkCore;
 using ROP;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Infrastructure.Repositories
 {

@@ -57,6 +57,7 @@ builder.Services.AddScoped<ModeloApi>();
 builder.Services.AddScoped<MarcaApi>();
 builder.Services.AddScoped<TipoProductoApi>();
 builder.Services.AddScoped<CarritoStateService>();
+builder.Services.AddScoped<ProductoVarianteApi>();
 
 
 await builder.Build().RunAsync();

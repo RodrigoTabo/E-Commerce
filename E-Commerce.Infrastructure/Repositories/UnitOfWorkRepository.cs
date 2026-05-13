@@ -1,9 +1,6 @@
 ﻿using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Infrastructure.Datas;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace E_Commerce.Infrastructure.Repositories
 {

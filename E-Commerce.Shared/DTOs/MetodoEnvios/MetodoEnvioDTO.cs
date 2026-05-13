@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Commerce.Shared.DTOs.MetodoEnvios
+﻿namespace E_Commerce.Shared.DTOs.MetodoEnvios
 {
     public record MetodoEnvioDTO
     {

@@ -1,7 +1,6 @@
 ﻿using E_Commerce.Application.Interfaces.Productos;
 using E_Commerce.Shared.DTOs.Productos;
 using Microsoft.AspNetCore.Mvc;
-using ROP;
 
 namespace E_Commerce.Server.Controllers
 {
