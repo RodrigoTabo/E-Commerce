@@ -8,5 +8,6 @@ namespace E_Commerce.Application.Interfaces.Domicilios
     {
         Task<Result<Domicilio>> ValidarDomicilioExistente(int? IdDomicilio);
         Task<Result<List<DomicilioDTO>>> GetAllAsync();
+        Task<Result<int>> CreateAsync(CreateDomicilioDTO request);
     }
 }

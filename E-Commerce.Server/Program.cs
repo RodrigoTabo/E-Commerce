@@ -3,6 +3,7 @@ using E_Commerce.Application.Interfaces.AtributoValores;
 using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Carritos;
+using E_Commerce.Application.Interfaces.Ciudades;
 using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.Marcas;
@@ -142,6 +143,10 @@ builder.Services.AddScoped<ITipoProductoService, TipoProductoService>();
 builder.Services.AddScoped<ITipoProductoRepository, TipoProductoRepository>();
 builder.Services.AddScoped<IProductoVarianteService, ProductoVarianteService>();
 builder.Services.AddScoped<IProductoVarianteRepository, ProductoVarianteRepository>();
+builder.Services.AddScoped<IDomicilioService, DomicilioService>();
+builder.Services.AddScoped<IDomicilioRepository, DomicilioRepository>();
+builder.Services.AddScoped<ICiudadService, CiudadService>();
+builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

@@ -10,6 +10,9 @@ namespace E_Commerce.Infrastructure.Repositories
     {
         private readonly ECommerceDBContext _context = context;
 
+        public async Task AddAsync(Domicilio domicilio)
+            => await _context.Domicilios.AddAsync(domicilio);
+
         public async Task<List<DomicilioDTO>> GetAllAsync(Guid? userId)
         => await _context.Domicilios.AsNoTracking()
             .Where(d => d.IdApplicationUser == userId)

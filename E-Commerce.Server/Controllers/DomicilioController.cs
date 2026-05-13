@@ -23,5 +23,19 @@ namespace E_Commerce.Server.Controllers
 
             return Ok(result.Value);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task <IActionResult>Post(CreateDomicilioDTO request)
+        {
+            var result = await _domicilioService.CreateAsync(request);
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Created($"api/productos/{result.Value}", new { result.Value });
+        }
+
     }
 }

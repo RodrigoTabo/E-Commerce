@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.client\\componentes\\perfil\\direccionescomponent.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|solutionrelative:e-commerce.client\\componentes\\perfil\\direccionescomponent.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.client\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|solutionrelative:e-commerce.client\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.application\\services\\domicilioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E010C83E-3882-41EB-07B0-0128F2127AB2}|E-Commerce.Application\\E-Commerce.Application.csproj|solutionrelative:e-commerce.application\\services\\domicilioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|c:\\users\\rodrii\\source\\repos\\e-commerce\\e-commerce.client\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{48FFE04A-7FA7-0D0E-2E6D-811015C62E1B}|E-Commerce.Client\\E-Commerce.Client.csproj|solutionrelative:e-commerce.client\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -26,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,58 +22,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DomicilioService.cs",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\DomicilioService.cs",
-              "RelativeDocumentMoniker": "E-Commerce.Application\\Services\\DomicilioService.cs",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Application\\Services\\DomicilioService.cs",
-              "RelativeToolTip": "E-Commerce.Application\\Services\\DomicilioService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T22:25:29.669Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MainLayout.razor",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Layout\\MainLayout.razor",
-              "RelativeDocumentMoniker": "E-Commerce.Client\\Layout\\MainLayout.razor",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Layout\\MainLayout.razor",
-              "RelativeToolTip": "E-Commerce.Client\\Layout\\MainLayout.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T22:21:23.794Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "NavMenu.razor",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Layout\\NavMenu.razor",
-              "RelativeDocumentMoniker": "E-Commerce.Client\\Layout\\NavMenu.razor",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Layout\\NavMenu.razor",
-              "RelativeToolTip": "E-Commerce.Client\\Layout\\NavMenu.razor",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T22:21:20.506Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DireccionesComponent.razor",
-              "DocumentMoniker": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Componentes\\Perfil\\DireccionesComponent.razor",
-              "RelativeDocumentMoniker": "E-Commerce.Client\\Componentes\\Perfil\\DireccionesComponent.razor",
-              "ToolTip": "C:\\Users\\Rodrii\\source\\repos\\E-Commerce\\E-Commerce.Client\\Componentes\\Perfil\\DireccionesComponent.razor",
-              "RelativeToolTip": "E-Commerce.Client\\Componentes\\Perfil\\DireccionesComponent.razor",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAQAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T22:14:14.007Z",
-              "EditorCaption": ""
             }
           ]
         }
