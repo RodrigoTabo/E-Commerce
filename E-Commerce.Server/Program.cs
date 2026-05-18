@@ -1,3 +1,4 @@
+using E_Commerce.Application.Interfaces;
 using E_Commerce.Application.Interfaces.Atributos;
 using E_Commerce.Application.Interfaces.AtributoValores;
 using E_Commerce.Application.Interfaces.Auth;
@@ -31,6 +32,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +86,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+        RoleClaimType = ClaimTypes.Role,
 
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
@@ -147,6 +150,8 @@ builder.Services.AddScoped<IDomicilioService, DomicilioService>();
 builder.Services.AddScoped<IDomicilioRepository, DomicilioRepository>();
 builder.Services.AddScoped<ICiudadService, CiudadService>();
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
+builder.Services.AddScoped<IImagenStorageService, ImagenStorage>();
+builder.Services.AddScoped<IPdfStorageService, PdfStorageService>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT
@@ -184,7 +189,7 @@ app.UseCors("AllowBlazorOrigin");
 // --- JWT ---
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 try
 {

@@ -47,23 +47,34 @@ namespace E_Commerce.Client.Common
 
         private ClaimsPrincipal BuildUserFromToken(string token)
         {
-            try
-            {
-                var handler = new JwtSecurityTokenHandler();
+            var handler = new JwtSecurityTokenHandler();
 
-                // Verificamos si el handler puede leerlo antes de intentar
-                if (!handler.CanReadToken(token))
-                    return _anonymous;
-
-                var jwt = handler.ReadJwtToken(token);
-                var identity = new ClaimsIdentity(jwt.Claims, "Bearer");
-
-                return new ClaimsPrincipal(identity);
-            }
-            catch
-            {
+            if (!handler.CanReadToken(token))
                 return _anonymous;
-            }
+
+            var jwt = handler.ReadJwtToken(token);
+
+            var claims = jwt.Claims
+                .Select(c =>
+                {
+                    if (c.Type == "role" ||
+                        c.Type == "roles" ||
+                        c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                    {
+                        return new Claim(ClaimTypes.Role, c.Value);
+                    }
+
+                    return c;
+                });
+
+            var identity = new ClaimsIdentity(
+                claims,
+                "Bearer",
+                ClaimTypes.NameIdentifier,
+                ClaimTypes.Role
+            );
+
+            return new ClaimsPrincipal(identity);
         }
     }
 }

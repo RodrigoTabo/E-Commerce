@@ -23,6 +23,18 @@ namespace E_Commerce.Server.Controllers
             return Ok(result.Value);
         }
 
+        [HttpGet("mis-compras")]
+        [ProducesResponseType(typeof(List<OrdenDetailsUserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ListOrdenByUsers()
+        {
+            var result = await _ordenService.ListOrdenByUsers();
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Ok(result.Value);
+        }
+
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,7 +58,7 @@ namespace E_Commerce.Server.Controllers
             return Created($"api/orden/{result.Value}", new { result.Value });
         }
 
-        [HttpPost("/aprobar")]
+        [HttpPost("aprobar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AprobarPagoAsync(int ordenId)
@@ -58,7 +70,7 @@ namespace E_Commerce.Server.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("/preparar")]
+        [HttpPost("preparar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PrepararOrdenAsync(int ordenId)
@@ -70,7 +82,7 @@ namespace E_Commerce.Server.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("/enviar")]
+        [HttpPost("enviar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> EnviarOrdenAsync(int ordenId)
@@ -81,12 +93,25 @@ namespace E_Commerce.Server.Controllers
 
             return Ok(result.Value);
         }
-        [HttpPost("/entregar")]
+
+        [HttpPost("entregar")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> EntregarOrdenAsync(int ordenId)
         {
             var result = await _ordenService.EntregarOrdenAsync(ordenId);
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Ok(result.Value);
+        }
+
+        [HttpPost("cargar-comprobante")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CargarComprobantes([FromForm] ComprobanteUploadDTO request)
+        {
+            var result = await _ordenService.CargarComprobante(request);
             if (!result.Success)
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 

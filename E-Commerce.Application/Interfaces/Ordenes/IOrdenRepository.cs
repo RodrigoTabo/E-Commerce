@@ -10,5 +10,6 @@ namespace E_Commerce.Application.Interfaces.Ordenes
         Task<List<ListOrdenDTO>> GetOrdenesAsync();
         Task<OrdenDetailsDTO> GetOrdenById(int id);
         Task<Orden?> GetByIdAsync(int id);
+        Task<List<OrdenDetailsUserDTO>> ListOrdenByUsers(Guid? UserId);
     }
 }

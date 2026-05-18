@@ -28,7 +28,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateById(UserRequestDTO request)
+        public async Task<IActionResult> UpdateById([FromForm]UserRequestDTO request)
         {
             var result = await _userService.ActualizarPerfil(request);
             if (!result.Success)

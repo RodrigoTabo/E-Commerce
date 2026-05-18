@@ -9,228 +9,323 @@
 @inject ProductoApi productoApi
 @inject ReviewApi reviewApi
 @inject AuthenticationStateProvider AuthStateProvider
-
 @if (Cargando && Model == null)
 {
-    <div class="d-flex justify-content-center p-5">
-        <div class="spinner-border"></div>
+    <div class="d-flex flex-column align-items-center justify-content-center p-5" style="min-height: 300px;">
+        <div class="spinner-border text-dark mb-3" style="width: 1.5rem; height: 1.5rem; stroke-width: 1;" role="status"></div>
+        <p class="text-uppercase small" style="font-size: 10px; letter-spacing: 2px;">Cargando producto...</p>
     </div>
 }
 else if (Model is not null)
 {
-    <MudDialog MaxWidth="MaxWidth.False" FullWidth="true" Style="width:80vw; max-width:80vw;">
+    <style global>
+        /* MudDialog customizado al estilo brutalista de la app */
+        .mud-dialog-custom {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+            padding: 1.5rem !important;
+        }
+
+        /* Envoltorio de imagen estilo foto de perfil */
+        .apex-product-detail .product-main-img-container {
+            background-color: #ffffff;
+            border: 1px solid #000000; /* border-dark */
+            border-radius: 0px;
+            padding: 2rem;
+            height: 450px;
+        }
+
+        /* Botón de talle como bloque plano */
+        .apex-product-detail .size-btn {
+            border: 1px solid #000000;
+            background: #ffffff;
+            padding: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            width: 100%;
+            border-radius: 0px;
+            transition: all 0.1s ease;
+        }
+
+            .apex-product-detail .size-btn.active {
+                border: 1px solid #000000;
+                background-color: #212529; /* btn-dark */
+                color: #ffffff;
+            }
+
+        /* Botón de acción principal idéntico a Guardar/Ver Detalles */
+        .apex-product-detail .btn-action-flat {
+            background-color: #212529;
+            color: #ffffff;
+            border: none;
+            border-radius: 0px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 1rem;
+            width: 100%;
+            transition: background-color 0.1s ease;
+        }
+
+            .apex-product-detail .btn-action-flat:hover:not(:disabled) {
+                background-color: #000000;
+                color: #ffffff;
+            }
+
+        /* Input de cantidad brutalista */
+        .apex-product-detail .qty-container {
+            border: 1px solid #000000;
+            border-radius: 0px;
+            background-color: #ffffff;
+        }
+
+        /* Badge pegado tipo catálogo */
+        .apex-product-detail .badge-flat {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #000000;
+            border-left: 1px solid #000000;
+        }
+
+        .apex-product-detail .material-symbols-outlined {
+            vertical-align: middle;
+        }
+
+        .apex-product-detail .star-filled {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+
+    <MudDialog MaxWidth="MaxWidth.False" FullWidth="true" Class="mud-dialog-custom" Style="width:85vw; max-width:85vw;">
         <DialogContent>
+            <div class="apex-product-detail">
 
-            <div class="d-flex justify-content-end">
-                <button class="btn" @onclick="Cancel">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-
-            <div class="row g-4">
-
-                <div class="col-12 col-md-7">
-                    <div class="d-flex align-items-center justify-content-center" style="height:450px;">
-                        <img src="@Model.UrlImagen" style="max-width:100%; max-height:100%; object-fit:contain;" />
-                    </div>
+                <div class="d-flex justify-content-end mb-3">
+                    <button class="btn btn-link text-dark fw-bold text-decoration-none p-0 text-uppercase"
+                            style="font-size: 0.8rem; letter-spacing: 1px;"
+                            @onclick="Cancel">
+                        [ Cerrar ]
+                    </button>
                 </div>
 
-                <div class="col-12 col-md-5 d-flex flex-column gap-3">
+                <div class="container-fluid px-0">
+                    <div class="row g-5">
 
-                    <div>
-                        <h4 class="mb-1">@Model.Nombre</h4>
+                        <div class="col-lg-6">
+                            <div class="product-main-img-container position-relative d-flex align-items-center justify-content-center">
+                                <img src="@GetImage(Model.UrlImagen)" alt="@Model.Nombre" class="img-fluid" style="max-height: 100%; object-fit: contain;" />
+                                <span class="badge-flat bg-dark text-white">Nuevo</span>
+                            </div>
+                        </div>
 
-                        <small class="text-muted">
-                            @Model.MarcaNombre · @Model.Modelo · @Model.CategoriaNombre
-                        </small>
-                    </div>
+                        <div class="col-lg-6 d-flex flex-column justify-content-between">
+                            <div class="vstack gap-3">
 
-                    <p class="text-muted mb-0">@Model.Descripcion</p>
+                                <div>
+                                    <label class="d-block fw-bold text-uppercase text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 1px;">
+                                        @Model.MarcaNombre · @Model.Modelo
+                                    </label>
+                                    <h1 class="h4 fw-bolder text-uppercase text-dark m-0" style="letter-spacing: 0.5px;">@Model.Nombre</h1>
 
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="badge bg-secondary">@Model.NombreVendedor</span>
-                        <span class="badge bg-info">
-                            ⭐ @Model.PromedioEstrellas.ToString("0.0") (@Model.TotalReviews)
-                        </span>
-                    </div>
+                                    <div class="d-flex align-items-center gap-3 mt-2 small">
+                                        <div class="text-dark d-flex align-items-center fw-bold">
+                                            <span class="material-symbols-outlined fs-5 star-filled me-1">star</span>
+                                            <span>@Model.PromedioEstrellas.ToString("0.0")</span>
+                                            <span class="text-muted fw-normal ms-1">(@Model.TotalReviews)</span>
+                                        </div>
+                                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem;">
+                                            Vendedor: <span class="text-dark">@Model.NombreVendedor</span>
+                                        </span>
+                                    </div>
+                                </div>
 
-                    @if (Model.Variantes != null && Model.Variantes.Any())
-                    {
-                        <div>
-                            <h6 class="fw-bold mb-2">
-                                Seleccioná talle (ARG)
-                            </h6>
 
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach (var v in Model.Variantes)
+                                <div class="py-3 bg-light px-3 border border-secondary-subtle row g-0 text-center text-sm-start">
+                                    <div class="col-sm-6">
+                                        <label class="d-block fw-bold text-uppercase text-muted mb-1" style="font-size: 0.6rem;">Precio</label>
+                                        <span class="h3 fw-bolder text-dark mb-0">@selectedVariantPrecio</span>
+                                    </div>
+                                </div>
+                                <p class="text-muted small my-1 lh-sm">@Model.Descripcion</p>
+                                @if (Model.Variantes != null && Model.Variantes.Any())
                                 {
-                                    var talle = v.Atributos.FirstOrDefault(a => a.Nombre == "Talle")?.Valor;
-
-                                    <button type="button"
-                                            class="btn btn-sm @(selectedVariantId == v.Id ? "btn-dark" : "btn-outline-dark")"
-                                            disabled="@(v.Stock == 0)"
-                                            @onclick="() => SeleccionarVariante(v.Id, v.Stock)">
-                                        @talle
-                                    </button>
+                                    <div>
+                                        <label class="fw-bold text-uppercase text-muted mb-2" style="font-size: 0.65rem; letter-spacing: 0.5px;">Seleccionar Talle (AR)</label>
+                                        <div class="row g-2">
+                                            @foreach (var v in Model.Variantes)
+                                            {
+                                                var talle = v.Atributos.FirstOrDefault(a => a.Nombre == "Talle")?.Valor;
+                                                <div class="col-3 col-sm-2">
+                                                    <button type="button"
+                                                            class="size-btn @(selectedVariantId == v.Id ? "active" : "") @(v.Stock == 0 ? "opacity-25" : "")"
+                                                            disabled="@(v.Stock == 0)"
+                                                            @onclick="() => SeleccionarVariante(v.Id, v.Stock, v.Precio)">
+                                                        @talle
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
                                 }
                             </div>
 
-                            <small class="text-muted d-block mt-2">
-                                Los talles disponibles pueden variar según stock
-                            </small>
-                        </div>
-                    }
+                            <div class="mt-4 pt-3 border-top border-secondary-subtle">
+                                @if (selectedVariantId != 0)
+                                {
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-sm-5">
+                                            <div class="d-flex align-items-center qty-container justify-content-between">
+                                                <button class="btn btn-link text-dark px-3 py-2 border-0 text-decoration-none fw-bold"
+                                                        type="button" @onclick="() => ModificarCantidad(-1)" disabled="@(cantidadSeleccionada <= 1)">
+                                                    -
+                                                </button>
+                                                <span class="fw-bold small">@cantidadSeleccionada</span>
+                                                <button class="btn btn-link text-dark px-3 py-2 border-0 text-decoration-none fw-bold"
+                                                        type="button" @onclick="() => ModificarCantidad(1)" disabled="@(cantidadSeleccionada >= selectedVariantStock)">
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7 text-sm-start">
+                                            <span class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem;">(@selectedVariantStock Disponibles)</span>
+                                        </div>
+                                    </div>
 
-                    @if (selectedVariantId != 0)
-                    {
-                        <div>
-
-                            <label class="form-label fw-bold">
-                                Cantidad
-                            </label>
-
-                            <div class="d-flex align-items-center gap-3">
-
-                                <div class="input-group" style="width:140px;">
-
-                                    <button class="btn btn-outline-dark"
-                                            type="button"
-                                            @onclick="() => ModificarCantidad(-1)"
-                                            disabled="@(cantidadSeleccionada <= 1)">
-                                        <i class="bi bi-dash"></i>
+                                    <button @onclick="AddCarrito" class="btn-action-flat d-flex align-items-center justify-content-center gap-2">
+                                        <span class="material-symbols-outlined fs-5">shopping_cart</span>
+                                        Agregar al Carrito
                                     </button>
+                                }
 
-                                    <span class="form-control text-center">
-                                        @cantidadSeleccionada
-                                    </span>
-
-                                    <button class="btn btn-outline-dark"
-                                            type="button"
-                                            @onclick="() => ModificarCantidad(1)"
-                                            disabled="@(cantidadSeleccionada >= selectedVariantStock)">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
-
+                                <div class="row g-2 mt-3 pt-2 border-top border-light">
+                                    <div class="col-12 small text-dark fw-bold d-flex align-items-center gap-2" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span class="material-symbols-outlined text-dark fs-5">inventory_2</span>
+                                        <span class="text-uppercase">Stock para envío inmediato</span>
+                                    </div>
+                                    <div class="col-6 small text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                                        <span class="material-symbols-outlined fs-5">local_shipping</span>
+                                        <span>Envío gratis</span>
+                                    </div>
+                                    <div class="col-6 small text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                                        <span class="material-symbols-outlined fs-5">published_with_changes</span>
+                                        <span>Cambio gratis (30d)</span>
+                                    </div>
                                 </div>
-
-                                <span class="text-muted small">
-                                    (@selectedVariantStock disponibles)
-                                </span>
-
                             </div>
 
-                            <button @onclick="AddCarrito" class="btn btn-dark w-100 mt-3 py-2 fw-bold">
-                                AGREGAR AL CARRITO
-                            </button>
-
                         </div>
-                    }
+                    </div>
 
-                </div>
+                    <hr class="my-5 border-dark opacity-100" />
 
-            </div>
+                    <section>
+                        <div class="row g-5">
 
-            <hr />
+                            <div class="col-lg-4">
+                                <h5 class="text-uppercase fw-bolder mb-4" style="letter-spacing: 1px; font-size: 0.9rem;">Opiniones de clientes</h5>
+                                <div class="d-flex align-items-center gap-3 mb-4 py-2 bg-light px-3 border border-secondary-subtle">
+                                    <span class="display-5 fw-bolder text-dark mb-0">@Model.PromedioEstrellas.ToString("0.0")</span>
+                                    <div>
+                                        <div class="text-dark d-flex mb-1">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <span class="material-symbols-outlined fs-5 @(i <= Math.Round(Model.PromedioEstrellas) ? "star-filled" : "")">star</span>
+                                            }
+                                        </div>
+                                        <p class="text-uppercase text-muted fw-bold m-0" style="font-size: 0.6rem; letter-spacing: 0.5px;">Basado en @Model.ReviewDTO.Count valoraciones</p>
+                                    </div>
+                                </div>
 
-            <div>
+                                <div class="card border border-dark rounded-0 bg-white p-4">
+                                    <h6 class="mb-3 fw-bold text-uppercase small" style="letter-spacing: 0.5px;">Deja tu opinión</h6>
 
-                <h6 class="mb-3">
-                    Reseñas (@Model.ReviewDTO.Count)
-                </h6>
+                                    <div class="mb-3 d-flex gap-1 text-dark">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            int star = i;
+                                            <span class="material-symbols-outlined fs-4 @(star <= nuevaReview.Rating ? "star-filled" : "")"
+                                                  style="cursor:pointer;" @onclick="() => SeleccionarRating(star)">
+                                                star
+                                            </span>
+                                        }
+                                    </div>
 
-                @foreach (var review in Model.ReviewDTO)
-                {
-                    <div class="card mb-2">
+                                    <textarea class="form-control rounded-0 border-dark shadow-none small mb-3"
+                                              rows="3" placeholder="Escribe tu reseña aquí..." @bind="nuevaReview.Comentario">
+                                    </textarea>
 
-                        <div class="card-body">
+                                    <div class="d-flex flex-column gap-2">
+                                        @if (!string.IsNullOrEmpty(Error))
+                                        {
+                                            <small class="text-danger fw-bold text-uppercase" style="font-size: 0.65rem;">@Error</small>
+                                        }
+                                        <button class="btn-action-flat py-2" @onclick="EnviarComentario"
+                                                disabled="@(nuevaReview.Rating == 0 || string.IsNullOrWhiteSpace(nuevaReview.Comentario) || Cargando)">
+                                            @if (Cargando)
+                                            {
+                                                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                            }
+                                            Publicar Reseña
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-
-                                <span>@review.UsuarioNombre</span>
-
-                                <div>
-                                    @for (int i = 1; i <= 5; i++)
+                            <div class="col-lg-8">
+                                <h5 class="text-uppercase fw-bolder mb-4" style="letter-spacing: 1px; font-size: 0.9rem;">Comentarios (@Model.ReviewDTO.Count)</h5>
+                                <div style="max-height: 480px; overflow-y: auto; padding-right: 15px;">
+                                    @foreach (var review in Model.ReviewDTO)
                                     {
-                                        <i class="bi @(i <= review.rating ? "bi-star-fill" : "bi-star")"></i>
+                                        <div class="border-bottom border-secondary-subtle mb-4 pb-3">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="border border-dark bg-dark text-white d-flex align-items-center justify-content-center fw-bold text-uppercase rounded-0" style="width: 35px; height: 35px; font-size: 11px; letter-spacing: 0.5px;">
+                                                        @(string.IsNullOrEmpty(review.UsuarioNombre) ? "U" : review.UsuarioNombre.Substring(0, Math.Min(2, review.UsuarioNombre.Length)))
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold text-dark small text-uppercase" style="font-size: 0.75rem;">@review.UsuarioNombre</h6>
+                                                        <div class="text-dark d-flex" style="font-size: 14px;">
+                                                            @for (int i = 1; i <= 5; i++)
+                                                            {
+                                                                <span class="material-symbols-outlined fs-6 @(i <= review.rating ? "star-filled" : "")">star</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="fw-bold text-uppercase text-muted" style="font-size: 0.6rem; letter-spacing: 0.5px;">Verificado</span>
+                                            </div>
+
+                                            <p class="text-muted small mt-2 mb-2 lh-sm">@review.comentario</p>
+
+                                            @if (review.UsuarioId == currentUserId)
+                                            {
+                                                <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none fw-bold text-uppercase"
+                                                        style="font-size: 0.65rem; letter-spacing: 0.5px;" @onclick="() => EliminarReview(review.Id)">
+                                                    [ Eliminar Comentario ]
+                                                </button>
+                                            }
+                                        </div>
                                     }
                                 </div>
-
                             </div>
 
-                            <p class="mb-2">
-                                @review.comentario
-                            </p>
-
-                            @if (review.UsuarioId == currentUserId)
-                            {
-                                <button class="btn btn-sm btn-link text-danger p-0"
-                                        @onclick="() => EliminarReview(review.Id)">
-                                    Eliminar
-                                </button>
-                            }
-
                         </div>
+                    </section>
 
-                    </div>
-                }
-
+                </div>
             </div>
-
-            <div class="mt-4">
-
-                <h6 class="mb-2">
-                    Deja tu opinión
-                </h6>
-
-                <div class="mb-2">
-
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        int star = i;
-
-                        <i class="bi @(star <= nuevaReview.Rating ? "bi-star-fill" : "bi-star")"
-                               style="cursor:pointer;"
-                               @onclick="() => SeleccionarRating(star)">
-                        </i>
-                    }
-
-                </div>
-
-                <textarea class="form-control mb-2"
-                          rows="3"
-                              @bind="nuevaReview.Comentario">
-                </textarea>
-
-                    <div class="d-flex justify-content-between align-items-center gap-2">
-
-                        @if (!string.IsNullOrEmpty(Error))
-                        {
-                            <small class="text-danger">
-                                @Error
-                            </small>
-                        }
-
-                        <button class="btn btn-primary"
-                                @onclick="EnviarComentario"
-                                disabled="@(nuevaReview.Rating == 0 || string.IsNullOrWhiteSpace(nuevaReview.Comentario) || Cargando)">
-
-                            @if (Cargando)
-                            {
-                                <span class="spinner-border spinner-border-sm"></span>
-                            }
-
-                            Publicar
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </DialogContent>
-        </MudDialog>
-    }
-
+        </DialogContent>
+    </MudDialog>
+}
 @code {
 
     [CascadingParameter]
@@ -249,6 +344,7 @@ else if (Model is not null)
 
     private int selectedVariantId = 0;
     private int selectedVariantStock = 0;
+    private decimal selectedVariantPrecio = 0;
     private int cantidadSeleccionada = 1;
 
     protected override async Task OnInitializedAsync()
@@ -360,15 +456,24 @@ else if (Model is not null)
         }
     }
 
-    private void SeleccionarVariante(int id, int stock)
+    private void SeleccionarVariante(int id, int stock, decimal precio)
     {
         selectedVariantId = id;
         selectedVariantStock = stock;
+        selectedVariantPrecio = precio;
         cantidadSeleccionada = 1;
     }
 
     private void Cancel()
     {
         MudDialog.Cancel();
+    }
+
+    private string GetImage(string? urlImagen)
+    {
+        if (string.IsNullOrWhiteSpace(urlImagen))
+            return "/images/default-product.png";
+
+        return $"https://localhost:7145{urlImagen}";
     }
 }

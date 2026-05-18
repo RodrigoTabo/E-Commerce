@@ -1,0 +1,178 @@
+﻿@page "/mis-compras"
+@using E_Commerce.Shared.DTOs.Orden
+@using E_Commerce.Client.ApiRoutes
+@inject OrdenApi ordenApi
+
+<div class="card border border-dark rounded-0 bg-white h-100">
+    <div class="card-header bg-white border-bottom border-dark px-4 py-3 d-flex justify-content-between align-items-center rounded-0">
+        <h5 class="m-0 fw-bolder text-uppercase" style="letter-spacing: 1px; font-size: 1rem;">
+            Mis Órdenes
+        </h5>
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="list-group list-group-flush rounded-0">
+
+            @foreach (var orden in ordenDetailsUserDTOs)
+            {
+                <div class="list-group-item p-4 border-bottom border-secondary-subtle">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <p class="mb-0 fw-bold text-uppercase" style="font-size: 0.85rem;">
+                                Orden #@orden.Id
+                            </p>
+                            <small class="text-muted">
+                                @orden.FechaCreado.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                        </div>
+
+                        <span class="badge bg-dark rounded-0 text-uppercase">
+                            @orden.EstadoOrden
+                        </span>
+                    </div>
+
+                    @if (orden.Domicilio != null)
+                    {
+                        <div class="mb-3">
+                            <p class="mb-0 text-secondary small fw-bold">
+                                @orden.Domicilio.Calle @orden.Domicilio.Altura
+                            </p>
+                            <p class="mb-0 text-secondary small">
+                                @orden.Domicilio.Ciudad - CP @orden.Domicilio.CodigoPostal
+                            </p>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        @foreach (var item in orden.OrdenItemsDetailUserDTOs)
+                        {
+                            <div class="d-flex justify-content-between small text-secondary mb-2">
+
+                                <div>
+                                    <span class="fw-bold text-dark">
+                                        @item.ProductoNombre
+                                    </span>
+
+                                    <span class="ms-2">x @item.Cantidad</span>
+
+                                    @if (item.ProductoVariante?.Atributos != null && item.ProductoVariante.Atributos.Any())
+                                    {
+                                        <div class="mt-1">
+                                            @foreach (var attr in item.ProductoVariante.Atributos)
+                                            {
+                                                <span class="badge bg-light text-dark border rounded-0 me-1">
+                                                    @attr.Nombre: @attr.Valor
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="text-end">
+                                    $@(item.PrecioUnitario * item.Cantidad)
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-top pt-2">
+
+                        <div class="small">
+                            <span class="fw-bold">Total:</span>
+                            <span>$@orden.Total</span>
+                        </div>
+
+                        <div class="d-flex gap-2 align-items-center">
+
+                            @if (orden.PagoDetailUserDTO != null && orden.PagoDetailUserDTO.EstadoPago == Shared.Enums.EstadoPago.Pendiente)
+                            {
+                                <InputFile OnChange="@(e => OnInputFileChange(e, orden.Id))" accept=".pdf" />
+                                @if (archivoSeleccionado != null && orden.Id == ordenCargada)
+                                {
+                                    <button @onclick="EnviarComprobante" class="btn btn-dark btn-sm rounded-0 text-uppercase" style="font-size: 0.7rem;">
+                                        Enviar comprobante
+                                    </button>
+                                }
+                            }
+
+                            @if (orden.PagoDetailUserDTO != null)
+                            {
+                                <span class="badge bg-secondary rounded-0 text-uppercase">
+                                    @orden.PagoDetailUserDTO.EstadoPago
+                                </span>
+
+                                @if (!string.IsNullOrEmpty(orden.PagoDetailUserDTO.ComprobanteUrl))
+                                {
+                                    <a href="@($"https://localhost:7145{orden.PagoDetailUserDTO.ComprobanteUrl}")" target="_blank">
+                                        Ver comprobante
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark rounded-0">
+                                    Sin pago
+                                </span>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            @if (!ordenDetailsUserDTOs.Any())
+            {
+                <div class="p-5 text-center">
+                    <i class="bi bi-bag text-muted fs-1"></i>
+                    <p class="text-muted mt-2 text-uppercase fw-bold" style="font-size: 0.8rem;">
+                        No tenés órdenes registradas.
+                    </p>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<OrdenDetailsUserDTO> ordenDetailsUserDTOs = new();
+    private IBrowserFile? archivoSeleccionado;
+    int ordenCargada;
+    private string mensajeStatus = "";
+    string? Error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ordenDetailsUserDTOs = await ordenApi.ListOrdenByUsers();
+    }
+
+    private void OnInputFileChange(InputFileChangeEventArgs e, int id)
+    {
+        archivoSeleccionado = e.File;
+        ordenCargada = id;
+        mensajeStatus = "Archivo listo para enviar.";
+    }
+
+    private async Task EnviarComprobante()
+    {
+        try
+        {
+            if (archivoSeleccionado is null)
+                return;
+
+            await ordenApi.CargarComprobante(ordenCargada, archivoSeleccionado);
+
+            mensajeStatus = "Comprobante enviado correctamente.";
+        }
+        catch (Common.HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+}

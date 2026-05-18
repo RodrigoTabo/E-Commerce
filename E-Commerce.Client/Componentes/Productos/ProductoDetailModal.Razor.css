@@ -1,0 +1,80 @@
+﻿:root {
+    --primary-color: #705d00;
+    --primary-container: #ffd700;
+    --on-primary-container: #705e00;
+    --surface: #f8f9fa;
+    --outline-variant: #d0c6ab;
+}
+
+.brand-font {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.btn-primary-custom {
+    background-color: var(--primary-container);
+    color: var(--on-primary-container);
+    border: none;
+    font-weight: 700;
+    padding: 1rem;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+    .btn-primary-custom:hover:not(:disabled) {
+        background-color: #e6c200;
+        color: var(--on-primary-container);
+    }
+
+.btn-outline-custom {
+    border: 2px solid #191c1d;
+    background: transparent;
+    color: #191c1d;
+    font-weight: 700;
+    padding: 0.75rem;
+    text-transform: uppercase;
+}
+
+    .btn-outline-custom:hover:not(:disabled) {
+        background: #191c1d;
+        color: white;
+    }
+
+.size-btn {
+    border: 1px solid var(--outline-variant);
+    background: white;
+    padding: 10px;
+    font-weight: 700;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+    .size-btn.active {
+        border: 2px solid var(--primary-color);
+        background-color: var(--primary-container);
+        color: var(--on-primary-container);
+    }
+
+.product-main-img-container {
+    background-color: #f3f4f5;
+    border: 1px solid var(--outline-variant);
+    border-radius: 8px;
+    padding: 2rem;
+    height: 450px;
+}
+
+.badge-new {
+    background-color: var(--primary-color);
+    color: white;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 5px 10px;
+}
+
+.material-symbols-outlined {
+    vertical-align: middle;
+}
+
+.star-filled {
+    font-variation-settings: 'FILL' 1;
+}

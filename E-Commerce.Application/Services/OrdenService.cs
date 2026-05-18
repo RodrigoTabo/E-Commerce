@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Interfaces.Auth;
+﻿using E_Commerce.Application.Interfaces;
+using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
@@ -12,6 +13,7 @@ using E_Commerce.Shared.DTOs.Orden;
 using E_Commerce.Shared.DTOs.Pagos;
 using E_Commerce.Shared.Enums;
 using ROP;
+using System.Text;
 
 namespace E_Commerce.Application.Services
 {
@@ -23,7 +25,8 @@ namespace E_Commerce.Application.Services
         ICarritoItemsService carritoItemsService,
         IProductoVarianteService productoVarianteService,
         IOrdenItemService ordenItemService,
-        IPagoService pagoService) : IOrdenService
+        IPagoService pagoService,
+        IPdfStorageService pdfStorageService) : IOrdenService
     {
         private readonly IOrdenRepository _ordenRepository = ordenRepository;
         private readonly IOrdenItemService _ordenItemService = ordenItemService;
@@ -34,6 +37,39 @@ namespace E_Commerce.Application.Services
         private readonly IProductoVarianteService _productoVarianteService = productoVarianteService;
         private readonly ICarritoItemsService _carritoItemsService = carritoItemsService;
         private readonly IPagoService _pagoService = pagoService;
+        private readonly IPdfStorageService _pdfStorageService = pdfStorageService;
+
+        public async Task<Result<Unit>> CargarComprobante(ComprobanteUploadDTO request)
+        {
+
+            //1. Buscar si la orden existe y obtener el objeto para modificar estado.
+            var orden = await _ordenRepository.GetByIdAsync(request.OrdenId);
+            if (orden is null)
+                return Result.NotFound<Unit>("La orden no existe.");
+
+            //2. Buscar si el pago enlazado a la orden existe y obtener el objeto para modificar estado.
+            var pago = await _pagoService.GetPagoByOrdenId(orden.Id);
+            if (!pago.Success)
+                return Result.Failure<Unit>(pago.Errors);
+
+            //3. Buscar los estados de ambos, si estan en estado pendiente,
+            if (!(pago.Value.EstadoPago == EstadoPago.Pendiente && orden.EstadoOrden == EstadoOrden.PendientePago))
+                return Result.Conflict<Unit>("La orden no se encuentra en un estado válido para cargar el comprobante.");
+
+
+            var path = await _pdfStorageService.SaveAsync(request.Archivo.OpenReadStream(), request.Archivo.ContentType, $"comprobantes/{orden.Id}");
+            //4.Cambiamos estados y guardamos.
+            var now = DateTime.UtcNow;
+            pago.Value.EstadoPago = EstadoPago.Procesando;
+            pago.Value.UpdatedAt = now;
+            pago.Value.ComprobanteUrl = path;
+            pago.Value.FechaCargaComprobante = now;
+            orden.EstadoOrden = EstadoOrden.Procesando;
+            orden.UpdatedAt = now;
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return Result.Success();
+        }
 
         public async Task<Result<Unit>> AprobarPagoAsync(int ordenId)
         {
@@ -231,6 +267,19 @@ namespace E_Commerce.Application.Services
                 return Result.NotFound<List<ListOrdenDTO>>("La lista esta vacia.");
 
             return Result.Success(ordenes);
+        }
+
+        public async Task<Result<List<OrdenDetailsUserDTO>>> ListOrdenByUsers()
+        {
+            var userId = _currentUserService.UserId;
+            if (userId is null)
+                return Result.Conflict<List<OrdenDetailsUserDTO>>("Debes estar conectado.");
+
+            var orden = await _ordenRepository.ListOrdenByUsers(userId);
+            if (orden is null)
+                return Result.Conflict<List<OrdenDetailsUserDTO>>("El cliente no tiene ninguna orden.");
+
+            return Result.Success(orden);
         }
 
         //Metodos privados

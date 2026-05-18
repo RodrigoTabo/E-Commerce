@@ -12,10 +12,16 @@
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView Roles="OwnerAdmin">
+            <Authorized>
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
 
     <main>
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
@@ -65,7 +71,7 @@
                                    data-bs-toggle="dropdown"
                                    aria-expanded="false"
                                    style="font-size: 0.85rem; text-transform: uppercase;">
-                                    <i class="bi bi-person-circle me-2 fs-5"></i> HOLA 
+                                    <i class="bi bi-person-circle me-2 fs-5"></i> HOLA
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end border border-dark mt-2 rounded-0 shadow-none"
@@ -112,8 +118,20 @@
 @code {
     private Guid? currentUserId;
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private bool isAdmin;
+
     protected override async Task OnInitializedAsync()
-        => await LoadUser();
+    {
+        await LoadUser();
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+
+        isAdmin = user.IsInRole("Admin");
+
+    }
 
     private async Task LoadUser()
     {
@@ -136,7 +154,7 @@
         await JwtAuthStateProvider.MarkUserAsLoggedOutAsync();
         ApiHttpClientProvider.ClearAuthorization();
 
-        currentUserId = null; 
+        currentUserId = null;
         StateHasChanged();
 
         Navigation.NavigateTo("/login", true);

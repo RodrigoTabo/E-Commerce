@@ -28,7 +28,6 @@ namespace E_Commerce.Application.Services
                 Apellido = request.Apellido,
                 Email = request.Email,
                 UserName = request.Email,
-                UrlImagen = request.UrlImagen,
                 DNI = request.DNI
             };
 

@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Interfaces.Auth;
+﻿using E_Commerce.Application.Interfaces;
+using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.Modelos;
 using E_Commerce.Application.Interfaces.Productos;
@@ -13,12 +14,14 @@ namespace E_Commerce.Application.Services
         (IProductoRepository productoRepository,
         IUnitOfWorkRepository unitOfWorkRepository,
         IModeloService modeloService,
-        ICurrentUserService currentUserService) : IProductoService
+        ICurrentUserService currentUserService,
+        IImagenStorageService imagenStorageService) : IProductoService
     {
         private readonly IProductoRepository _productoRepository = productoRepository;
         private readonly IModeloService _modeloService = modeloService;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository = unitOfWorkRepository;
         private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly IImagenStorageService _imagenStorageService = imagenStorageService;
 
         public async Task<Result<List<ProductoResponseDTO>>> GetAllAsync()
         {
@@ -58,16 +61,27 @@ namespace E_Commerce.Application.Services
                 return Result.Conflict<int>("Usuario no autenticado");
 
             // 4. Crear entidad
+
+
             var producto = new Producto
             {
                 Nombre = dto.Nombre,
-                UrlImagen = dto.UrlImagen,
                 Descripcion = dto.Descripcion,
                 IdModelo = dto.IdModelo,
                 IdApplicationUser = userId.Value
             };
 
             await _productoRepository.AddAsync(producto);
+
+            if (request.ImagenPerfilForm is not null)
+            {
+                var path = await _imagenStorageService.SaveAsync(
+                    request.ImagenPerfilForm.OpenReadStream(),
+                    request.ImagenPerfilForm.ContentType,
+                    $"productos/{producto.Id}");
+
+                producto.UrlImagen = path;
+            }
             await _unitOfWorkRepository.SaveChangesAsync();
 
             return Result.Success(producto.Id);
@@ -95,8 +109,22 @@ namespace E_Commerce.Application.Services
 
             producto.Nombre = request.Nombre;
             producto.Descripcion = request.Descripcion;
-            producto.UrlImagen = request.UrlImagen;
             producto.IdModelo = request.IdModelo;
+
+            if (request.ImagenPerfilForm is not null)
+            {
+                if (!string.IsNullOrWhiteSpace(producto.UrlImagen))
+                {
+                    await _imagenStorageService.DeleteAsync(producto.UrlImagen);
+                }
+
+                var path = await _imagenStorageService.SaveAsync(
+                    request.ImagenPerfilForm.OpenReadStream(),
+                    request.ImagenPerfilForm.ContentType,
+                    $"productos/{producto.Id}");
+
+                producto.UrlImagen = path;
+            }
 
             await _unitOfWorkRepository.SaveChangesAsync();
 
@@ -180,12 +208,6 @@ namespace E_Commerce.Application.Services
                 errores.Add(Error.Create("Añade un Nombre."));
             if (string.IsNullOrWhiteSpace(dto.Descripcion))
                 errores.Add(Error.Create("Añade una Descripcion."));
-            if (string.IsNullOrWhiteSpace(dto.UrlImagen))
-                errores.Add(Error.Create("Añade una Imagen."));
-            //if (dto.Precio <= 0)
-            //    errores.Add(Error.Create("Añade el Precio."));
-            //if (dto.Stock <= 0)
-            //    errores.Add(Error.Create("Añade el Stock."));
             if (dto.IdModelo <= 0)
                 errores.Add(Error.Create("Añade el Modelo."));
 

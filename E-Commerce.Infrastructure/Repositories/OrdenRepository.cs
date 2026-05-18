@@ -8,6 +8,7 @@ using E_Commerce.Shared.DTOs.Pagos;
 using E_Commerce.Shared.DTOs.ProductoVariantes;
 using E_Commerce.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
+using ROP;
 
 namespace E_Commerce.Infrastructure.Repositories
 {
@@ -81,8 +82,7 @@ namespace E_Commerce.Infrastructure.Repositories
             {
                 Id = o.Id,
                 User = o.ApplicationUser.Nombre + " " + o.ApplicationUser.Apellido,
-                DomicilioCompleto =
-                    o.CalleSnapshot + " " + o.AlturaSnapshot + " " + o.CiudadSnapshot + " " + o.CodigoPostalSnapshot,
+                DomicilioCompleto = o.CalleSnapshot + " " + o.AlturaSnapshot + " " + o.CiudadSnapshot + " " + o.CodigoPostalSnapshot,
                 MetodoEnvio = o.MetodoEnvio.Nombre,
                 EstadoOrden = o.EstadoOrden,
                 Total = o.Total,
@@ -90,5 +90,43 @@ namespace E_Commerce.Infrastructure.Repositories
                 FechaExpirado = o.ExpiresAt
             })
             .ToListAsync();
+
+        public async Task<List<OrdenDetailsUserDTO>> ListOrdenByUsers(Guid? UserId)
+            => await _context.Ordenes
+            .Where(o => o.IdApplicationUser == UserId)
+            .OrderByDescending(o => o.CreatedAt)
+            .Select(o => new OrdenDetailsUserDTO
+            {
+                Id = o.Id,
+                Domicilio = new DomicilioDTO(o.IdDomicilio, o.CalleSnapshot, o.AlturaSnapshot, o.CiudadSnapshot, o.CodigoPostalSnapshot, null),
+                MetodoEnvio = o.MetodoEnvio.Nombre,
+                EstadoOrden = o.EstadoOrden,
+                Total = o.Total,
+                FechaCreado = o.CreatedAt,
+                FechaExpirado = o.ExpiresAt,
+                OrdenItemsDetailUserDTOs = o.OrdenItems.Select(oi => new OrdenItemsDetailUserDTO
+                {
+                    ProductoNombre = oi.ProductoVariante.Producto.Nombre,
+                    ProductoVariante = new ProductoVarianteDTO
+                    {
+                        Atributos = oi.ProductoVariante.ProductoAtributoVariantes
+                             .Select(a => new AtributoVarianteDTO
+                             {
+                                 IdAtributo = a.AtributoValor.Atributo.Id,
+                                 Nombre = a.AtributoValor.Atributo.Nombre,
+                                 IdValor = a.AtributoValor.Id,
+                                 Valor = a.AtributoValor.Valor
+                             }).ToList()
+                    },
+                    Cantidad = oi.Cantidad,
+                    PrecioUnitario = oi.PrecioUnitario
+                }).ToList(),
+                PagoDetailUserDTO = o.Pagos.Select(p => new PagoDetailUserDTO
+                {
+                    EstadoPago = p.EstadoPago,
+                    ComprobanteUrl = p.ComprobanteUrl,
+                    Total = p.Monto,
+                }).SingleOrDefault()
+            }).ToListAsync();
     }
 }

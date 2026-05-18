@@ -20,6 +20,7 @@
     private ProductoModal modalInstancia;
     private ProductoVarianteModal modalProductoVariante;
     private string? Error;
+    private string? previewImage;
     private bool Cargando;
 
     protected override async Task OnInitializedAsync() => await LoadProductosAsync();
@@ -65,5 +66,4 @@
 
         await modalProductoVariante.Abrir(item.Id);
     }
-
 }

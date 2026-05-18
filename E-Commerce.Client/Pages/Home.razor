@@ -1,35 +1,42 @@
 ﻿@page "/"
 @using E_Commerce.Client.ApiRoutes
-@using E_Commerce.Client.Common
 @using E_Commerce.Client.Componentes.Productos
 @using E_Commerce.Shared.DTOs.Productos
 @inject ProductoApi productoApi
 
-<ProductoCard Items="items"
-              Loading="Cargando" />
+<ProductoCard Titulo="Descuentos" Items="Descuentos" />
+<ProductoCard Titulo="Zapatillas" Items="Zapatillas" />
+<ProductoCard Titulo="Remeras" Items="Remeras" />
+
 @code {
     public List<ProductoResponseDTO> items { get; set; } = new();
+    public List<ProductoResponseDTO> Descuentos { get; set; } = new();
+    public List<ProductoResponseDTO> Zapatillas { get; set; } = new();
+    public List<ProductoResponseDTO> Remeras { get; set; } = new();
     private string? Error;
     private bool Cargando;
 
     protected override async Task OnInitializedAsync()
         => await ProductList();
-    
+
     private async Task ProductList()
     {
         Cargando = true;
-        Error = null;
-        try
-        {
-            items = await productoApi.GetAllAsync();
-        }
-        catch (HttpApiException ex)
-        {
-            Error = ex.Message;
-        }
-        finally
-        {
-            Cargando = false;
-        }
+
+        items = await productoApi.GetAllAsync();
+
+        Descuentos = items
+            .Where(x => x.PromedioEstrellas > 4)
+            .ToList();
+
+        Zapatillas = items
+            .Where(x => x.CategoriaNombre == "Calzado")
+            .ToList();
+
+        Remeras = items
+            .Where(x => x.CategoriaNombre == "Remera")
+            .ToList();
+
+        Cargando = false;
     }
 }

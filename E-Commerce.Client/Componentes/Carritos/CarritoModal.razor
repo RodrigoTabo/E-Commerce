@@ -34,7 +34,7 @@ else
                 {
                     <MudPaper Class="pa-3 d-flex align-center" Elevation="1">
 
-                        <MudImage Src="@item.ProductoUrlImagen"
+                        <MudImage Src="@GetImage(item.ProductoUrlImagen)"
                                   Width="80"
                                   Height="80"
                                   Class="me-3 rounded" />
@@ -180,6 +180,14 @@ else
         carrito = await carritoApi.CarritoUser();
         StateHasChanged();
         carritoStateService.SetMensaje();
+    }
+
+    private string GetImage(string? urlImagen)
+    {
+        if (string.IsNullOrWhiteSpace(urlImagen))
+            return "/images/default-product.png";
+
+        return $"https://localhost:7145{urlImagen}";
     }
 
     void Cerrar() => MudDialog.Close();

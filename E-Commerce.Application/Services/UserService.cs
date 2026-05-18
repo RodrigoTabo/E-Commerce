@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Interfaces.Auth;
+﻿using E_Commerce.Application.Interfaces;
+using E_Commerce.Application.Interfaces.Auth;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.User;
 using E_Commerce.Shared.DTOs.User;
@@ -8,11 +9,13 @@ namespace E_Commerce.Application.Services
 {
     public class UserService(IUserRepository userRepository,
         IUnitOfWorkRepository unitOfWorkRepository,
-        ICurrentUserService currentUserService) : IUserService
+        ICurrentUserService currentUserService,
+        IImagenStorageService imagenStorageService) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository = unitOfWorkRepository;
         private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly IImagenStorageService _imagenStorageService = imagenStorageService;
 
         public async Task<Result<Unit>> ActualizarPerfil(UserRequestDTO request)
         {
@@ -24,14 +27,28 @@ namespace E_Commerce.Application.Services
             if (!validarDatosUser.Success)
                 return Result.Failure<Unit>(validarDatosUser.Errors);
 
-            var GetByUserId = await _userRepository.GetByUserId(userId);
-            if (GetByUserId is null)
+            var usuario = await _userRepository.GetByUserId(userId);
+            if (usuario is null)
                 return Result.NotFound<Unit>("El usuario no existe.");
 
-            GetByUserId.Nombre = request.Nombre;
-            GetByUserId.Apellido = request.Apellido;
-            GetByUserId.UrlImagen = request.UrlImagen;
-            GetByUserId.DNI = request.DNI;
+            usuario.Nombre = request.Nombre;
+            usuario.Apellido = request.Apellido;
+            usuario.DNI = request.DNI;
+
+            if (request.ImagenPerfilForm is not null)
+            {
+                if (!string.IsNullOrWhiteSpace(usuario.UrlImagen))
+                {
+                    await _imagenStorageService.DeleteAsync(usuario.UrlImagen);
+                }
+                
+                var path = await _imagenStorageService.SaveAsync(
+                    request.ImagenPerfilForm.OpenReadStream(),
+                    request.ImagenPerfilForm.ContentType,
+                    $"users/{usuario.Id}");
+
+                usuario.UrlImagen = path;
+            }
 
             await _unitOfWorkRepository.SaveChangesAsync();
             return Result.Success();

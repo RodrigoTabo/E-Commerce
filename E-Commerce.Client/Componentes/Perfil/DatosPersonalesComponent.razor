@@ -2,6 +2,7 @@
 @using E_Commerce.Client.Common
 @using E_Commerce.Shared.DTOs.User
 @inject UserApi userApi
+@using Microsoft.AspNetCore.Components.Forms
 
 @if (User == null)
 {
@@ -29,12 +30,17 @@ else
         <div class="card-body px-4 py-4">
             <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-light">
                 <div class="border border-dark rounded-0 p-1" style="width: 80px; height: 80px;">
-                    <img alt="Profile" class="w-100 h-100 object-fit-cover rounded-0" src="@User.UrlImagen" />
+                    <img alt="Profile" class="w-100 h-100 object-fit-cover rounded-0" src="@GetImageUrl()" />
                 </div>
                 @if (isEditing)
                 {
                     <div class="d-flex flex-column gap-2">
-                        <button class="btn btn-dark btn-sm rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Subir Foto</button>
+                        <label class="btn btn-dark btn-sm rounded-0 text-uppercase fw-bold mb-0"
+                               style="font-size: 0.7rem; cursor:pointer;">
+                            Subir Foto
+                            <InputFile OnChange="OnImageSelected"
+                                       accept=".png,.jpg,.jpeg,.webp" />
+                        </label>
                         <button class="btn btn-outline-danger btn-sm rounded-0 text-uppercase fw-bold" style="font-size: 0.7rem;">Eliminar</button>
                     </div>
                 }
@@ -105,6 +111,8 @@ else
     private UserRequestDTO editModel = new();
     private string? Error;
     private bool isEditing = false;
+    private IBrowserFile? selectedImage;
+    private string? previewImage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,6 +143,7 @@ else
     private async Task GuardarCambios()
     {
         await userApi.UpdateById(editModel);
+        await LoadPerfilUser();
         isEditing = false;
     }
 
@@ -151,4 +160,34 @@ else
             };
         }
     }
+
+    private async Task OnImageSelected(InputFileChangeEventArgs e)
+    {
+        selectedImage = e.File;
+
+        editModel.ImagenPerfil = selectedImage;
+
+        using var stream = selectedImage.OpenReadStream(2 * 1024 * 1024);
+
+        using var ms = new MemoryStream();
+
+        await stream.CopyToAsync(ms);
+
+        var base64 = Convert.ToBase64String(ms.ToArray());
+
+        previewImage = $"data:{selectedImage.ContentType};base64,{base64}";
+    }
+
+    private string GetImageUrl()
+    {
+        if (!string.IsNullOrWhiteSpace(previewImage))
+            return previewImage;
+
+        if (!string.IsNullOrWhiteSpace(User?.UrlImagen))
+            return $"https://localhost:7145{User.UrlImagen}";
+
+        return "/images/default-user.png";
+    }
+
+
 }

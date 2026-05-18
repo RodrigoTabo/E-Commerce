@@ -35,7 +35,7 @@
                                     <td class="ps-3">
                                         @if (!string.IsNullOrEmpty(item.UrlImagen))
                                         {
-                                            <img src="@item.UrlImagen"
+                                            <img src="@GetImage(item.UrlImagen)"
                                                  alt="@item.Nombre"
                                                  class="rounded"
                                                  style="width: 50px; height: 50px; object-fit: cover;" />
@@ -93,7 +93,7 @@
 
     [Parameter]
     public List<ProductoResponseDTO> Items { get; set; } = new();
-
+    private string? previewImage;
     [Parameter]
     public EventCallback OnCreate { get; set; }
 
@@ -104,4 +104,12 @@
     public EventCallback<int> OnDelete { get; set; }
     [Parameter]
     public EventCallback<int> OnProductoVariante { get; set; }
+
+    private string GetImage(string? urlImagen)
+    {
+        if (string.IsNullOrWhiteSpace(urlImagen))
+            return "/images/default-product.png";
+
+        return $"https://localhost:7145{urlImagen}";
+    }
 }

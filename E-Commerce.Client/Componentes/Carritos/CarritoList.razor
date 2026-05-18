@@ -34,7 +34,7 @@
                         <div class="card-body d-flex justify-content-between flex-wrap">
 
                             <div class="d-flex align-items-center gap-3">
-                                <img src="@item.ProductoUrlImagen"
+                                <img src="@GetImage(item.ProductoUrlImagen)"
                                      style="width:70px;height:70px;object-fit:cover;border-radius:8px;" />
 
                                 <div>
@@ -95,5 +95,12 @@
     public void Dispose()
     {
         carritoStateService.OnChange -= RecargarCarritoWrapper;
+    }
+    private string GetImage(string? urlImagen)
+    {
+        if (string.IsNullOrWhiteSpace(urlImagen))
+            return "/images/default-product.png";
+
+        return $"https://localhost:7145{urlImagen}";
     }
 }

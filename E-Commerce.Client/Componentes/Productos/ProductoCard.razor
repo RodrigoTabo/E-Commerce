@@ -1,64 +1,144 @@
-﻿@using E_Commerce.Client.ApiRoutes
-@using E_Commerce.Client.Common
-@using E_Commerce.Shared.DTOs.Productos
+﻿@using E_Commerce.Shared.DTOs.Productos
 @inject IDialogService DialogService
+@if (Items != null && Items.Any())
+{
+    <style global>
+        /* Estilos Catálogo - Identidad brutalista/minimalista idéntica al Perfil */
+        .apex-catalog-brutalist {
+            font-family: inherit;
+        }
 
-<div id="productCarousel" class="carousel slide" data-bs-ride="false" style="max-width: 1600px; margin: auto;">
-    
-    <div class="carousel-inner p-4">
-        
-        <div class="carousel-item active">
+            /* Envoltorio de imagen adaptado al estilo del contenedor de la foto de perfil */
+            .apex-catalog-brutalist .product-img-wrapper {
+                position: relative;
+                background-color: #white;
+                border: 1px solid #000000; /* border-dark */
+                border-radius: 0px !important; /* rounded-0 */
+                aspect-ratio: 1 / 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem;
+            }
+
+            .apex-catalog-brutalist .product-img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: cover;
+            }
+
+            /* Etiquetas planas como el badge del perfil */
+            .apex-catalog-brutalist .badge-flat {
+                position: absolute;
+                top: 0;
+                left: 0;
+                margin: 0; /* Pegado al borde superior izquierdo */
+                text-transform: uppercase;
+                font-size: 0.65rem;
+                padding: 4px 8px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                border-bottom: 1px solid #000000;
+                border-right: 1px solid #000000;
+            }
+
+            /* Botón de acción idéntico a los botones del perfil */
+            .apex-catalog-brutalist .btn-action-flat {
+                background-color: #212529; /* btn-dark */
+                color: #ffffff;
+                border: none;
+                border-radius: 0px; /* rounded-0 */
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                padding: 8px 0;
+                width: 100%;
+                transition: background-color 0.1s ease;
+            }
+
+                .apex-catalog-brutalist .btn-action-flat:hover {
+                    background-color: #000000;
+                }
+    </style>
+
+    <section class="py-4 my-2 apex-catalog-brutalist">
+        <div class="container-xxl">
+
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary-subtle">
+                @if (!string.IsNullOrWhiteSpace(Titulo))
+                {
+                    <h5 class="m-0 fw-bolder text-uppercase" style="letter-spacing: 1px; font-size: 1rem;">
+                        @Titulo
+                    </h5>
+                }
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link text-dark fw-bold text-decoration-none p-0 text-uppercase"
+                            style="font-size: 0.8rem; letter-spacing: 1px;"
+                            @onclick="Anterior">
+                        [ Ant ]
+                    </button>
+                    <button class="btn btn-link text-dark fw-bold text-decoration-none p-0 text-uppercase"
+                            style="font-size: 0.8rem; letter-spacing: 1px;"
+                            @onclick="Siguiente">
+                        [ Sig ]
+                    </button>
+                </div>
+            </div>
+
             <div class="row g-4">
                 @foreach (var item in Items.Take(4))
                 {
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="card h-100 border-0 shadow-lg position-relative rounded-4 overflow-hidden">
-                            
-                            @* <button class="btn btn-light position-absolute top-0 end-0 m-3 shadow-sm rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 40px; height: 40px; z-index: 10; color: #ff4757;">
-                                <i class="oi oi-heart"></i>
-                            </button> *@
+                    <div class="col-6 col-md-3">
+                        <div class="card border border-dark rounded-0 bg-white h-100">
 
-                            <div class="ratio ratio-1x1 bg-white p-4">
-                                <img src="@item.UrlImagen" class="object-fit-contain" alt="@item.Nombre">
-                            </div>
-                            
-                            <div class="card-body text-right d-flex flex-column justify-content-right">
-                                <h5 class="card-title mb-1 text-truncate">@item.Nombre</h5>
-                                @* <p class="card-text fs-5">$ @item.Precio</p> *@
+                            <div class="product-img-wrapper">
+                                @if (Titulo.ToLower().Contains("descuento"))
+                                {
+                                    <span class="badge-flat bg-dark text-white text-uppercase">Top</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-flat bg-dark text-white text-uppercase">Nuevo</span>
+                                }
+
+                                <img alt="@item.Nombre" class="product-img rounded-0" src="@GetImage(item.UrlImagen)" />
                             </div>
 
-                            <div class="card-footer p-3 pt-0 border-0 bg-transparent">
-                                <div class="d-grid">
-                                    @* <button @onclick="@(() => AddCarrito(item.Id, item.Stock))" class="btn btn-primary fw-bold py-2">
-                                        Añadir al carrito
-                                    </button> *@
-                                    <button @onclick="@(() => OpenDialogAsync(item.Id))" class="btn btn-primary fw-bold py-2">
-                                        Ver detalles
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                <div class="mb-3">
+                                    <label class="d-block fw-bold text-uppercase text-muted mb-1" style="font-size: 0.65rem;">
+                                        Apex Performance
+                                    </label>
+                                    <h4 class="fw-semibold text-dark text-uppercase m-0 text-truncate" style="font-size: 0.9rem; letter-spacing: 0.5px;">
+                                        @item.Nombre
+                                    </h4>
+                                </div>
+
+                                <div>
+
+                                    <button class="btn-action-flat" @onclick="@(() => OpenDialogAsync(item.Id))">
+                                        Ver Detalles
                                     </button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 }
             </div>
+
         </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev"
-            style="width: 5%; left: -2.5rem;" @onclick="Anterior">
-        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next"
-            style="width: 5%; right: -2.5rem;" @onclick="Siguiente">
-        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-    </button>
-</div>
+    </section>
+}
+
+
 @code {
 
-    [Parameter]
-    public List<ProductoResponseDTO> Items { get; set; } = new();
-    [Parameter]
-    public bool Loading { get; set; }
+    [Parameter] public string Titulo { get; set; } = string.Empty;
+    [Parameter] public List<ProductoResponseDTO> Items { get; set; } = new();
+    [Parameter] public bool Loading { get; set; }
+
     private string? Error;
     int posicion = 0;
 
@@ -69,9 +149,9 @@
         {
             ["Id"] = Id,
         };
+
         var dialog = await DialogService.ShowAsync<ProductoDetailModal>("Simple Dialog", parameters, options);
         var result = await dialog.Result;
-
     }
 
     private void Siguiente()
@@ -94,5 +174,13 @@
             Items.Insert(0, ultimo);
         }
         StateHasChanged();
+    }
+
+    private string GetImage(string? urlImagen)
+    {
+        if (string.IsNullOrWhiteSpace(urlImagen))
+            return "/images/default-product.png";
+
+        return $"https://localhost:7145{urlImagen}";
     }
 }

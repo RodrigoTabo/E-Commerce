@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">E-Commerce.Client</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -8,7 +9,7 @@
 </div>
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav style="background-color:red;" class="nav flex-column">
+    <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
@@ -16,17 +17,31 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Carrito
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            <NavLink class="nav-link" href="configuracion">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Configuraciones
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="producto">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Productos
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="atributo">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Atributos
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="ordenes">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Ordenes
             </NavLink>
         </div>
     </nav>
 </div>
-
 @code {
     private bool collapseNavMenu = true;
 
