@@ -5,6 +5,7 @@ using E_Commerce.Application.Interfaces.Reviews;
 using E_Commerce.Domain.Entities;
 using E_Commerce.Shared.DTOs.Reviews;
 using ROP;
+using System.Reflection.Metadata.Ecma335;
 
 namespace E_Commerce.Application.Services
 {
@@ -47,6 +48,28 @@ namespace E_Commerce.Application.Services
             await _unitOfWorkRepository.SaveChangesAsync();
 
             return Result.Success(newReview.Id);
+        }
+
+        public async Task<Result<Unit>> DeleteAsync(DeleteReviewDTO request)
+        {
+            var userId = _currentUserService.UserId;
+            if (userId is null)
+                return Result.Conflict<Unit>("No tienes permitido esta acción");
+
+            var review = await _reviewRepository.GetReview(request.IdReview, userId, request.IdProducto);
+
+            if (!(review is null) && review.IdApplicationUser == userId)
+            {
+                await _reviewRepository.Remove(review);
+                await _unitOfWorkRepository.SaveChangesAsync();
+            }
+            else
+            {
+                return Result.NotFound<Unit>("No existe el review.");
+            }
+
+
+            return Result.Success();
         }
 
         private async Task<Result<Unit>> ValidarProducto(int IdProducto)

@@ -15,12 +15,12 @@
 
 <div class="page">
     <AuthorizeView Roles="OwnerAdmin">
-            <Authorized>
-                <div class="sidebar">
-                    <NavMenu />
-                </div>
-            </Authorized>
-        </AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+    </AuthorizeView>
 
 
     <main>
@@ -39,13 +39,8 @@
 
                     <form class="d-flex mx-lg-auto my-3 my-lg-0" style="width: 100%; max-width: 500px;">
                         <div class="input-group">
-                            <input class="form-control bg-light border-end-0 rounded-0"
-                                   type="search"
-                                   placeholder="Buscar productos..."
-                                   style="border-color: #dee2e6;" />
-                            <button class="btn btn-outline-secondary bg-light border-start-0 rounded-0"
-                                    type="submit"
-                                    style="border-color: #dee2e6;">
+                            <input class="form-control bg-light border-end-0 rounded-0" type="search" placeholder="Buscar productos..." style="border-color: #dee2e6;" />
+                            <button class="btn btn-outline-secondary bg-light border-start-0 rounded-0" type="submit" style="border-color: #dee2e6;">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
@@ -54,16 +49,15 @@
                     <ul class="navbar-nav ms-auto align-items-center gap-3">
                         @if (currentUserId is not null)
                         {
-                            <li class="nav-item">
-                                <MudButton OnClick="OpenDialogAsync"
-                                           StartIcon="@Icons.Material.Filled.AddShoppingCart"
-                                           Variant="Variant.Text"
-                                           Color="Color.Dark"
-                                           Class="rounded-0">
-                                    CARRITO
-                                </MudButton>
-                            </li>
 
+                            <li class="nav-item">
+                                <button class="btn btn-outline-dark rounded-0 text-uppercase d-flex align-items-center gap-2"
+                                        @onclick="OpenModal">
+                                    <i class="bi bi-cart"></i>
+                                    Carrito
+                                </button>
+                            </li>
+                            <CarritoModal @ref="carritoModal" />
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center"
                                    href="#"
@@ -117,7 +111,7 @@
 </div>
 @code {
     private Guid? currentUserId;
-
+    private CarritoModal? carritoModal;
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
 
@@ -143,10 +137,12 @@
         currentUserId = Guid.TryParse(idString, out var parsed) ? parsed : null;
     }
 
-    private async Task OpenDialogAsync()
+    private async Task OpenModal()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        await DialogService.ShowAsync<CarritoModal>("Carrito", options);
+        if (carritoModal is not null)
+        {
+            await carritoModal.Open();
+        }
     }
 
     private async Task Logout()

@@ -33,6 +33,7 @@ namespace E_Commerce.Infrastructure.Repositories
                                o.IdDomicilio,
                                o.CalleSnapshot,
                                o.AlturaSnapshot,
+                               o.Domicilio.IdCiudad,
                                o.CiudadSnapshot,
                                o.CodigoPostalSnapshot,
                                null
@@ -98,7 +99,7 @@ namespace E_Commerce.Infrastructure.Repositories
             .Select(o => new OrdenDetailsUserDTO
             {
                 Id = o.Id,
-                Domicilio = new DomicilioDTO(o.IdDomicilio, o.CalleSnapshot, o.AlturaSnapshot, o.CiudadSnapshot, o.CodigoPostalSnapshot, null),
+                Domicilio = new DomicilioDTO(o.IdDomicilio, o.CalleSnapshot, o.AlturaSnapshot, o.Domicilio.IdCiudad, o.CiudadSnapshot, o.CodigoPostalSnapshot, null),
                 MetodoEnvio = o.MetodoEnvio.Nombre,
                 EstadoOrden = o.EstadoOrden,
                 Total = o.Total,

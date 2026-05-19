@@ -1,0 +1,197 @@
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Shared.DTOs.Ciudades
+@using E_Commerce.Shared.DTOs.Domicilios
+@inject DomicilioApi domicilioApi
+@inject CiudadApi ciudadApi
+
+@if (Ver)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-0">
+
+                <div class="card-header bg-white border-bottom border-dark px-4 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 fw-bolder text-uppercase" style="letter-spacing: 1px; font-size: 1rem;">
+                        @GetTitulo()
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="Cerrar" aria-label="Close"></button>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (EsEliminacion)
+                    {
+                        <div class="alert alert-danger border-0 rounded-0 mb-0">
+                            <p class="fw-bold mb-2">¿Estás seguro de que deseas eliminar esta dirección?</p>
+                            <ul class="list-unstyled mb-0 small text-secondary">
+                                <li><strong>Calle:</strong> @Calle</li>
+                                <li><strong>Altura:</strong> @Altura</li>
+                                <li><strong>Código Postal:</strong> @CodigoPostal</li>
+                                <li><strong>Referencia:</strong> @Referencia</li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold text-secondary mb-1">Calle</label>
+                                <input type="text" class="form-control rounded-0 form-control-sm" @bind="Calle" placeholder="Ej: Av. Siempreviva" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary mb-1">Altura</label>
+                                <input type="text" class="form-control rounded-0 form-control-sm" @bind="Altura" placeholder="Ej: 742" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary mb-1">Código Postal</label>
+                                <input type="text" class="form-control rounded-0 form-control-sm" @bind="CodigoPostal" placeholder="Ej: 1600" />
+                            </div>
+
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold text-secondary mb-1">Referencia / Observaciones</label>
+                                <input type="text" class="form-control rounded-0 form-control-sm" @bind="Referencia" placeholder="Ej: Entre calles X e Y" />
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-secondary mb-1">Localidad</label>
+                                <select class="form-select rounded-0 form-control-sm" @bind="IdLocalidad">
+                                    <option value="">Seleccione una localidad...</option>
+                                    @foreach (var loc in ListaLocalidades)
+                                    {
+                                        <option value="@loc.Id">@loc.CiudadCompleta</option>
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer border-top-0 px-4 pb-4 pt-0 d-flex justify-content-end gap-2">
+                    <button class="btn btn-light rounded-0 px-4" @onclick="Cerrar">
+                        Cancelar
+                    </button>
+                    <button class="btn @(EsEliminacion ? "btn-danger" : "btn-dark") rounded-0 px-4" @onclick="Confirmar">
+                        @GetTextoBoton()
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private List<DomicilioDTO> domicilio { get; set; } = new();
+    private List<CiudadesDTO> ListaLocalidades { get; set; } = new();
+    public string? Error;
+    public bool Ver { get; set; }
+    public int? Id { get; set; }
+    public string Calle { get; set; }
+    public int Altura { get; set; }
+    public int IdLocalidad { get; set; }
+    public string Localidad { get; set; }
+    public string CodigoPostal { get; set; }
+    public string Referencia { get; set; }
+    public bool EsEliminacion { get; set; }
+    [Parameter]
+    public EventCallback OnAccionCompletada { get; set; }
+
+
+    public void Cerrar() => Ver = false;
+
+    private string GetTitulo() => EsEliminacion ? "Confirmar Eliminación" : (Id == null ? "Nuevo Domicilio" : "Editar Domicilio");
+    private string GetTextoBoton() => EsEliminacion ? "Eliminar" : (Id == null ? "Crear" : "Guardar Cambios");
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDomicilioAsync();
+        await LoadCiudadesAsync();
+    }
+
+    private async Task LoadDomicilioAsync()
+    {
+        try
+        {
+            domicilio = await domicilioApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private async Task LoadCiudadesAsync()
+    {
+        try
+        {
+            ListaLocalidades = await ciudadApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    public async Task Abrir(int? id = null, string calle = "", int altura = 0, int idLocalidad = 0, string codigoPostal = "", string referencia = "", bool eliminar = false)
+    {
+        Id = id;
+        Calle = calle;
+        Altura = altura;
+        IdLocalidad = idLocalidad;
+        CodigoPostal = codigoPostal;
+        Referencia = referencia;
+        EsEliminacion = eliminar;
+
+        Ver = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Confirmar()
+    {
+        try
+        {
+            if (EsEliminacion)
+            {
+                await domicilioApi.DeleteAsync(Id!.Value);
+            }
+            else if (Id == null)
+            {
+                var request = new CreateDomicilioDTO
+                {
+                    Altura = Altura,
+                    Calle = Calle,
+                    CodigoPostal = CodigoPostal,
+                    IdLocalidad = IdLocalidad,
+                    Referencia = Referencia
+                };
+                await domicilioApi.CreateAsync(request);
+            }
+            else
+            {
+                var request = new UpdateDomicilioDTO
+                {
+                    Id = Id.Value,
+                    Altura = Altura,
+                    Calle = Calle,
+                    CodigoPostal = CodigoPostal,
+                    IdLocalidad = IdLocalidad,
+                    Referencia = Referencia
+                };
+                await domicilioApi.PutAsync(request);
+            }
+
+            await OnAccionCompletada.InvokeAsync();
+            Cerrar();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+}

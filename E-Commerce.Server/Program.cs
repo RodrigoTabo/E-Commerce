@@ -6,6 +6,7 @@ using E_Commerce.Application.Interfaces.CarritoItems;
 using E_Commerce.Application.Interfaces.Carritos;
 using E_Commerce.Application.Interfaces.Ciudades;
 using E_Commerce.Application.Interfaces.Domicilios;
+using E_Commerce.Application.Interfaces.Favoritos;
 using E_Commerce.Application.Interfaces.IUnitOfWorkRepository;
 using E_Commerce.Application.Interfaces.Marcas;
 using E_Commerce.Application.Interfaces.MetodoEnvios;
@@ -152,6 +153,8 @@ builder.Services.AddScoped<ICiudadService, CiudadService>();
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<IImagenStorageService, ImagenStorage>();
 builder.Services.AddScoped<IPdfStorageService, PdfStorageService>();
+builder.Services.AddScoped<IFavoritoRepository, FavoritoRepository>();
+builder.Services.AddScoped<IFavoritoService, FavoritoService>();
 builder.Services.AddScoped<IdentitySeedService>();
 builder.Services.AddHttpContextAccessor(); //JWT
 builder.Services.AddAuthorization(); //JWT

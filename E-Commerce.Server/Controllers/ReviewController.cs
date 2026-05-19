@@ -14,7 +14,7 @@ namespace E_Commerce.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromBody] CrearReviewDTO request)
+        public async Task<IActionResult> CreateAsync([FromBody] CrearReviewDTO request)
         {
             var result = await _reviewService.CrearteAsync(request);
 
@@ -22,6 +22,25 @@ namespace E_Commerce.Server.Controllers
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 
             return Created($"api/review/{result.Value}", new { result.Value });
+        }
+
+        [HttpDelete("{reviewId:int}")]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteAsync(int reviewId, [FromQuery] int productId)
+        {
+            var request = new DeleteReviewDTO
+            {
+                IdReview = reviewId,
+                IdProducto = productId
+            };
+
+            var result = await _reviewService.DeleteAsync(request);
+
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Ok(result.Success);
         }
     }
 }

@@ -91,14 +91,13 @@
     </div>
 </div>
 
-@* Suscribimos al evento para que la tabla se refresque al terminar una acción *@
 <ProductoVarianteModalCrear @ref="modalProductoVarianteCrear" OnAccionCompletada="LoadProductoVariantes" />
 
 @code {
     private List<ListProductoVariante> listProductoVariantes { get; set; } = new();
     private ProductoVarianteModalCrear modalProductoVarianteCrear;
     private bool mostrar;
-    private int Id; // Id del Producto padre
+    private int Id; 
     private string? Error;
 
     public async Task Abrir(int id)

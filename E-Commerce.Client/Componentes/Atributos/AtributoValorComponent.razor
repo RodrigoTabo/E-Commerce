@@ -3,8 +3,8 @@
 @using E_Commerce.Client.Componentes.ListItem
 @using E_Commerce.Client.Componentes.Modal
 @using E_Commerce.Shared.DTOs.AtributoValores
-
 @inject AtributoValorApi atributoValorApi
+@inject AtributoApi atributoApi
 
 <div class="container mt-4">
 
@@ -27,24 +27,18 @@
                OnConfirm="ConfirmarOperacion" />
 
 </div>
-
 @code {
-
     private CrudModal modal = default!;
-
     private List<ListAtributoValorResponseDTO> atributoValores = [];
-
+    private List<CrudModal.SelectOption> opcionesAtributos = []; 
     private string? Error;
 
-    private readonly List<string> columns =
-    [
-        "Valor",
-        "Atributo"
-    ];
+    private readonly List<string> columns = ["Valor", "Atributo"];
 
     protected override async Task OnInitializedAsync()
     {
         await CargarValoresAsync();
+        await CargarOpcionesAtributosAsync();
     }
 
     private async Task CargarValoresAsync()
@@ -52,8 +46,24 @@
         try
         {
             Error = null;
-
             atributoValores = await atributoValorApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private async Task CargarOpcionesAtributosAsync()
+    {
+        try
+        {
+            var atributos = await atributoApi.GetAllAsync();
+            opcionesAtributos = atributos.Select(a => new CrudModal.SelectOption
+            {
+                Value = a.Id.ToString(),
+                Text = a.Nombre
+            }).ToList();
         }
         catch (HttpApiException ex)
         {
@@ -66,35 +76,40 @@
         return atributoValores.Select(a => new ListItemComponent.TableRow
         {
             Id = a.Id,
-
-            Values =
-            [
-                a.Valor,
-                a.Atributo
-            ]
+            Values = [a.Valor, a.Atributo]
         }).ToList();
     }
 
     private void AbrirCrear()
     {
+        modal.Fields = new List<CrudModal.ModalField>
+        {
+            new() { Label = "Valor del atributo", Type = "text", Value = "" },
+            new() { Label = "Atributo", Type = "select", Options = opcionesAtributos, Value = opcionesAtributos.FirstOrDefault()?.Value ?? "" }
+        };
+
         modal.Open(
             entityName: "Valor",
-            label: "Valor del atributo",
-            placeholder: "Ej: Rojo, XL..."
+            label: "",
+            placeholder: ""
         );
     }
 
     private void AbrirEditar(int id)
     {
         var valor = atributoValores.FirstOrDefault(a => a.Id == id);
+        if (valor is null) return;
 
-        if (valor is null)
-            return;
+        modal.Fields = new List<CrudModal.ModalField>
+        {
+            new() { Label = "Valor del atributo", Type = "text", Value = valor.Valor },
+            new() { Label = "Atributo", Type = "select", Options = opcionesAtributos, Value = valor.IdAtributo.ToString() }
+        };
 
         modal.Open(
             entityName: "Valor",
-            label: "Valor del atributo",
-            placeholder: "Ej: Rojo, XL...",
+            label: "",
+            placeholder: "",
             id: valor.Id,
             itemName: valor.Valor
         );
@@ -103,9 +118,9 @@
     private void AbrirEliminar(int id)
     {
         var valor = atributoValores.FirstOrDefault(a => a.Id == id);
+        if (valor is null) return;
 
-        if (valor is null)
-            return;
+        modal.Fields = [];
 
         modal.Open(
             entityName: "Valor",
@@ -127,17 +142,25 @@
             }
             else if (result.Id is null)
             {
+                var inputValor = modal.Fields[0].Value;
+                var selectIdAtributo = int.Parse(modal.Fields[1].Value);
+
                 await atributoValorApi.CreateAsync(new CreateAtributoValorRequestDTO
                 {
-                    Valor = result.Name
+                    Valor = inputValor,
+                    IdAtributo = selectIdAtributo
                 });
             }
             else
             {
+                var inputValor = modal.Fields[0].Value;
+                var selectIdAtributo = int.Parse(modal.Fields[1].Value);
+
                 await atributoValorApi.PutAsync(new UpdateAtributoValorRequestDTO
                 {
                     Id = result.Id.Value,
-                    Valor = result.Name
+                    Valor = inputValor,
+                    IdAtributo = selectIdAtributo
                 });
             }
 

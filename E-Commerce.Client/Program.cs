@@ -58,6 +58,8 @@ builder.Services.AddScoped<MarcaApi>();
 builder.Services.AddScoped<TipoProductoApi>();
 builder.Services.AddScoped<CarritoStateService>();
 builder.Services.AddScoped<ProductoVarianteApi>();
+builder.Services.AddScoped<FavoritoApi>();
+builder.Services.AddScoped<CiudadApi>();
 
 
 await builder.Build().RunAsync();

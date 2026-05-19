@@ -9,7 +9,6 @@ namespace E_Commerce.Application.Interfaces.Productos
         Task<Result<List<ProductoResponseDTO>>> GetAllAsync();
         Task<Result<ProductoDetalleDTO>> GetProductoDetalleAsync(int id);
         Task<Result<int>> CreateAsync(CreateProductoRequestDTO request);
-        //Task<Result<bool>> UpdateAsync(int id, UpdateProductoRequestDTO request);
         Task<Result<bool>> DeleteAsync(int id);
         Task<Result<List<Producto>>> ListaProductosByIds(List<int> IdsProductos);
         //Result<Unit> DescontarStock(List<Producto> productos, List<CarritoItem> carritoItems);

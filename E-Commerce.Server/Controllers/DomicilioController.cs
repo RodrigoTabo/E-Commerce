@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Interfaces.Domicilios;
+﻿using Azure.Core;
+using E_Commerce.Application.Interfaces.Domicilios;
 using E_Commerce.Shared.DTOs.Domicilios;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +35,32 @@ namespace E_Commerce.Server.Controllers
             if (!result.Success)
                 return StatusCode((int)result.HttpStatusCode, result.Errors);
 
-            return Created($"api/productos/{result.Value}", new { result.Value });
+            return Created($"api/domicilio/{result.Value}", new { result.Value });
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PutAsync([FromBody] UpdateDomicilioDTO request)
+        {
+            var result = await _domicilioService.UpdateAsync(request);
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+
+            return Ok(result.Value);
+        }
+
+        [HttpDelete("{idDomicilio:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAsync(int idDomicilio)
+        {
+            var result = await _domicilioService.DeleteAsync(idDomicilio);
+            if (!result.Success)
+                return StatusCode((int)result.HttpStatusCode, result.Errors);
+            return Ok(result.Value);
         }
 
     }

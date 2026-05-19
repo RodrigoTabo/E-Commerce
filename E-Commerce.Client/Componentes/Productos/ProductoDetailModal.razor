@@ -309,7 +309,7 @@ else if (Model is not null)
                                             @if (review.UsuarioId == currentUserId)
                                             {
                                                 <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none fw-bold text-uppercase"
-                                                        style="font-size: 0.65rem; letter-spacing: 0.5px;" @onclick="() => EliminarReview(review.Id)">
+                                                        style="font-size: 0.65rem; letter-spacing: 0.5px;" @onclick="() => EliminarReview(review.Id, Model.Id)">
                                                     [ Eliminar Comentario ]
                                                 </button>
                                             }
@@ -426,9 +426,9 @@ else if (Model is not null)
         }
     }
 
-    private async Task EliminarReview(int id)
+    private async Task EliminarReview(int idReview, int idProducto)
     {
-        // implementar
+        await reviewApi.DeleteAsync(idReview, idProducto);
     }
 
     private async Task AddCarrito()

@@ -1,0 +1,32 @@
+﻿@page "/mis-favoritos"
+@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Componentes.Productos
+@using E_Commerce.Shared.DTOs.Productos
+@using E_Commerce.Shared.DTOs.Favoritos
+@inject FavoritoApi favoritoApi
+
+<div class="container mt-4">
+    @if (productosFavoritos == null)
+    {
+        <p class="text-uppercase small fw-bold">Cargando tus favoritos...</p>
+    }
+    else if (!productosFavoritos.Any())
+    {
+        <p class="text-uppercase small fw-bold text-muted">[ No tenés productos en favoritos todavía ]</p>
+    }
+    else
+    {
+        <ProductoCard Items="productosFavoritos" Titulo="Mis Favoritos" />
+    }
+</div>
+
+@code {
+
+    private List<ProductoResponseDTO> productosFavoritos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        List<FavoritoResponseDTO> favoritos = await favoritoApi.GetAGetFavoritosByUserllAsync();
+        productosFavoritos = favoritos.Select(f => f.Productos).ToList();
+    }
+}

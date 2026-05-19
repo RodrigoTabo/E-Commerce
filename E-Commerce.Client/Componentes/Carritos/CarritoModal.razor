@@ -5,124 +5,191 @@
 @inject CarritoApi carritoApi
 @inject CarritoStateService carritoStateService
 
-@if (Cargando)
+@if (IsOpen)
 {
-    <MudProgressCircular Indeterminate="true" />
-}
-else if (!string.IsNullOrEmpty(Error))
-{
-    <MudAlert Severity="Severity.Error">
-        @Error
-    </MudAlert>
-}
-else if (carrito == null || !carrito.Items.Any())
-{
-    <MudAlert Severity="Severity.Info">
-        El carrito está vacío
-    </MudAlert>
-}
-else
-{
-    <MudDialog MaxWidth="MaxWidth.Medium" FullWidth="true">
-        <DialogContent>
+    <div class="modal fade show d-block"
+         tabindex="-1"
+         style="background-color: rgba(0,0,0,.5);">
 
-            <MudText Typo="Typo.h5" Class="mb-4">
-                🛒 Tu carrito
-            </MudText>
-            <MudStack Spacing="2">
-                @foreach (var item in carrito.Items)
-                {
-                    <MudPaper Class="pa-3 d-flex align-center" Elevation="1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-0 border border-dark">
 
-                        <MudImage Src="@GetImage(item.ProductoUrlImagen)"
-                                  Width="80"
-                                  Height="80"
-                                  Class="me-3 rounded" />
+                <div class="modal-header bg-white border-bottom border-dark rounded-0 px-4 py-3">
 
-                        <div class="flex-grow-1">
+                    <h5 class="modal-title fw-bolder text-uppercase"
+                        style="letter-spacing: 1px; font-size: 1rem;">
+                        🛒 Tu carrito
+                    </h5>
 
-                            <MudText Typo="Typo.subtitle1">
-                                @item.ProductoNombre
-                            </MudText>
+                    <button type="button"
+                            class="btn-close rounded-0"
+                            @onclick="Cerrar">
+                    </button>
 
-                            <MudText Typo="Typo.caption">
-                                Modelo: @item.ModeloNombre
-                            </MudText>
+                </div>
 
-                            <MudStack Row AlignItems="AlignItems.Center" Spacing="1" Class="mt-2">
+                <div class="modal-body p-0 bg-white">
 
-                                <MudIconButton Icon="@Icons.Material.Filled.Remove"
-                                               OnClick="() => Restar(item)"
-                                               Size="Size.Small" />
+                    @if (Cargando)
+                    {
+                        <div class="d-flex justify-content-center align-items-center p-5">
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    }
+                    else if (!string.IsNullOrEmpty(Error))
+                    {
+                        <div class="alert alert-danger rounded-0 border-0 m-0">
+                            @Error
+                        </div>
+                    }
+                    else if (carrito == null || !carrito.Items.Any())
+                    {
+                        <div class="p-5 text-center">
 
-                                <MudText>
-                                    @item.CarritoCantidad
-                                </MudText>
+                            <i class="bi bi-cart-x text-muted fs-1"></i>
 
-                                <MudIconButton Icon="@Icons.Material.Filled.Add"
-                                               OnClick="() => Sumar(item)"
-                                               Size="Size.Small" />
-
-                            </MudStack>
+                            <p class="text-muted mt-3 text-uppercase fw-bold"
+                               style="font-size: 0.8rem;">
+                                El carrito está vacío
+                            </p>
 
                         </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush rounded-0">
 
-                        <MudText Typo="Typo.subtitle2" Class="mx-3">
-                            $@item.CarritoPrecio
-                        </MudText>
+                            @foreach (var item in carrito.Items)
+                            {
+                                <div class="list-group-item p-4 border-bottom border-secondary-subtle">
 
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                       Color="Color.Error"
-                                       OnClick="() => Eliminar(item)" />
+                                    <div class="d-flex align-items-start gap-3">
 
-                    </MudPaper>
-                }
-                <MudDivider Class="my-2" />
+                                        <img src="@GetImage(item.ProductoUrlImagen)"
+                                             alt="@item.ProductoNombre"
+                                             style="width: 90px; height: 90px; object-fit: cover;"
+                                             class="border rounded-0" />
 
-                <MudStack Row Justify="Justify.SpaceBetween">
-                    <MudText Typo="Typo.h6">Total</MudText>
-                    <MudText Typo="Typo.h6">
-                        $@carrito.Total
-                    </MudText>
-                </MudStack>
-            </MudStack>
-        </DialogContent>
-        <DialogActions>
+                                        <div class="flex-grow-1">
 
-            <MudButton OnClick="Cerrar"
-                       Color="Color.Secondary">
-                Cerrar
-            </MudButton>
+                                            <p class="mb-1 fw-bold text-uppercase"
+                                               style="font-size: 0.85rem;">
+                                                @item.ProductoNombre
+                                            </p>
 
-            <MudButton Color="Color.Primary"
-                       Variant="Variant.Filled">
-                Finalizar compra
-            </MudButton>
-        </DialogActions>
-    </MudDialog>
+                                            <small class="text-muted">
+                                                Modelo: @item.ModeloNombre
+                                            </small>
+
+                                            <div class="d-flex align-items-center gap-2 mt-3">
+
+                                                <button class="btn btn-outline-dark btn-sm rounded-0"
+                                                        @onclick="() => Restar(item)">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+
+                                                <span class="fw-bold">
+                                                    @item.CarritoCantidad
+                                                </span>
+
+                                                <button class="btn btn-outline-dark btn-sm rounded-0"
+                                                        @onclick="() => Sumar(item)">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="text-end">
+
+                                            <p class="fw-bold mb-3">
+                                                $@item.CarritoPrecio
+                                            </p>
+
+                                            <button class="btn btn-outline-danger btn-sm rounded-0"
+                                                    @onclick="() => Eliminar(item)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="p-4 d-flex justify-content-between align-items-center bg-light border-top">
+
+                                <div class="fw-bold text-uppercase">
+                                    Total
+                                </div>
+
+                                <div class="fw-bold fs-5">
+                                    $@carrito.Total
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+                <div class="modal-footer border-top border-dark rounded-0">
+
+                    <button class="btn btn-outline-dark rounded-0 text-uppercase"
+                            @onclick="Cerrar">
+                        Cerrar
+                    </button>
+
+                    <button class="btn btn-dark rounded-0 text-uppercase">
+                        Finalizar compra
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 }
 
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
 
     private CarritoDto? carrito;
     private string? Error;
     private bool Cargando;
+    private bool IsOpen;
 
     protected override async Task OnInitializedAsync()
     {
-        carrito = await carritoApi.CarritoUser();
+        await RecargarCarrito();
+    }
+
+    public async Task Open()
+    {
+        IsOpen = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task Cerrar()
+    {
+        IsOpen = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     async Task Sumar(CarritoItemDto item)
     {
         Cargando = true;
         Error = null;
+
         try
         {
             await carritoApi.SumarCantidad(item.IdProductoVariante);
+
             await RecargarCarrito();
+
             carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
@@ -139,10 +206,13 @@ else
     {
         Cargando = true;
         Error = null;
+
         try
         {
             await carritoApi.RestarCantidad(item.IdProductoVariante);
+
             await RecargarCarrito();
+
             carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
@@ -159,10 +229,13 @@ else
     {
         Cargando = true;
         Error = null;
+
         try
         {
             // await carritoApi.EliminarItem(item.ProductoId);
+
             await RecargarCarrito();
+
             carritoStateService.SetMensaje();
         }
         catch (HttpApiException ex)
@@ -178,7 +251,9 @@ else
     async Task RecargarCarrito()
     {
         carrito = await carritoApi.CarritoUser();
+
         StateHasChanged();
+
         carritoStateService.SetMensaje();
     }
 
@@ -189,6 +264,4 @@ else
 
         return $"https://localhost:7145{urlImagen}";
     }
-
-    void Cerrar() => MudDialog.Close();
 }

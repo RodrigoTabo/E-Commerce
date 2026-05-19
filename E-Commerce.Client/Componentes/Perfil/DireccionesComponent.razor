@@ -1,13 +1,13 @@
 ﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Client.Common
+@using E_Commerce.Client.Componentes.Domicilio
 @using E_Commerce.Shared.DTOs.Domicilios
 @inject DomicilioApi domicilioApi
-
-
 
 <div class="card border border-dark rounded-0 bg-white h-100">
     <div class="card-header bg-white border-bottom border-dark px-4 py-3 d-flex justify-content-between align-items-center rounded-0">
         <h5 class="m-0 fw-bolder text-uppercase" style="letter-spacing: 1px; font-size: 1rem;">Mis Direcciones</h5>
-        <button class="btn btn-dark btn-sm rounded-0 fw-bold text-uppercase" style="font-size: 0.7rem;">
+        <button @onclick="() => AbrirModalCrear()" class="btn btn-dark btn-sm rounded-0 fw-bold text-uppercase" style="font-size: 0.7rem;">
             + Agregar Nueva
         </button>
     </div>
@@ -25,11 +25,13 @@
                             <p class="mb-0 text-secondary small fw-bold mt-2">CP: @dir.CodigoPostal</p>
                         </div>
 
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-dark btn-sm rounded-0 border-0">
-                                <i class="bi bi-pencil"></i>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-secondary btn-sm border-0"
+                                    @onclick="() => AbrirModalEditar(dir.Id)">
+                                <i class="bi bi-pencil-square"></i>
                             </button>
-                            <button class="btn btn-outline-danger btn-sm rounded-0 border-0">
+                            <button class="btn btn-outline-danger btn-sm border-0"
+                                    @onclick="() => AbrirModalEliminar(dir.Id)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -48,11 +50,49 @@
     </div>
 </div>
 
+<DomicilioModal @ref="modalInstancia" OnAccionCompletada="LoadDomicilioAsync" />
+
 @code {
-    [Parameter] public string UserId { get; set; }
+    [Parameter] 
+    public string UserId { get; set; }
     private List<DomicilioDTO> domicilioDTOs = new();
-    protected override async Task OnInitializedAsync()
+    private DomicilioModal modalInstancia;
+    private string? Error;
+    private string? previewImage;
+    private bool Cargando;
+
+    protected override async Task OnInitializedAsync() => await LoadDomicilioAsync();
+
+    private async Task LoadDomicilioAsync()
     {
-        domicilioDTOs = await domicilioApi.GetAllAsync();
+        Cargando = true;
+        Error = null;
+        try
+        {
+            domicilioDTOs = await domicilioApi.GetAllAsync();
+        }
+        catch (HttpApiException ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            Cargando = false;
+        }
     }
+
+    private void AbrirModalCrear() => modalInstancia.Abrir();
+
+    private void AbrirModalEditar(int id)
+    {
+        var item = domicilioDTOs.FirstOrDefault(p => p.Id == id);
+        if (item != null) modalInstancia.Abrir(item.Id, item.Calle, item.Altura, item.idCiudad, item.CodigoPostal,item.Referencia, false);
+    }
+
+    private void AbrirModalEliminar(int id)
+    {
+        var item = domicilioDTOs.FirstOrDefault(p => p.Id == id);
+        if (item != null) modalInstancia.Abrir(item.Id, item.Calle, item.Altura, item.idCiudad, item.CodigoPostal, item.Referencia, true);
+    }
+
 }

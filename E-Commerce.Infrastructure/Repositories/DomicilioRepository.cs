@@ -16,12 +16,17 @@ namespace E_Commerce.Infrastructure.Repositories
         public async Task<List<DomicilioDTO>> GetAllAsync(Guid? userId)
         => await _context.Domicilios.AsNoTracking()
             .Where(d => d.IdApplicationUser == userId)
-            .Select(d => new DomicilioDTO(d.Id, d.Calle, d.Altura, d.Ciudad.Nombre, d.CodigoPostal, d.Referencia))
+            .Select(d => new DomicilioDTO(d.Id, d.Calle, d.Altura, d.IdCiudad, d.Ciudad.Nombre, d.CodigoPostal, d.Referencia))
             .ToListAsync();
+
+        public Task Remove(Domicilio domicilio)
+        {
+            _context.Remove(domicilio);
+            return Task.CompletedTask;
+        }
 
         public async Task<Domicilio?> ValidarDomicilioExistente(int? IdDomicilio)
             => await _context.Domicilios
-            .AsNoTracking()
             .Include(c => c.Ciudad)
                 .ThenInclude(c => c.Provincia)
                     .ThenInclude(c => c.Pais)

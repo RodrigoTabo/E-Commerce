@@ -77,12 +77,13 @@
 }
 
 @code {
-    [Parameter] public EventCallback OnAccionCompletada { get; set; }
+    [Parameter]
+    public EventCallback OnAccionCompletada { get; set; }
 
     private List<ModeloDetalleDTO> modelosItems { get; set; } = new();
     private string? Error;
 
-    private IBrowserFile? selectedImage; 
+    private IBrowserFile? selectedImage;
     private string? previewImage;
 
     public bool Ver { get; set; }
@@ -148,7 +149,7 @@
             await OnAccionCompletada.InvokeAsync();
             Cerrar();
         }
-        catch (Exception ex)
+        catch (HttpApiException ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
         }
@@ -180,7 +181,13 @@
 
     private async Task LoadModelosAsync()
     {
-        try { modelosItems = await modeloApi.GetAllAsync(); }
-        catch (Exception ex) { Error = ex.Message; }
+        try
+        {
+            modelosItems = await modeloApi.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
     }
 }

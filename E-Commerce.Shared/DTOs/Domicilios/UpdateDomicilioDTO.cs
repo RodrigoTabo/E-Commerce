@@ -4,8 +4,9 @@ using System.Text;
 
 namespace E_Commerce.Shared.DTOs.Domicilios
 {
-    public class CreateDomicilioDTO
+    public class UpdateDomicilioDTO
     {
+        public int Id { get; set; }
         public string Calle { get; set; }
         public int Altura { get; set; }
         public int IdLocalidad { get; set; }

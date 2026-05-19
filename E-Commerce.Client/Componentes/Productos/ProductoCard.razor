@@ -1,5 +1,8 @@
-﻿@using E_Commerce.Shared.DTOs.Productos
+﻿@using E_Commerce.Client.ApiRoutes
+@using E_Commerce.Shared.DTOs.Productos
 @inject IDialogService DialogService
+@inject FavoritoApi favoritoApi
+
 @if (Items != null && Items.Any())
 {
     <style global>
@@ -60,6 +63,30 @@
                 .apex-catalog-brutalist .btn-action-flat:hover {
                     background-color: #000000;
                 }
+
+            /* Botón de Favoritos Brutalista */
+            .apex-catalog-brutalist .btn-fav {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background-color: #ffffff;
+                color: #000000;
+                border-bottom: 1px solid #000000;
+                border-left: 1px solid #000000;
+                border-top: none;
+                border-right: none;
+                border-radius: 0px !important;
+                padding: 6px 10px;
+                font-size: 0.9rem;
+                line-height: 1;
+                z-index: 10;
+                transition: background-color 0.1s ease;
+            }
+
+                .apex-catalog-brutalist .btn-fav:hover {
+                    background-color: #f8f9fa;
+                    color: #dc3545; /* Se pone rojo al pasar el mouse */
+                }
     </style>
 
     <section class="py-4 my-2 apex-catalog-brutalist">
@@ -101,6 +128,10 @@
                                 {
                                     <span class="badge-flat bg-dark text-white text-uppercase">Nuevo</span>
                                 }
+
+                                <button type="button" class="btn-fav" @onclick="() => ToggleFavorito(item.Id)" title="Añadir a favoritos">
+                                    ♥
+                                </button>
 
                                 <img alt="@item.Nombre" class="product-img rounded-0" src="@GetImage(item.UrlImagen)" />
                             </div>
@@ -183,4 +214,10 @@
 
         return $"https://localhost:7145{urlImagen}";
     }
+
+    private async Task ToggleFavorito(int itemId)
+    {
+        await favoritoApi.ToggleFavorito(itemId);
+    }
+
 }
